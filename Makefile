@@ -1,9 +1,42 @@
 include config/config.mk
 
-.PHONY: all kernel clean run
+.PHONY: all kernel clean run iso
 
-_OBJS= boot.c.o framebuffer.c.o
-OBJ = $(patsubst %,$(OBJ_DIR)/%,$(_OBJS))
+override _C_SOURCES := $(abspath $(shell find -P src/kernel -type f -name '*.c'))
+
+
+
+
+###DEFINE HERE
+SOURCES_BUILD := boot.c kernel.c framebuffer.c
+###DEFINE HERE
+
+C_SOURCES := $(filter $(addprefix %/,$(SOURCES_BUILD)),$(_C_SOURCES))
+
+OBJ := $(addprefix $(OBJ_DIR), $(notdir $(C_SOURCES:.c=.c.o)))
+dirs := $(dir $(C_SOURCES))
+VPATH := $(dirs)
+
+
+
+
+
+COLOR_RESET := '\033[0m'
+COLOR_BLACK := '\033[0;30m'
+COLOR_RED := '\033[0;31m'
+COLOR_GREEN := '\033[0;32m'
+COLOR_YELLOW := '\033[0;33m'
+COLOR_BLUE := '\033[0;34m'
+COLOR_MAGENTA := '\033[0;35m'
+COLOR_CYAN := '\033[0;36m'
+COLOR_WHITE := '\033[0;37m'
+COLOR_BOLD := '\033[1m'
+COLOR_UNDERLINE := '\033[4m'
+
+
+
+
+
 
 
 all: kernel
@@ -11,24 +44,25 @@ all: kernel
 
 run: $(KERNEL_NAME).iso
 	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/iso/$(KERNEL_NAME).iso -boot d
+	@echo -e $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
 
 
 kernel: $(OBJ) $(CFG_DIR)/linker.ld
+	
+
 #	@$(LD) -n $(OBJ) $(LDFLAGS) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE)
+	
 	@$(CC) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE) $(LDFLAGS) $(OBJ)
-	@echo -e ' ' LD $(KERNEL_FILE)
+	
+	@echo -e LD ' ' $(KERNEL_FILE)
+	@echo -e $(COLOR_GREEN)[BUILD]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) SUCCESSFUL
 
-$(OBJ_DIR)/%.c.o: $(KRNL_DIR)/%.c 
+$(OBJ): $(OBJ_DIR)%.c.o: %.c
+	
 	@$(CC) -MD -c $< -o $@ $(CFLAGS)
 	@echo -e CC ' ' $@
 
-$(OBJ_DIR)/%.c.o: $(SRC_DIR)/kernel/dev/%.c
-	@$(CC) -MD -c $< -o $@ $(CFLAGS)
-	@echo -e CC ' ' $@
-
-$(OBJ_DIR)/%.asm.o: $(KRNL_DIR)/%.asm
-	@$(AS) $(ASFLAGS) $< -o $@
-	@echo -e AS ' ' $@
+iso: $(KERNEL_NAME).iso
 
 $(KERNEL_NAME).iso: kernel
 	@rm -rf $(BUILD_DIR)/iso
@@ -42,6 +76,6 @@ $(KERNEL_NAME).iso: kernel
 
 	@/$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso
 	@rm -rf $(BUILD_DIR)iso
-
+	@echo -e $(COLOR_GREEN)[ISO]$(COLOR_RESET) KERNEL IMAGE GENERATED $(BUILD_DIR)/iso/nkos.iso
 clean:
 	@rm -rf $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d $(BUILD_DIR)/*.iso $(BUILD_DIR)/*.elf

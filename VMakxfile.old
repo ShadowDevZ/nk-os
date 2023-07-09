@@ -2,13 +2,10 @@ include config/config.mk
 
 .PHONY: all kernel clean run
 
-override CFILES := $(abspath $(shell find -P src/kernel -type f -name '*.c'))
-
-_OBJS= $(foreach item,$(CFILES),$(addsuffix .o,$(item)))
-OBJ = $(patsubst %,$(OBJ_DIR)/%, $(_OBJS))
+_OBJS= boot.c.o framebuffer.c.o
+OBJ = $(patsubst %,$(OBJ_DIR)/%,$(_OBJS))
 
 
-# $(addsufix .o,$(CFILES))
 all: kernel
 
 
@@ -17,13 +14,15 @@ run: $(KERNEL_NAME).iso
 
 
 kernel: $(OBJ) $(CFG_DIR)/linker.ld
-	
 #	@$(LD) -n $(OBJ) $(LDFLAGS) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE)
 	@$(CC) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE) $(LDFLAGS) $(OBJ)
 	@echo -e ' ' LD $(KERNEL_FILE)
 
-$(OBJ_DIR)/%.c.o: $(CFILES)
-	@echo $(OBJ)
+$(OBJ_DIR)/%.c.o: $(KRNL_DIR)/%.c 
+	@$(CC) -MD -c $< -o $@ $(CFLAGS)
+	@echo -e CC ' ' $@
+
+$(OBJ_DIR)/%.c.o: $(SRC_DIR)/kernel/dev/%.c
 	@$(CC) -MD -c $< -o $@ $(CFLAGS)
 	@echo -e CC ' ' $@
 

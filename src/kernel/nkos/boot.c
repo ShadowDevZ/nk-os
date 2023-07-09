@@ -30,7 +30,10 @@ struct limine_kernel_address_request kernel_address_request = {
     .id = LIMINE_KERNEL_ADDRESS_REQUEST,
     .revision = 0, .response = NULL
 };
-
+struct limine_kernel_file_request kf_request = {
+    .id = LIMINE_KERNEL_FILE_REQUEST,
+    .revision = 0, .response = NULL
+};
 
 #pragma suffixregion
 
@@ -178,7 +181,11 @@ void _start(void) {
 
     font.charBuffer = (void*)(uint64_t)file->address + sizeof(PSF1_HEADER);
 
-      Print(&fb, &font, "Hello from Fbuffer");
+    struct limine_kernel_file_response *kf_response = kf_request.response;
+    Print(&fb, &font, kf_response->kernel_file->cmdline);
+    Print(&fb, &font,"\n");
+
+      kmain(&fb, &font);
 
 end:
     for (;;);

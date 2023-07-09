@@ -17,7 +17,8 @@ export INCDIRS=-Isrc/kernel/include
 export CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
- -march=x86-64 -mabi=sysv -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel
+ -march=x86-64 -mabi=sysv -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel \
+ -Wunknown-pragmas
 
 
 
@@ -31,7 +32,9 @@ export BUILD_DIR=$(abspath build)
 export KRNL_DIR=$(abspath src/kernel/$(KERNEL_NAME))
 export RES_DIR=$(abspath src/kernel/libs/res)
 export FONT_DIR=$(RES_DIR)/fonts
-export OBJ_DIR=$(BUILD_DIR)/objs
+#even tho i think that variables shouldnt contain slash at the end. I havent found any other way to do it
+#$(OBJ): $(OBJ_DIR)/%.o: %.c <- Doing this leads to no input file errors. 
+export OBJ_DIR=$(BUILD_DIR)/objs/
 export CFG_DIR=$(abspath config)
 export SYM_DIR=$(BUILD_DIR)/iso/boot/sym
 

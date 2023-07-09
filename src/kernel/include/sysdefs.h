@@ -28,4 +28,5 @@ typedef unsigned long long ullong;
 
 typedef uint32_t ICOLOR;
 
-
+#include <dev/framebuffer.h>
+KERNEL_ENTRY kmain(FRAMEBUFFER* fb, PSF1_FONT* font);
