@@ -144,13 +144,17 @@ struct limine_file* GetLimineModule(const char* name) {
     return NULL;
 }
 
-static void hcf(void) {
+static void hcf_early(void) {
     asm ("cli");
     for (;;) {
         asm ("hlt");
     }
 }
 
+static void hcf() {
+    FrameBufferPutClrString("\n[KERNEL RETURNED FROM LOOP. THIS SHOULD NOT HAPPEN]\n", FB_CLR_RED);
+    hcf_early();
+}
 
 void _start(void) {
     
@@ -164,19 +168,19 @@ void _start(void) {
     fb.bufferSize = lfb->height * lfb->pitch;
 
     if (module_request.response == NULL) {
-        hcf();
+        hcf_early();
     }
     
     struct limine_file* file = GetLimineModule("zap-light16.psf");
 
     if (file == NULL) {
-        hcf();
+        hcf_early();
     }
     
     PSF1_FONT font;
     font.header = (PSF1_HEADER*)file->address;
     if (font.header->magic[0] != 0x36 || font.header->magic[1] != 0x04) {
-        hcf();
+        hcf_early();
     }
   
 
@@ -196,8 +200,7 @@ void _start(void) {
    // bp.kernelInfo = kf_response->kernel_file;
    
     kmain(&bp);
-
-end:
-    for (;;);
+    //in case somethign goes wrong we stop
+    hcf();
 
 }

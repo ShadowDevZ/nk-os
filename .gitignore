@@ -1,3 +1,5 @@
 build/objs/*
 bx_enh_dbg.ini
 *.old
+*.o
+*.d

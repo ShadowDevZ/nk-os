@@ -39,9 +39,26 @@ typedef struct {
 bool SetDefaulFont(PSF1_FONT* font);
 bool SetDefaultFramebuffer(FRAMEBUFFER* fb);
 
+HEXCLR RGB2Hex(ushort r, ushort g, ushort b);
 
-int FrameBufferPutChar(char c, HEXCLR clr);
+enum FrameBufferBasicColors{
+    FB_CLR_WHITE = 0Xffffff,
+    FB_CLR_RED = 0xff0000,
+    FB_CLR_ORANGE = 0xff6600,
+    FB_CLR_YELLOW = 0xffe600,
+    FB_CLR_GREEN = 0x00ff00,
+    FB_CLR_BLUE = 0x0000ff,
+    FB_CLR_PURPLE = 0xc300ff,
+    FB_CLR_BLACK = 0x0
+
+};
+
+void FrameBufferPutChar(char c, HEXCLR clr);
 void FrameBufferPutString(const char* str);
 void FrameBufferPutClrString(const char* str, HEXCLR iclr);
-
+void FrameBufferClearScreen();
 CURSOR_INFO GetCursorInfo();
+
+void scrollFramebuffer(uint32_t rows);
+void *memmove(void *dest, const void *src, size_t n);
+void *memset(void *s, int c, size_t n);
