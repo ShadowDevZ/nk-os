@@ -12,7 +12,7 @@ export LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000
 
 export C_VERSION=gnu11
 
-export INCDIRS=-Isrc/kernel/include
+export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine
 
 export CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \

@@ -1,10 +1,11 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-
+#include "kernel.h"
 #include "limine/limine.h"
 #include <sysdefs.h>
 #include "dev/framebuffer.h"
+#include <kernel.h>
 #pragma region limine_requests
 
 static volatile struct limine_framebuffer_request framebuffer_request = {
@@ -182,10 +183,19 @@ void _start(void) {
     font.charBuffer = (void*)(uint64_t)file->address + sizeof(PSF1_HEADER);
 
     struct limine_kernel_file_response *kf_response = kf_request.response;
-    Print(&fb, &font, kf_response->kernel_file->cmdline);
-    Print(&fb, &font,"\n");
+   // Print(&fb, &font, kf_response->kernel_file->cmdline);
+   // Print(&fb, &font,"\n");
 
-      kmain(&fb, &font);
+   SetDefaultFramebuffer(&fb);
+   SetDefaulFont(&font);
+
+    //  kmain(&fb, &font);
+    BOOTARGS bp;
+    bp.fb = &fb;
+    bp.defFont = font;
+   // bp.kernelInfo = kf_response->kernel_file;
+   
+    kmain(&bp);
 
 end:
     for (;;);
