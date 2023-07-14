@@ -43,7 +43,7 @@ all: kernel
 
 
 run: $(KERNEL_NAME).iso
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/iso/$(KERNEL_NAME).iso -boot d
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/iso/$(KERNEL_NAME).iso -boot d -d int -D ~/qemu.log
 	@echo -e $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
 
 

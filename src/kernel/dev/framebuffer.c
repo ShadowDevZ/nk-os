@@ -7,23 +7,29 @@ PSF1_FONT* dFont;
 uint32_t numRowsUsed = 0;
 
 void scrollFramebuffer(uint32_t rows) {
+    uint32_t totalRows = dFb->height / DEFAULT_FONT_SIZE;
+
     if (rows >= numRowsUsed) {
-        return; // Do not scroll beyond the number of used rows
+        rows = numRowsUsed; // Scroll all used rows
     }
 
     uint32_t* dest = (uint32_t*)dFb->baseAddress;
-    uint32_t* src = (uint32_t*)dFb->baseAddress + (rows * dFb->width);
-    uint32_t pixelSize = (dFb->height - rows) * dFb->width;
+    uint32_t* src = (uint32_t*)dFb->baseAddress + (rows * dFb->scanLinePixels * (DEFAULT_FONT_SIZE / 8));
+    uint32_t pixelSize = (totalRows - rows) * dFb->scanLinePixels;
     uint32_t byteSize = pixelSize * sizeof(uint32_t);
     memmove(dest, src, byteSize);
 
     // Clear the newly visible portion at the bottom
-    uint32_t* clearStart = (uint32_t*)dFb->baseAddress + pixelSize;
-    uint32_t clearBytes = rows * dFb->width * sizeof(uint32_t);
+    uint32_t clearStartRow = totalRows - rows;
+    uint32_t clearRowCount = rows;
+    uint32_t clearBytes = clearRowCount * dFb->width * sizeof(uint32_t);
+    uint32_t* clearStart = (uint32_t*)dFb->baseAddress + (clearStartRow * dFb->scanLinePixels * (DEFAULT_FONT_SIZE / 8));
     memset(clearStart, 0, clearBytes);
 
     numRowsUsed -= rows;
 }
+
+
 
 INTERNAL void FrameBufferPutCharInternal(FRAMEBUFFER* fb, PSF1_FONT* font, char chr, uint xOff, uint yOff, HEXCLR clr) {
       uint* pixPtr = (uint*)fb->baseAddress;
@@ -114,6 +120,11 @@ void FrameBufferPutChar(char c, HEXCLR clr) {
          case '\n':
             cInfo.x = 0;
             cInfo.y += DEFAULT_FONT_SIZE;
+            numRowsUsed++;
+            if (numRowsUsed > dFb->height / DEFAULT_FONT_SIZE) {
+            scrollFramebuffer(numRowsUsed);
+            
+        }
             break;
         case '\t':
             cInfo.x += TABSPACE;
@@ -132,11 +143,14 @@ void FrameBufferPutChar(char c, HEXCLR clr) {
             if (cInfo.x >= dFb->width) {
                 cInfo.x = 0;
                 cInfo.y += DEFAULT_FONT_SIZE;
+               // numRowsUsed++;
             }
+            
 
             if (cInfo.y + DEFAULT_FONT_SIZE >= dFb->height) {
                 uint32_t numScrollRows = (cInfo.y + DEFAULT_FONT_SIZE - dFb->height + 1) / DEFAULT_FONT_SIZE;
-                scrollFramebuffer(numScrollRows);
+                scrollFramebuffer(numRowsUsed);
+                
                 cInfo.y -= numScrollRows * DEFAULT_FONT_SIZE;
             }
 
