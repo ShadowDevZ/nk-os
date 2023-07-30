@@ -3,8 +3,8 @@
  /home/shadow/shadow/toolchain/x86_64-elf/lib/gcc/x86_64-elf/12.2.0/include/stdint.h \
  /home/shadow/shadow/toolchain/x86_64-elf/lib/gcc/x86_64-elf/12.2.0/include/stdint-gcc.h \
  /home/shadow/shadow/toolchain/x86_64-elf/lib/gcc/x86_64-elf/12.2.0/include/stddef.h \
+ src/kernel/include/limine/limine.h src/kernel/include/sys/version.h \
+ src/kernel/include/sysdefs.h \
  /home/shadow/shadow/toolchain/x86_64-elf/lib/gcc/x86_64-elf/12.2.0/include/stdbool.h \
- src/kernel/include/kernel.h src/kernel/include/sysdefs.h \
  src/kernel/include/kattributes.h src/kernel/include/limine/limine.h \
- src/kernel/include/dev/framebuffer.h src/kernel/include/limine/limine.h \
- src/kernel/include/limine/limine.h
+ src/kernel/libs/klibc/include/kstdio.h

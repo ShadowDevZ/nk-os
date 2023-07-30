@@ -1,29 +1,37 @@
 export HOST_ARCH=x86_64
 export KERNEL_NAME=nkos
-export AR=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ar
+export TARGET_AR=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ar
 
-export AS=/bin/nasm 
-export CC=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-gcc
-export LD=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ld
-export GAS=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-as
+export TARGET_AS=/bin/nasm 
+export TARGET_CC=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-gcc
+export TARGET_LD=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ld
+export TARGET_GAS=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-as
 
-export LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000
+
+
+export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$(SYM_DIR)/$(KERNEL_NAME).map
+
+
+
+###DEFINE HERE
+SOURCES_BUILD := boot.c kver.c kstdio.c
+###DEFINE HERE
 
 
 export C_VERSION=gnu11
 
-export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine
+export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include
 
-export CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
+export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
  -march=x86-64 -mabi=sysv -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel \
  -Wunknown-pragmas
 
 
+export HOST_CC=gcc
 
-
-export ASFLAGS=-Wall -felf64 -g
+export TARGET_ASFLAGS=-Wall -felf64 -g
 export HOST=$(HOST_ARCH)-elf
 export INCLUDE_DIR=$(abspath src/kernel/include)
 
@@ -36,7 +44,7 @@ export FONT_DIR=$(RES_DIR)/fonts
 #$(OBJ): $(OBJ_DIR)/%.o: %.c <- Doing this leads to no input file errors. 
 export OBJ_DIR=$(BUILD_DIR)/objs/
 export CFG_DIR=$(abspath config)
-export SYM_DIR=$(BUILD_DIR)/iso/boot/sym
+export SYM_DIR=$(BUILD_DIR)/sym
 
 export LIBS_DIR=$(abspath src/libs)
 export LIMINE_BOOT_DIR=$(LIBS_DIR)/boot/limine

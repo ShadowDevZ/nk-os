@@ -1,206 +1,84 @@
 #include <stdint.h>
 #include <stddef.h>
-#include <stdbool.h>
-#include "kernel.h"
-#include "limine/limine.h"
-#include <sysdefs.h>
-#include "dev/framebuffer.h"
-#include <kernel.h>
-#pragma region limine_requests
+#include <limine/limine.h>
+#include "sys/version.h"
+#include "kstdio.h"
 
+
+// The Limine requests can be placed anywhere, but it is important that
+// the compiler does not optimise them away, so, usually, they should
+// be made volatile or equivalent.
 static volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
 };
 
-static volatile struct limine_rsdp_request rsdp_request = {
-    .id = LIMINE_RSDP_REQUEST,
+static volatile struct limine_terminal_request terminal_request = {
+    .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
 };
 
-static volatile struct limine_module_request module_request = {
-    .id = LIMINE_MODULE_REQUEST,
-    .revision = 0
-};
-
-static volatile struct limine_memmap_request memmap_request = {
-    .id = LIMINE_MEMMAP_REQUEST,
-    .revision = 0
-};
-struct limine_kernel_address_request kernel_address_request = {
-    .id = LIMINE_KERNEL_ADDRESS_REQUEST,
-    .revision = 0, .response = NULL
-};
-struct limine_kernel_file_request kf_request = {
-    .id = LIMINE_KERNEL_FILE_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-#pragma suffixregion
+// GCC and Clang reserve the right to generate calls to the following
+// 4 functions even if they are not directly called.
+// Implement them as the C specification mandates.
+// DO NOT remove or rename these functions, or stuff will eventually break!
+// They CAN be moved to a different .c file.
 
 
 
-void *memcpy(void *dest, const void *src, size_t n) {
-    uint8_t *pdest = (uint8_t *)dest;
-    const uint8_t *psrc = (const uint8_t *)src;
-
-    for (size_t i = 0; i < n; i++) {
-        pdest[i] = psrc[i];
-    }
-
-    return dest;
-}
-
-void *memset(void *s, int c, size_t n) {
-    uint8_t *p = (uint8_t *)s;
-
-    for (size_t i = 0; i < n; i++) {
-        p[i] = (uint8_t)c;
-    }
-
-    return s;
-}
-
-void *memmove(void *dest, const void *src, size_t n) {
-    uint8_t *pdest = (uint8_t *)dest;
-    const uint8_t *psrc = (const uint8_t *)src;
-
-    if (src > dest) {
-        for (size_t i = 0; i < n; i++) {
-            pdest[i] = psrc[i];
-        }
-    } else if (src < dest) {
-        for (size_t i = n; i > 0; i--) {
-            pdest[i-1] = psrc[i-1];
-        }
-    }
-
-    return dest;
-}
-
-int memcmp(const void *s1, const void *s2, size_t n) {
-    const uint8_t *p1 = (const uint8_t *)s1;
-    const uint8_t *p2 = (const uint8_t *)s2;
-
-    for (size_t i = 0; i < n; i++) {
-        if (p1[i] != p2[i]) {
-            return p1[i] < p2[i] ? -1 : 1;
-        }
-    }
-
-    return 0;
-}
-
-// Our quick and dirty strlen() implementation.
-size_t strlen(const char *str) {
-    size_t ret = 0;
-    while (*str++) {
-        ret++;
-    }
-    return ret;
-}
-
-bool CheckStringSuffix(const char* str, const char* suffix) {
-
-     const char *_str = str;
-     const char *_suffix = suffix;
-
-
-    while (*str != 0)
-        str++;
-    str--;
-
-    while (*suffix != 0)
-        suffix++;
-    suffix--;
-
-    while (true)
-    {
-        if (*str != *suffix)
-            return false;
-
-        str--;
-        suffix--;
-
-        if (suffix == _suffix || (str == _str && suffix == _suffix))
-            return true;
-
-        if (str == _str)
-            return false;
-    }
-
-    return true;
-
-}
-
-struct limine_file* GetLimineModule(const char* name) {
-    struct limine_module_response* resp = module_request.response;
-    for (size_t i = 0; i < resp->module_count; ++i) {
-        struct limine_file* file = resp->modules[i];
-        if (CheckStringSuffix(file->path, name)) {
-            return file;
-        }
-    }
-    return NULL;
-}
-
-static void hcf_early(void) {
+// Halt and catch fire function.
+static void hcf(void) {
     asm ("cli");
     for (;;) {
         asm ("hlt");
     }
 }
+#include "sys/version.h"
 
-static void hcf() {
-    FrameBufferPutClrString("\n[KERNEL RETURNED FROM LOOP. THIS SHOULD NOT HAPPEN]\n", FB_CLR_RED);
-    hcf_early();
-}
-
+// The following will be our kernel's entry point.
+// If renaming _start() to something else, make sure to change the
+// linker script accordingly.
 void _start(void) {
-    
-
-    FRAMEBUFFER fb;
-    struct limine_framebuffer* lfb = framebuffer_request.response->framebuffers[0];
-    fb.baseAddress = lfb->address;
-    fb.width = lfb->width;
-    fb.height = lfb->height;
-    fb.scanLinePixels = lfb->pitch / 4;
-    fb.bufferSize = lfb->height * lfb->pitch;
-
-    if (module_request.response == NULL) {
-        hcf_early();
+    // Ensure we got a terminal
+    if (terminal_request.response == NULL
+     || terminal_request.response->terminal_count < 1) {
+        hcf();
     }
-    
-    struct limine_file* file = GetLimineModule("zap-light16.psf");
 
-    if (file == NULL) {
-        hcf_early();
-    }
-    
-    PSF1_FONT font;
-    font.header = (PSF1_HEADER*)file->address;
-    if (font.header->magic[0] != 0x36 || font.header->magic[1] != 0x04) {
-        hcf_early();
-    }
-  
+              
 
-    font.charBuffer = (void*)(uint64_t)file->address + sizeof(PSF1_HEADER);
 
-    struct limine_kernel_file_response *kf_response = kf_request.response;
-   // Print(&fb, &font, kf_response->kernel_file->cmdline);
-   // Print(&fb, &font,"\n");
+    // We should now be able to call the Limine terminal to print out
+    // a simple "Hello World" to screen.
+  //  const char *hello_msg = "Hello World";
 
-   SetDefaultFramebuffer(&fb);
-   SetDefaulFont(&font);
+    struct limine_terminal *terminal = terminal_request.response->terminals[0];
+    #define print(terminal, str) terminal_request.response->write(terminal, str, strlen(str))
+  //print(terminal ,hello_msg);
 
-    //  kmain(&fb, &font);
-    BOOTARGS bp;
-    bp.fb = &fb;
-    bp.defFont = font;
-   // bp.kernelInfo = kf_response->kernel_file;
-   
-    kmain(&bp);
-    //in case somethign goes wrong we stop
+
+KVER_INFO bi = GetKernelVersion();
+print(terminal, " Hello number 1\n");
+print(terminal, " Hello number 2\n");
+print(terminal, " Hello number 3\n");
+print(terminal, " Hello number 4\n");
+print(terminal, " Hello number 5\n");
+print(terminal, " Hello number 6\n");
+print(terminal, "\x1B[31mHello number 6\n\x1B[0m");
+print(terminal, bi.version->versionStr);
+
+//*(unsigned int *)(pixPtr + 0 + (8 * fb->pitch / 4)) = 0xff0000;
+
+//for (int64_t y = 2; y < 20 + 16; y++) {
+//    for (int64_t x = 1; x < 10 + 8; x++) {
+//        if (x >= 0 && x < fb->width && y >= 0 && y < fb->height) {
+//                      *(unsigned int *)(pixPtr + x + (y * fb->pitch / 4)) = 0xff0000;
+//        }
+//    }
+//}
+
+
+
+    // We're done, just hang...
     hcf();
-
 }

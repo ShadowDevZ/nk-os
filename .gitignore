@@ -3,3 +3,15 @@ bx_enh_dbg.ini
 *.old
 *.o
 *.d
+*.elf
+*.iso
+src/libs/boot/limine/*
+.editorconfig
+bx_enh_dbg.ini
+VMakxfile.old
+*.map
+*.dmp
+*.asmdump
+*.ksym
+*.ksymx
+*.cno

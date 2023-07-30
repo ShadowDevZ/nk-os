@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "NKOS",
+            "includePath": [
+                "/home/shadow/Projects/OperatingSystems/nkos/src/**",
+                "/home/shadow/Projects/OperatingSystems/nkos/src/kernel/libs/klibc/include"
+            ],
+            "defines": [],
+            "compilerPath": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPathInCppPropertiesJson": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",
+            "mergeConfigurations": false,
+            "configurationProvider": "ms-vscode.makefile-tools",
+            "browse": {
+                "path": [
+                    "src/kernel/include",
+                    "src/kernel/arch/x86_64",
+                    "src/utils",
+                    "src/kernel/libs/klibc/include/",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "configurationProviderInCppPropertiesJson": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
