@@ -21,5 +21,5 @@ TODO:
 - dependency checking and install if supported by system
 - script for generating cross compiler, need to set the symlink in `confik.mk`
 
-TODOLIST:
-✅ Basic printing
+TODOLIST: 
+- ✅ Basic printing
