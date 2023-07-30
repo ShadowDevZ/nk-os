@@ -22,4 +22,4 @@ TODO:
 - script for generating cross compiler, need to set the symlink in `confik.mk`
 
 TODOLIST:
-:white_check_mark Basic printing
+✅ Basic printing
