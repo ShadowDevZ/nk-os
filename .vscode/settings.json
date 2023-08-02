@@ -2,7 +2,10 @@
     "files.associations": {
         "framebuffer.h": "c",
         "version.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "kstdio.h": "c",
+        "requests.h": "c",
+        "fbdev.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled"
