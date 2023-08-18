@@ -3,15 +3,18 @@ include config/config.mk
 .PHONY: all kernel clean run iso limine distclean ksyms asmdump debug
 
 override _C_SOURCES := $(abspath $(shell find -P src -type f -name '*.c'))
-
+override _AS_SOURCES := $(abspath $(shell find -P src -type f -name '*.asm'))
 
 
 
 
 
 C_SOURCES := $(filter $(addprefix %/,$(SOURCES_BUILD)),$(_C_SOURCES))
+AS_SOURCES := $(filter $(addprefix %/,$(SOURCES_BUILD)),$(_AS_SOURCES))
 
 OBJ := $(addprefix $(OBJ_DIR), $(notdir $(C_SOURCES:.c=.c.o)))
+OBJASM := $(addprefix $(OBJ_DIR), $(notdir $(AS_SOURCES:.asm=.asm.o)))
+
 dirs := $(dir $(C_SOURCES))
 VPATH := $(dirs)
 
@@ -38,6 +41,7 @@ COLOR_UNDERLINE := '\033[4m'
 
 
 all: kernel
+#	@echo $(AS_SOURCES)
 
 debug: kernel asmdump ksyms
 	@echo -e $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
@@ -47,14 +51,15 @@ _run: $(KERNEL_NAME).iso
 	@echo -e $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
 
 
-run: _run clean
+run: _run 
 
-kernel: $(OBJ) $(CFG_DIR)/linker.ld 
+kernel: $(OBJ) $(OBJASM) $(CFG_DIR)/linker.ld 
+	
 	
 
 #	@$(LD) -n $(OBJ) $(LDFLAGS) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE)
 	
-	@$(TARGET_CC) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE) $(TARGET_LDFLAGS) $(OBJ)
+	@$(TARGET_CC) -T $(CFG_DIR)/linker.ld -o $(BUILD_DIR)/$(KERNEL_FILE) $(TARGET_LDFLAGS) $(OBJ) $(OBJASM)
 	
 	@echo -e LD ' ' $(KERNEL_FILE)
 	@echo -e $(COLOR_GREEN)[BUILD]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) SUCCESSFUL
@@ -63,6 +68,14 @@ $(OBJ): $(OBJ_DIR)%.c.o: %.c
 	
 	@$(TARGET_CC) -MD -c $< -o $@ $(TARGET_CFLAGS)
 	@echo -e CC ' ' $@
+
+
+$(OBJASM): $(OBJ_DIR)%.asm.o: %.asm
+	@echo $(OBJASM)
+	
+	@$(TARGET_AS) $(TARGET_ASFLAGS) -o $@ $<
+	@echo -e AS ' ' $@
+
 
 iso: $(KERNEL_NAME).iso
 
@@ -109,6 +122,6 @@ $(KERNEL_NAME).iso: kernel
 	@cp $(BUILD_DIR)/iso/$(KERNEL_NAME).iso $(BUILD_DIR)
 #	@/$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso
 	@rm -rf $(BUILD_DIR)/iso/*
-	@echo -e $(COLOR_GREEN)[ISO]$(COLOR_RESET) KERNEL IMAGE GENERATED $(BUILD_DIR)/iso/nkos.iso
+	@echo -e $(COLOR_GREEN)[ISO]$(COLOR_RESET) KERNEL IMAGE GENERATED $(BUILD_DIR)/nkos.iso
 clean:
 	@rm -rf $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d $(BUILD_DIR)/*.iso $(BUILD_DIR)/*.elf $(SYM_DIR)/*
