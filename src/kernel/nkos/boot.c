@@ -3,7 +3,7 @@
 #include <limine/limine.h>
 #include "sys/version.h"
 #include "kstdio.h"
-
+#include "../arch/x86_64/include/gdt.h"
 
 static volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
@@ -101,6 +101,7 @@ bi.ccVersion,
 bi.buildDate,
 bi.buildTime,
 bi.version->versionStr);
+//gdt_init();
 //*(unsigned int *)(pixPtr + 0 + (8 * fb->pitch / 4)) = 0xff0000;
 
 //for (int64_t y = 2; y < 20 + 16; y++) {
