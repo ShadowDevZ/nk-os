@@ -3,8 +3,7 @@
 #include <limine/limine.h>
 #include "sys/version.h"
 #include "kstdio.h"
-#include "../arch/x86_64/include/gdt.h"
-
+#include "../arch/x86_64/include/io.h"
 static volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
@@ -34,6 +33,14 @@ static void hcf(void) {
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
 // linker script accordingly.
+
+
+
+static inline void outb(u16 port, u8 data)
+{
+	__asm volatile("outb %0,%w1" : : "a" (data), "d" (port));
+}
+
 void _start(void) {
     // Ensure we got a terminal
 
@@ -62,12 +69,12 @@ KVER_INFO bi = GetKernelVersion();
 InitializeFramebuffers(framebuffer_request, terminal_request);
 
 printf("Kernel booted\n");
-printf("0x%02x - Physical base\n\
+printf("0x%02llx - Physical base\n\
 0x%02x - Virtual base\n", address_request.response->physical_base, address_request.response->virtual_base);
 printf("%s", "==KERNEL_INFO==\n");
 
-printf("ADDR: 0x%x\n" \
-"SIZE: %lluKiB\n" \
+printf("ADDR: 0x%p\n" \
+"SIZE: %luKiB\n" \
 "PATH: %s\n" \
 "CMD: %s\n" \
 "MEDIA: %u\n" \
@@ -84,13 +91,13 @@ kernel_request.response->kernel_file->mbr_disk_id,
 kernel_request.response->kernel_file->part_uuid.a,
 kernel_request.response->kernel_file->part_uuid.b,
 kernel_request.response->kernel_file->part_uuid.c,
-kernel_request.response->kernel_file->part_uuid.d
+*kernel_request.response->kernel_file->part_uuid.d
 );
 
 printf("Kernel Version Info\n");
 printf("Version String: %s" \
 "Codename: %s\n" \
-"Arch (%s)\n" \
+"Arch (%s) - SystemV ABI\n" \
 "CC: %s\n" \
 "Build time %s %s\n" \
 "Version: %s",
@@ -101,6 +108,12 @@ bi.ccVersion,
 bi.buildDate,
 bi.buildTime,
 bi.version->versionStr);
+
+
+
+
+
+
 //gdt_init();
 //*(unsigned int *)(pixPtr + 0 + (8 * fb->pitch / 4)) = 0xff0000;
 

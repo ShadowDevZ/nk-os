@@ -5,7 +5,10 @@
         "stdio.h": "c",
         "kstdio.h": "c",
         "requests.h": "c",
-        "fbdev.h": "c"
+        "fbdev.h": "c",
+        "stdint.h": "c",
+        "kattributes.h": "c",
+        "limine.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled"

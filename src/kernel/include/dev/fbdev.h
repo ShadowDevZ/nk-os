@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "tinyprintf.h"
-
+#include "limine.h"
 #define FB_MAX_SUPPORT 5
 #define FBDEV_MAX_LEN 10
 typedef struct {
@@ -23,5 +23,15 @@ typedef struct {
 #define FBDEV_DEFAULT 0
 bool InitializeFramebuffers(struct limine_framebuffer_request lbf, struct limine_terminal_request term);
 
-void FbPutChar(_unused_ void* putp, char c);
+void FbPutChar(void* putp, char c);
 #define FbPutChar(c) _FbPutChar(NULL, c);
+
+typedef int STREAM_TYPE;
+
+bool Fb_SwitchStream(int fbIndex, int streamType);
+STREAM_TYPE Fb_GetStreamType(int fbIndex);
+
+
+void _FbPutString(const char* str);
+#define FB_OUTPUT_STDIO 0xDE5
+#define FB_OUTPUT_DBG_E9 0xE98

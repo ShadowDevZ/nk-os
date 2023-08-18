@@ -16,6 +16,7 @@ OBJ := $(addprefix $(OBJ_DIR), $(notdir $(C_SOURCES:.c=.c.o)))
 OBJASM := $(addprefix $(OBJ_DIR), $(notdir $(AS_SOURCES:.asm=.asm.o)))
 
 dirs := $(dir $(C_SOURCES))
+dirs += $(dir $(AS_SOURCES))
 VPATH := $(dirs)
 
 
@@ -47,7 +48,7 @@ debug: kernel asmdump ksyms
 	@echo -e $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
 
 _run: $(KERNEL_NAME).iso 
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -d int -D ~/qemu.log
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d  -debugcon stdio
 	@echo -e $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
 
 
@@ -71,7 +72,8 @@ $(OBJ): $(OBJ_DIR)%.c.o: %.c
 
 
 $(OBJASM): $(OBJ_DIR)%.asm.o: %.asm
-	@echo $(OBJASM)
+
+#	@echo $(OBJASM)
 	
 	@$(TARGET_AS) $(TARGET_ASFLAGS) -o $@ $<
 	@echo -e AS ' ' $@
