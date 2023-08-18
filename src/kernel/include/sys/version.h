@@ -21,7 +21,9 @@
 
 #define __KERNEL_PREFIX_CLASS dev
 
-#define __KERNEL_COMPILER_VERSION __VERSION__
+#define __KERNEL_CROSSCC gcc
+
+#define __KERNEL_COMPILER_VERSION STRSTR(__KERNEL_CROSSCC) " " __VERSION__
 
 #define __KERNEL_SUFFIX DEBUG
 
@@ -30,6 +32,7 @@
 #else
 #define __KERNEL_SUFFIX RELEASE
 #endif
+
 
 
 //looks ugly but its enough for now
@@ -42,7 +45,7 @@
 
 
 
-#define __KERNEL_FULL_NAME __KERNEL_CLASS_TYPE " " "(" STRSTR(__KERNEL_ARCH) ") " "[" __KERNEL_VERSION_STR "] " STRSTR(__KERNEL_SUFFIX)
+#define __KERNEL_FULL_NAME __KERNEL_CLASS_TYPE " " "(" STRSTR(__KERNEL_ARCH) ") " "[" __KERNEL_VERSION_STR "] "  STRSTR(__KERNEL_SUFFIX) " "
 
 #define MAX_ELEM_VERLEN 80
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <stddef.h>
-
+#include <tinyprintf.h>
 int strcmp(const char* s1, const char* s2);
 char* strncpy(char* destination, const char* source, size_t num);
 

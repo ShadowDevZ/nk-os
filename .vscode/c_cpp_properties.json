@@ -9,6 +9,7 @@
                 "/home/shadow/Projects/OperatingSystems/nkos/src/kernel/include/**",
                 "${workspaceFolder}/src/kernel/include/**",
                 "/home/shadow/Projects/OperatingSystems/nkos/src/kernel/include/sys/**",
+                "${workspaceFolder}/src/kernel/libs/klibc/include",
                 "${workspaceFolder}/src/kernel/libs/klibc/include"
             ],
             "defines": [],
