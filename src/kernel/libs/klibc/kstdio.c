@@ -139,3 +139,30 @@ char* itoa(int value, char* result, int base) {
     }
     return result;
 }
+#include "dev/fbdev.h"
+#include <stdarg.h>
+#include <stdbool.h>
+#define DEBUG_MAX_SIZE_MSG 512
+void debugf(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    bool ret;
+    char buffer[DEBUG_MAX_SIZE_MSG];
+    Fb_SwitchStream(0, FB_OUTPUT_DBG_E9);
+  
+    vsnprintf(buffer, DEBUG_MAX_SIZE_MSG, format, args);
+    printf("%s", buffer);
+
+    va_end(args);
+    Fb_SwitchStream(0, FB_OUTPUT_STDIO);
+ 
+
+    
+
+}
+
+void debugs(const char* str) {
+    Fb_SwitchStream(0, FB_OUTPUT_DBG_E9);
+    puts(str);
+    Fb_SwitchStream(0, FB_OUTPUT_STDIO);
+}

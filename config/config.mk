@@ -14,7 +14,7 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 
 
 ###DEFINE HERE
-SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm
+SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm
 ###DEFINE HERE
 
 
@@ -26,7 +26,7 @@ export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
  -march=x86-64 -mabi=sysv -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel \
- -Wunknown-pragmas
+ -Wunknown-pragmas -Wno-attributes
 
 
 export HOST_CC=gcc
