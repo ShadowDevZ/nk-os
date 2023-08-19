@@ -14,7 +14,7 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 
 
 ###DEFINE HERE
-SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm
+SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm gdt.c idt.c isr.asm isr.c
 ###DEFINE HERE
 
 
@@ -31,7 +31,7 @@ export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
 
 export HOST_CC=gcc
 
-export TARGET_ASFLAGS=-Wall -felf64 -g
+export TARGET_ASFLAGS=-Wall -felf64 -g -isrc/kernel/arch/x86_64/include/
 export HOST=$(HOST_ARCH)-elf
 export INCLUDE_DIR=$(abspath src/kernel/include)
 export ARCH_DIR=$(abspath src/kernel/$(HOST_ARCH))
