@@ -4,6 +4,8 @@
 #include "sys/version.h"
 #include "kstdio.h"
 #include "../arch/x86_64/include/io.h"
+#include "../arch/x86_64/include/gdt.h"
+#include "../arch/x86_64/include/isr.h"
 static volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
@@ -109,22 +111,15 @@ bi.buildDate,
 bi.buildTime,
 bi.version->versionStr);
 
+//todo add this to device manager to keep it organized.
+//Too lazy to do the interface now
+//also we should call 'real' kernel entry from here
+
+gdt_init();
 
 
-
-
-
-//gdt_init();
-//*(unsigned int *)(pixPtr + 0 + (8 * fb->pitch / 4)) = 0xff0000;
-
-//for (int64_t y = 2; y < 20 + 16; y++) {
-//    for (int64_t x = 1; x < 10 + 8; x++) {
-//        if (x >= 0 && x < fb->width && y >= 0 && y < fb->height) {
-//                      *(unsigned int *)(pixPtr + x + (y * fb->pitch / 4)) = 0xff0000;
-//        }
-//    }
-//}
-
+//IsrInstallGates();
+//__asm("int $0x2");
 
 
     // We're done, just hang...
