@@ -9,7 +9,9 @@
         "stdint.h": "c",
         "kattributes.h": "c",
         "limine.h": "c",
-        "stdint-gcc.h": "c"
+        "stdint-gcc.h": "c",
+        "isr.h": "c",
+        "idt.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled"

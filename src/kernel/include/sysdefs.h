@@ -28,3 +28,4 @@ typedef unsigned long long ullong;
 
 typedef uint32_t HEXCLR;
 #include "limine.h"
+#define UNUSED(x) (void)(x)

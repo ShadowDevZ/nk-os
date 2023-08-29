@@ -562,7 +562,7 @@ void IsrInstallGates() {
     IDT_SetGate(254, X64_ISR254,  IDT_FLAG_RING0 | IDT_FLAG_GATE_32BIT_INT);
     IDT_SetGate(255, X64_ISR255,  IDT_FLAG_RING0 | IDT_FLAG_GATE_32BIT_INT);
 
-    void Initialize_IDT();
+    Initialize_IDT();
 
     __asm__ volatile("sti");
 

@@ -63,14 +63,16 @@ VPATH := $(dirs)
 
 
 all: kernel
+	@$(ECHO) $(COLOR_GREEN)COMPLETED$(COLOR_RESET)
 #	@$(ECHO) $(AS_SOURCES)
 
 debug: kernel asmdump ksyms
 	@$(ECHO) $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
 
 _run: $(KERNEL_NAME).iso 
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d  -debugcon stdio
 	@$(ECHO) $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d  -debugcon stdio
+	
 
 
 run: _run 

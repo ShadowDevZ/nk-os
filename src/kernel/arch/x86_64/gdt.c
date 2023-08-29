@@ -46,14 +46,13 @@ void gdt_init(void) {
     SetGDTEntry(5, 0, 0, 0x9a, 0xa2);
     SetGDTEntry(6, 0, 0, 0x92, 0xa0);
     SetGDTEntry(7, 0, 0, 0xf2, 0);
-    SetGDTEntry(8, 0, 0, 0xfa, 0x20
-    );
+    SetGDTEntry(8, 0, 0, 0xfa, 0x20);
 
    
 
     gdt_flush(&g_GDT_PTR);
     debugf("\n======GDT DUMP END======\n");
-    printf("It works");
+    printf("\nIt works");
 
     // 16-bit code descriptor (Entry 1)
 
