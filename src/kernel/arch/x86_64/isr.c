@@ -562,16 +562,31 @@ void IsrInstallGates() {
     IDT_SetGate(254, X64_ISR254,  IDT_FLAG_RING0 | IDT_FLAG_GATE_32BIT_INT);
     IDT_SetGate(255, X64_ISR255,  IDT_FLAG_RING0 | IDT_FLAG_GATE_32BIT_INT);
 
-    Initialize_IDT();
+   
 
-    __asm__ volatile("sti");
+   // __asm__ volatile("sti");
 
 
 
 
 }
+void ISR_Init() {
+    IsrInstallGates();
+    for (int i = 0; i < 256; i++) {
+        IDT_EnableGate(i);
+    }
+    IDT_DisableGate(0x80);
+}
+
+ISR_HANDLER g_ISRHandlers[256];
+
 #include "kstdio.h"
-void ISR_Handler(registers_t regs) {
+void ISR_Handler(registers_t* regs) {
     printf("ISR handler boysss\n");
-    printf("INT[%d]%s\n", regs.int_no, exception_messages[regs.int_no]);
+    printf("INT[%d]%s\n", regs->int_no, exception_messages[regs->int_no]);
+    asm("hlt");
+}
+void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
+    g_ISRHandlers[interrupt] = handler;
+    IDT_EnableGate(interrupt);
 }
