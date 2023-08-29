@@ -70,6 +70,7 @@ KVER_INFO bi = GetKernelVersion();
 
 InitializeFramebuffers(framebuffer_request, terminal_request);
 
+
 printf("Kernel booted\n");
 printf("0x%02llx - Physical base\n\
 0x%02x - Virtual base\n", address_request.response->physical_base, address_request.response->virtual_base);
@@ -115,11 +116,12 @@ bi.version->versionStr);
 //Too lazy to do the interface now
 //also we should call 'real' kernel entry from here
 
+
 gdt_init();
+printf("aa");
 
-
-//IsrInstallGates();
-//__asm("int $0x2");
+IsrInstallGates();
+//__asm__("int $0x3");
 
 
     // We're done, just hang...
