@@ -8,22 +8,32 @@ FBDEV g_Fb[FB_MAX_SUPPORT];
 
 STREAM_TYPE gStream[FB_MAX_SUPPORT];
 
-//#define puts(terminal, str) terminal_request.response->write(terminal, str, strlen(str))
 
-#define FB_OUTPUT_STDIO 0xDE5
-#define FB_OUTPUT_DBG_E9 0xE98
+
+
 
 STREAM_TYPE Fb_GetStreamType([[_unused_]]int fbIndex) {
   return gStream[FBDEV_DEFAULT];
 }
 
 bool Fb_SwitchStream(int fbIndex, int streamType) {
- if (streamType == FB_OUTPUT_DBG_E9 || streamType == FB_OUTPUT_STDIO) {
-  gStream[FBDEV_DEFAULT] = streamType;
-  return true;
- }
- return false;
+// if (streamType == FB_OUTPUT_DBG_E9 || streamType == FB_OUTPUT_STDIO) {
+ // gStream[FBDEV_DEFAULT] = streamType;
+ // return true;
+// }
+// return false;
   
+switch(streamType) {
+  case FB_OUTPUT_DBG_E9:
+  case FB_OUTPUT_BROADCAST:
+  case FB_OUTPUT_STDIO:
+  gStream[FBDEV_DEFAULT] = streamType;
+  break;
+  default:
+    gStream[FBDEV_DEFAULT] = FB_OUTPUT_STDIO;
+    
+}
+
 
 }
 #include "include/io.h"
@@ -38,14 +48,28 @@ void _FbPutChar(_unused_ void* putp, char c) {
  char str[2];
  str[0] = c;
  str[1] = '\0';
- if (Fb_GetStreamType(0) == FB_OUTPUT_DBG_E9) {
-  x64_outb(0xE9, c);
-  return;
+ //if (Fb_GetStreamType(0) == FB_OUTPUT_DBG_E9) {
+ // x64_outb(0xE9, c);
+ // return;
+ //}
+ switch(Fb_GetStreamType(FBDEV_DEFAULT)) {
+  case FB_OUTPUT_DBG_E9:
+    x64_outb(0xE9, c);
+    break;
+  case FB_OUTPUT_BROADCAST:
+    x64_outb(0xE9, c);
+    _FbPutString(str);
+    break;
+  case FB_OUTPUT_STDIO:
+  default:
+    _FbPutString(str);
+    break;
+
  }
  
  
  //g_Fb[FBDEV_DEFAULT].lr.response->write(g_Fb[FBDEV_DEFAULT].lr.response->terminals[FBDEV_DEFAULT], str, 2);
- _FbPutString(str);
+ //_FbPutString(str);
 }
 
 

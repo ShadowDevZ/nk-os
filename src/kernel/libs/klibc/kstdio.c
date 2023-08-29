@@ -143,18 +143,38 @@ char* itoa(int value, char* result, int base) {
 #include <stdarg.h>
 #include <stdbool.h>
 #define DEBUG_MAX_SIZE_MSG 512
+
+#define COMMON_PUTS(str, stream) \
+    do { \
+        Fb_SwitchStream(FBDEV_DEFAULT, stream); \
+        puts(str); \
+        Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_RESET); \
+    } while (0)
+
+
+#define COMMON_PRINTF(fmt, stream, ...) \
+     do { \
+        char buffer[DEBUG_MAX_SIZE_MSG]; \
+        Fb_SwitchStream(FBDEV_DEFAULT, stream); \
+        vsnprintf(buffer, DEBUG_MAX_SIZE_MSG, fmt, __VA_ARGS__); \
+        printf("%s", buffer); \
+        Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_RESET); \
+    } while (0)
+
+#define COMMON_PUTC(c, stream) \
+    do { \
+        Fb_SwitchStream(FBDEV_DEFAULT, stream); \
+        FbPutChar(c); \
+        Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_RESET); \
+    }while (0);
+
+
 void debugf(const char* format, ...) {
     va_list args;
     va_start(args, format);
-    bool ret;
-    char buffer[DEBUG_MAX_SIZE_MSG];
-    Fb_SwitchStream(0, FB_OUTPUT_DBG_E9);
-  
-    vsnprintf(buffer, DEBUG_MAX_SIZE_MSG, format, args);
-    printf("%s", buffer);
-
+    COMMON_PRINTF(format, FB_OUTPUT_DBG_E9, args);
     va_end(args);
-    Fb_SwitchStream(0, FB_OUTPUT_STDIO);
+    
  
 
     
@@ -162,7 +182,9 @@ void debugf(const char* format, ...) {
 }
 
 void debugs(const char* str) {
-    Fb_SwitchStream(0, FB_OUTPUT_DBG_E9);
-    puts(str);
-    Fb_SwitchStream(0, FB_OUTPUT_STDIO);
+    COMMON_PUTS(str, FB_OUTPUT_DBG_E9);
+}
+
+void putchar(char c) {
+    COMMON_PUTC(c, FB_OUTPUT_STDIO);
 }
