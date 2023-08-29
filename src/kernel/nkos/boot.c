@@ -117,7 +117,7 @@ bi.version->versionStr);
 //also we should call 'real' kernel entry from here
 
 
-gdt_init();
+//gdt_init();
 printf("aa");
 
 IsrInstallGates();
