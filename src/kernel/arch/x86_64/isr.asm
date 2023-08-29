@@ -1,4 +1,3 @@
-%include "isrs_gen.inc"
 extern ISR_Handler
 
 
@@ -33,8 +32,8 @@ extern ISR_Handler
 
 global X64_ISR%1:
 X64_ISR%1:
-    push byte 0              ; push dummy error code
-    push byte %1             ; push interrupt number
+    push  0              ; push dummy error code
+    push  %1             ; push interrupt number
     jmp isr_common
 
 %endmacro
@@ -43,7 +42,7 @@ X64_ISR%1:
 global X64_ISR%1:
 X64_ISR%1:
                         ; cpu pushes an error code to the stack
-    push byte %1             ; push interrupt number
+    push %1             ; push interrupt number
     jmp isr_common
 
 %endmacro
@@ -321,8 +320,8 @@ isr_common:
     mov gs, ax
 
     ; Call the isr handler
-    call ISR_Handler
-
+   ; call ISR_Handler
+    hlt
     pop rax
     mov ds, ax
     mov es, ax
@@ -331,5 +330,4 @@ isr_common:
     POPALL
 
     add rsp, 8          ; Removes the pushed error code and ISR number
-    sti
     iretq

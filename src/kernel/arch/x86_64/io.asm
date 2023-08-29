@@ -67,18 +67,19 @@ x64_outsw:
     ret
 
 
-global load_gdt
-
-load_gdt:
-    lgdt [rdi]
-    ret
-
 
 
 global load_idt
 
 load_idt:
+    push rbp
+    mov rbp, rsp
+    
     lidt [rdi]
+    
+    mov rsp, rbp
+    pop rbp
+    
     ret
 
 

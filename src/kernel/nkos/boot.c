@@ -6,6 +6,7 @@
 #include "../arch/x86_64/include/io.h"
 #include "../arch/x86_64/include/gdt.h"
 #include "../arch/x86_64/include/isr.h"
+#include "../arch/x86_64/include/idt.h"
 static volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
@@ -117,11 +118,15 @@ bi.version->versionStr);
 //also we should call 'real' kernel entry from here
 
 
-gdt_init();
-printf("aa");
-//IsrInstallGates();
-//asm("int $0x2");
+//gdt_init();
 
+Initialize_IDT();
+
+asm("sti");
+ISR_Init();
+printf("CONTROL_REACH_EOF_KRNL_END");
+
+__asm("int $0x3");
 
     // We're done, just hang...
     hcf();

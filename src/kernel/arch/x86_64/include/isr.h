@@ -7,5 +7,7 @@ typedef struct {
     uint64_t rip, cs, eflags, useresp, ss;
 } registers_t;
 
-void ISR_Handler(registers_t regs);
-void IsrInstallGates();
+void ISR_Handler(registers_t* regs);
+void ISR_Init();
+
+typedef void (*ISR_HANDLER)(registers_t* regs);
