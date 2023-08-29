@@ -33,5 +33,11 @@ STREAM_TYPE Fb_GetStreamType(int fbIndex);
 
 
 void _FbPutString(const char* str);
+//print to the default TERM set by kernel
 #define FB_OUTPUT_STDIO 0xDE5
+//print to e9 debug port
 #define FB_OUTPUT_DBG_E9 0xE98
+//broadcast the message to all terminals, debug ports and every ouput defined by kernel
+#define FB_OUTPUT_BROADCAST 0xF86
+//for now, later use function to reset to previous
+#define FB_OUTPUT_RESET FB_OUTPUT_STDIO

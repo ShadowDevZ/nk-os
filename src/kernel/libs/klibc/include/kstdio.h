@@ -16,6 +16,9 @@ char* strncat(char* destination, const char* source, size_t num);
 
 #define puts(str) _FbPutString(str);
 #define debugc(c) x64_outb(0xE9, c);
+
+
 char* itoa(int value, char* result, int base);
 void debugf(const char* format, ...);
 void debugs(const char* str);
+void putchar(char c);
