@@ -21,6 +21,6 @@ void CDECL x64_outsw(port_t port, const void *addr, int cnt);
 #define IRQ_RES { asm volatile ("sti"); }
 
 
-void load_gdt(void* gdt);
+void gdt_flush(void* gdt);
 
 void load_idt(uint64_t idt);

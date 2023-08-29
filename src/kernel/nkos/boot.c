@@ -117,11 +117,10 @@ bi.version->versionStr);
 //also we should call 'real' kernel entry from here
 
 
-//gdt_init();
+gdt_init();
 printf("aa");
-
-IsrInstallGates();
-//__asm__("int $0x3");
+//IsrInstallGates();
+//asm("int $0x2");
 
 
     // We're done, just hang...
