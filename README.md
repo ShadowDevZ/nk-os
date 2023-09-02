@@ -26,3 +26,49 @@ TODO:
 
 TODOLIST: 
 - ✅ Basic printing
+- ✅ Better framebuffer interface
+- ✅ GDT
+- ✅ IDT
+- ✅ ISR
+- ✅ Kernel symbols
+- ✅ Versioning scheme
+- ✅ Limine bootloader
+- HAL
+- IRQ
+- Better build system (CMake)
+- TSS
+- PIT
+- PIC
+- PS2 keyboard
+- ✅ Debugging support
+- Paging
+- VMM
+- PMM
+- SMP
+- Threads
+- Custom remote debugger using unix socket via qemu
+- Usermode
+- ACPI
+- Kernel driver interface
+- ✅ Kernel main
+- Kconfig like customization
+- µGUI port
+- Add support for floats inside printf
+- Toolchain builder
+- C++ support
+- Device manager
+- ATA support
+- AHCI support
+- Fat32 file system
+- Virtual filesystem
+- Logging ✅
+- Network
+- Serial debugging
+- Processes
+- Kernel libc
+- libc
+- libsys
+- PCI driver
+- APIC
+- HPET
+- Syscalls
