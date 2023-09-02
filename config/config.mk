@@ -14,13 +14,15 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 
 
 ###DEFINE HERE
-SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm gdt.c idt.c isr.asm isr.c panic.c kernel.c
+SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm gdt.c idt.c \
+isr.asm isr.c panic.c kernel.c ksyms.c gensym.c
 ###DEFINE HERE
 
 
 export C_VERSION=gnu11
 
-export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include -Isrc/kernel/arch/$(HOST_ARCH)
+export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include -Isrc/kernel/arch/$(HOST_ARCH) \
+-Isrc/kernel/include/sys
 
 export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
@@ -48,6 +50,9 @@ export SYM_DIR=$(BUILD_DIR)/sym
 
 export LIBS_DIR=$(abspath src/libs)
 export LIMINE_BOOT_DIR=$(LIBS_DIR)/boot/limine
+
+export SYS_DIR=$(abspath src/kernel/sys)
+export SCRIPTS_DIR=$(abspath scripts)
 
 export KERNEL_FILE=$(KERNEL_NAME).elf
 

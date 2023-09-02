@@ -12,7 +12,9 @@
         "stdint-gcc.h": "c",
         "isr.h": "c",
         "idt.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "ksyms.h": "c",
+        "stddef.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",
