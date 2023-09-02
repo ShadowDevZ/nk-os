@@ -68,3 +68,6 @@ TODOLIST:
 - Kernel libc
 - libc
 - libsys
+- PCI driver
+- APIC
+- HPET
