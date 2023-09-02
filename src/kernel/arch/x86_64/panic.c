@@ -14,11 +14,11 @@ NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reaso
     //IKP=internal kernel panic, for kernel modules its EKP
     snprintf(stopCode, STOP_CODE_MAXLEN, "IKP_%s", reason);
     
-    for (int i = 0; i < strlen(stopCode); ++i) {
+    for (size_t i = 0; i < strlen(stopCode); ++i) {
         stopCode[i] = toupper(stopCode[i]);
     }
     if (!strncmp(stopCode, "IKP_ISR_STOP", STOP_CODE_MAXLEN)) {
-        snprintf(stopCode, STOP_CODE_MAXLEN, "%s_%d",stopCode, regs->isr_number);
+        snprintf(stopCode, STOP_CODE_MAXLEN, "%s_%ld",stopCode, regs->isr_number);
     } 
   
     printf("Reason: %s\nDescription: %s\n\n", stopCode, description);
@@ -41,6 +41,11 @@ NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reaso
 
 void PrintRegs(isr_state_t* reg)
 {
+    #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat"
+
+
+
     printf("CPU Register dump:\n\n");
     printf("rax: 0x%llx, rbx:    0x%llx, rcx: 0x%llx, rdx: 0x%llx\n"
           "rsi: 0x%llx, rdi:    0x%llx, rbp: 0x%llx, r8 : 0x%llx\n"
@@ -52,6 +57,7 @@ void PrintRegs(isr_state_t* reg)
           reg->gp.r9,  reg->gp.r10,    reg->gp.r11, reg->gp.r12,
           reg->gp.r13, reg->gp.r14,    reg->gp.r15, reg->er.ss,
           reg->er, reg->er.rflags, reg->er.cs,  reg->er.rip);
+#pragma GCC diagnostic pop
 }
 
 NORET void _SystemRaiseHardErrorEx(const char* reason, const char* description, isr_state_t* regs);

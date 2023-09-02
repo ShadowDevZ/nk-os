@@ -8,7 +8,6 @@
 typedef int KERNEL_ENTRY;
 
 #define NATIVECALL __attribute__((optimize("O0")))
-#define CDECL __attribute__((cdecl))
 #define PACKED __attribute__((packed))
 #define NORET __attribute__((noreturn))
 #define DEPRECATED __attribute__((deprecated))
