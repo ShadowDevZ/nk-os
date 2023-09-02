@@ -71,3 +71,4 @@ TODOLIST:
 - PCI driver
 - APIC
 - HPET
+- Syscalls
