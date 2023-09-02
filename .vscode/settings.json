@@ -14,7 +14,9 @@
         "idt.h": "c",
         "io.h": "c",
         "ksyms.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "sysdefs.h": "c",
+        "krnlcfg.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

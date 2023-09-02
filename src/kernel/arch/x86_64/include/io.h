@@ -16,6 +16,7 @@ void  x64_outsb(port_t port, const void *addr, int cnt);
 void  x64_outsw(port_t port, const void *addr, int cnt);
 
 
+
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
 

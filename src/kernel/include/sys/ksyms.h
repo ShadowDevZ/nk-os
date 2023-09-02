@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #define SYM_NAME_MAXLEN 256
 #include <stdint.h>
+#include "sysdefs.h"
 typedef struct {
     void* addr;
     const char name[SYM_NAME_MAXLEN];
@@ -19,3 +20,4 @@ typedef struct {
 }SYM_ENUM_STATE;
 
 bool KsymEnumSymbol(SYM_ENUM_STATE* state);
+
