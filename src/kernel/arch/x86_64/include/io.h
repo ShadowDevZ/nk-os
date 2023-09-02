@@ -6,7 +6,6 @@ typedef uint16_t port_t;
 
 
 
-void x64_panic();
 
 
 void CDECL x64_outb(port_t port, uint8_t value);
@@ -22,5 +21,5 @@ void CDECL x64_outsw(port_t port, const void *addr, int cnt);
 
 
 void gdt_flush(void* gdt);
-
-void load_idt(uint64_t idt);
+#include "idt.h"
+void load_idt(IDT_DESCRIPTOR64* idt);

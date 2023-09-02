@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+      "name": "nkos-debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "/home/shadow/Projects/OperatingSystems/nkos/build/nkos.elf",
+  
+     
+      "stopAtEntry": true,
+      "stopAtConnect": true,
+      
+  
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "miDebuggerServerAddress": "localhost:1234",
+      "setupCommands": [{
+        "description": "Enable pretty-printing for gdb",
+        "text": "-enable-pretty-printing",
+        "ignoreFailures": true,
+    },
+    {
+        "description": "Launch Qemu GDB derver",
+        "text": "make run_dbg",
+        "ignoreFailures": false,
+    }]
+  }]
+  }

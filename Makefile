@@ -32,7 +32,7 @@ endif
 
 
 
-.PHONY: all kernel clean run iso limine distclean ksyms asmdump debug
+.PHONY: all kernel clean run iso limine distclean ksyms asmdump debug run_dbg
 
 override _C_SOURCES := $(abspath $(shell find -P src -type f -name '*.c'))
 override _AS_SOURCES := $(abspath $(shell find -P src -type f -name '*.asm'))
@@ -62,7 +62,7 @@ VPATH := $(dirs)
 
 
 
-all: kernel
+all: kernel iso
 	@$(ECHO) $(COLOR_GREEN)COMPLETED$(COLOR_RESET)
 #	@$(ECHO) $(AS_SOURCES)
 
@@ -74,6 +74,9 @@ _run: $(KERNEL_NAME).iso
 	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d  -debugcon stdio
 	
 
+run_dbg:
+	@echo -e $(COLOR_GREEN) [QEMU]$(COLOR_RESET) GDB Debugging session started on localhost:1234
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -s -S -serial stdio -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d
 
 run: _run 
 

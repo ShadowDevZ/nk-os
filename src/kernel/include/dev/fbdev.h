@@ -23,7 +23,7 @@ typedef struct {
 #define FBDEV_DEFAULT 0
 bool InitializeFramebuffers(struct limine_framebuffer_request lbf, struct limine_terminal_request term);
 
-void FbPutChar(void* putp, char c);
+void _FbPutChar(void* putp, char c);
 #define FbPutChar(c) _FbPutChar(NULL, c);
 
 typedef int STREAM_TYPE;

@@ -1,11 +1,14 @@
 [bits 64]
 
+global x64_reg_dump
+x64_reg_dump:
+    
 
-
-global x64_panic
-x64_panic:
+global x64_cpu_stop
+x64_cpu_stop:
     cli
     hlt
+    jmp $ ; just in case the cpu wont stop, avoid triple fault and provide debug info
 
 global x64_EnableInterrupts
 x64_EnableInterrupts:
@@ -104,3 +107,4 @@ tss_flush:
     mov ax, 0x48
     ltr ax
     ret
+
