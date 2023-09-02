@@ -3,14 +3,16 @@
 //kernel attributes
 
 #define KERNEL_STARTUP void
-#define KERNEL_ENTRY void
+//#define KERNEL_ENTRY void
+
+typedef int KERNEL_ENTRY;
 
 #define NATIVECALL __attribute__((optimize("O0")))
 #define CDECL __attribute__((cdecl))
 #define PACKED __attribute__((packed))
 #define NORET __attribute__((noreturn))
 #define DEPRECATED __attribute__((deprecated))
-
+#define UNREACHABLE() for (;;);
 // custom attributes
 #define INTERNAL
 #define EXTERNAL
@@ -28,3 +30,5 @@
 
 #define _unused_
 #define _reserved_
+
+KERNEL_ENTRY kmain();

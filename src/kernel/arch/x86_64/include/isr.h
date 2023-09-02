@@ -1,8 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-typedef struct
-{
+typedef struct {
     uint64_t r15;
     uint64_t r14;
     uint64_t r13;
@@ -18,19 +17,31 @@ typedef struct
     uint64_t rcx;
     uint64_t rbx;
     uint64_t rax;
-    
-    uint64_t isr_number;
-    uint64_t error_code;
-    
+
+}general_registers_t;
+
+typedef struct {
     uint64_t rip;
     uint64_t cs;
     uint64_t rflags;
     uint64_t rsp;
     uint64_t ss;
-} registers_t;
+
+}extended_registers_t;
+typedef struct
+{
+    general_registers_t gp;
+    
+    uint64_t isr_number;
+    uint64_t error_code;
+    extended_registers_t er;
+    
+    
+} isr_state_t;
 
 
-void ISR_Handler(registers_t* regs);
+
+void ISR_Handler(isr_state_t* regs);
 void ISR_Init();
-
-typedef void (*ISR_HANDLER)(registers_t* regs);
+char** GetIsrExceptionList();
+typedef void (*ISR_HANDLER)(isr_state_t* regs);

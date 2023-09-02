@@ -67,7 +67,7 @@ void _start(void) {
   //print(terminal ,hello_msg);
   
 
- terminal_request.response->write(terminal_request.response->terminals[0], "\033[31mRed text\033[0m\n", strlen("\033[31mRed text\033[0m\n"));
+ 
 KVER_INFO bi = GetKernelVersion();
 
 
@@ -127,10 +127,12 @@ Initialize_IDT();
 
 ISR_Init();
 asm("sti");
-printf("CONTROL_REACH_EOF_KRNL_END");
-SystemRaiseHardError("Test", "Debug");
 
-//asm ("int $0x1");
+
+//SystemRaiseHardError("Test", "Debug");
+
+int ret = kmain();
+SystemRaiseHardError("KMAIN_RETURNED", "Kernel main returned, this should not be happening");
 
 
     // We're done, just hang...

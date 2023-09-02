@@ -1,6 +1,7 @@
 #include "include/isr.h"
 #include "include/idt.h"
 #include "include/panic.h"
+
 char *exception_messages[] = {
     "Division by Zero",
     "Debug",
@@ -37,6 +38,11 @@ char *exception_messages[] = {
     "Reserved",
     "Reserved"
 };
+
+char** GetIsrExceptionList() {
+    return exception_messages;
+}
+
 #include "include/idt.h"
 
 void __attribute((cdecl)) X64_ISR0();
@@ -581,14 +587,19 @@ void ISR_Init() {
 }
 
 ISR_HANDLER g_ISRHandlers[256];
-void isr_register_dump(registers_t *cpu);
+#include "../arch/x86_64/include/panic.h"
 #include "kstdio.h"
-void ISR_Handler(registers_t* regs) {
-    printf("ISR handler called\n");
-    printf("INT[%lu] %s\n", regs->isr_number, exception_messages[regs->isr_number]);
-    PrintRegs(regs);
-    asm("cli");
-    asm("hlt");
+void ISR_Handler(isr_state_t* regs) {
+   
+   
+  //  PrintRegs(regs);
+
+    //x64_cpu_stop();
+    ISR_SystemRaiseHardError("CPU exception has occured", regs);
+
+  //  printf("INT[%lu] %s\n", regs->isr_number, exception_messages[regs->isr_number]);
+   // PrintRegs(regs);
+    
 }
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
     g_ISRHandlers[interrupt] = handler;

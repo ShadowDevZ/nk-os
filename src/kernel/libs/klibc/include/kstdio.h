@@ -6,7 +6,7 @@
 #include "include/io.h"
 int strcmp(const char* s1, const char* s2);
 char* strncpy(char* destination, const char* source, size_t num);
-
+int strncmp( const char * s1, const char * s2, size_t n );
 void *memcpy(void *dest, const void *src, size_t n);
 void *memset(void *s, int c, size_t n);
 void *memmove(void *dest, const void *src, size_t n);
@@ -25,3 +25,7 @@ void putchar(char c);
 
 #define FLAG_SET(x, flag) x |= flag
 #define FLAG_UNSET(x, flag) x &= ~(flag);
+
+
+
+int toupper(int ch);
