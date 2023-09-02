@@ -15,6 +15,9 @@ Build is currently only supported on linux (the script requires /dev/null device
 - objdump
 - awk
 - git
+- gdb
+- git
+- python3 (pathlib, os, sys)
 - VT100 compatible terminal that supports ANSI escape sequence for colored output
 
 TODO: 
