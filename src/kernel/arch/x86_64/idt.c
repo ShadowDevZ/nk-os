@@ -1,5 +1,6 @@
 #include "include/idt.h"
 #include "include/io.h"
+#include "krnlcfg.h"
 __attribute__((aligned(0x10))) 
 IDT_ENTRY64 g_IDT[256];
 IDT_DESCRIPTOR64 g_Desc;
@@ -22,13 +23,17 @@ void IDT_SetGate(int gate, void* handler, int flags) {
         .kernelCs = 0x28,
         .reserved = 0,
         //0x60 is user mode access
-        .attributes = flags,
+        .attributes = flags | 0x60,
         .isrMid = middle_16,
         .isrHigh = high_32,
         .ist = 0
 
     };
     g_IDT[gate] = entry;
+#if KF_IDT_DEBUG == 1
+debugf("Setting IDT Gate %d\n", gate);
+debugf("HANDLER: 0x%llx FLAGS: 0x%x IST: 0x%x COD_SEG: 0x%x\n", (uint64_t)handler, flags, entry.ist, entry.kernelCs);
+#endif
 
    
 

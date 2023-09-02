@@ -1,7 +1,16 @@
 #include "kstdio.h"
 #include "include/gdt.h"
-
-
+#include "krnlcfg.h"
+#define GDT_SEG_NULL 0
+#define GDT_SEG_CODE16 1
+#define GDT_SEG_DATA16 2
+#define GDT_SEG_CODE32 3
+#define GDT_SEG_DATA32 4
+#define GDT_SEG_CODE64 5
+#define GDT_SEG_DATA64 6
+#define GDT_SEG_DATAUSR 7
+#define GDT_SEG_CODEUSR 8
+#define GDT_SEG_TSS 9
 GDTEntry g_GDT[GTD_DESC_COUNT];
 GDT_PTR g_GDT_PTR;
 //reserved for future use
@@ -22,22 +31,66 @@ void SetGDTEntry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8
 
     this->BaseHigh = (base >> 24 & 0xFF);
 
-     
-    debugf("\n\nGDT[%d]: BASE: 0x%x LIMIT: 0x%x ACCESS: 0x%x GRAN: 0x%x\n", index,
-            base, limit, access, gran);
+
+#if KF_GDT_DEBUG == 1
+    switch (index)
+    {
+    case GDT_SEG_NULL:
+        debugf("\tNULL segment ");
+        break;
+    case GDT_SEG_CODE16:
+        debugf("\t16-bit code segment  ");
+        break;    
+    case GDT_SEG_DATA16:
+        debugf("\t16-bit data segment  ");
+        break;
+    case GDT_SEG_CODE32:
+        debugf("\t32-bit code segment  ");
+        break;
+    case GDT_SEG_DATA32:
+        debugf("\t32-bit data segment  ");
+        break;
+    case GDT_SEG_CODE64:
+        debugf("\t64-bit code segment  ");
+        break;
+    case GDT_SEG_DATA64:
+        debugf("\t64-bit data segment  ");
+        break;
+    case GDT_SEG_CODEUSR:
+        debugf("\tuser code segment    ");
+        break;
+    case GDT_SEG_DATAUSR:
+        debugf("\tuser data segment    ");
+        break;
+    case GDT_SEG_TSS:
+        debugf("\tTSS segment  ");
+        break;
     
+    default:
+        break;
+    } 
+
+    debugf("GDT[%d]: BASE: 0x%x LIMIT: 0x%x ACCESS: 0x%x GRAN: 0x%x\n", index,
+            base, limit, access, gran);
+
+#endif 
 }
 
 
 //todo implement TSS next and interrupts
 
 void gdt_init(void) {
-   
+  
+#if KF_GDT_DEBUG == 1
     debugf("\n=====GDT DUMP BEGIN=====\n");
+#endif
+    
     
     g_GDT_PTR.limit = sizeof(g_GDT) - 1;
     g_GDT_PTR.base_address = (uint64_t)g_GDT;
 //index, base, limit, access, grann
+
+
     //NULL segment
     SetGDTEntry(0, 0, 0, 0, 0); 
     //16-bit code segment
@@ -61,8 +114,9 @@ void gdt_init(void) {
    
 
     gdt_flush(&g_GDT_PTR);
+#if KF_GDT_DEBUG == 1
     debugf("\n======GDT DUMP END======\n");
-    printf("\nIt works");
+#endif
 
     // 16-bit code descriptor (Entry 1)
 
