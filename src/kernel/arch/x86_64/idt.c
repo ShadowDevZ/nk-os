@@ -19,7 +19,7 @@ void IDT_SetGate(int gate, void* handler, int flags) {
 
     IDT_ENTRY64 entry = {
         .isrLow = low_16,
-        .kernelCs = 0x08,
+        .kernelCs = 0x28,
         .reserved = 0,
         //0x60 is user mode access
         .attributes = flags,
@@ -29,6 +29,8 @@ void IDT_SetGate(int gate, void* handler, int flags) {
 
     };
     g_IDT[gate] = entry;
+
+   
 
 }
 

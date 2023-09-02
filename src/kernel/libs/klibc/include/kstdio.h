@@ -24,4 +24,4 @@ void debugs(const char* str);
 void putchar(char c);
 
 #define FLAG_SET(x, flag) x |= flag
-#define FLAG_UNSET(x, flag) x &= ~(flag)
+#define FLAG_UNSET(x, flag) x &= ~(flag);

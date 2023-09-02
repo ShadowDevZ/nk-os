@@ -33,6 +33,8 @@ static void hcf(void) {
 }
 #include "sys/version.h"
 #include "dev/fbdev.h"
+#include "include/panic.h"
+
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
 // linker script accordingly.
@@ -118,15 +120,18 @@ bi.version->versionStr);
 //also we should call 'real' kernel entry from here
 
 
-//gdt_init();
+gdt_init();
 
 Initialize_IDT();
 
-asm("sti");
-ISR_Init();
-printf("CONTROL_REACH_EOF_KRNL_END");
 
-__asm("int $0x3");
+ISR_Init();
+asm("sti");
+printf("CONTROL_REACH_EOF_KRNL_END");
+SystemRaiseHardError("Test", "Debug");
+
+//asm ("int $0x1");
+
 
     // We're done, just hang...
     hcf();

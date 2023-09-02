@@ -38,15 +38,25 @@ void gdt_init(void) {
     g_GDT_PTR.limit = sizeof(g_GDT) - 1;
     g_GDT_PTR.base_address = (uint64_t)g_GDT;
 //index, base, limit, access, grann
-    SetGDTEntry(0, 0, 0, 0, 0);
+    //NULL segment
+    SetGDTEntry(0, 0, 0, 0, 0); 
+    //16-bit code segment
     SetGDTEntry(1, 0, 0xffff, 0x9a, 0x80);
+     //16-bit data segment
     SetGDTEntry(2, 0, 0xffff, 0x92, 0x80);
+    //32-bit code segment
     SetGDTEntry(3, 0, 0xffff, 0x9a, 0xcf);
+    //32-bit data segment
     SetGDTEntry(4, 0, 0xffff, 0x92, 0xcf);
+    //64-bit code segment
     SetGDTEntry(5, 0, 0, 0x9a, 0xa2);
+    //64-bit data segment
     SetGDTEntry(6, 0, 0, 0x92, 0xa0);
+    //user data segment 
     SetGDTEntry(7, 0, 0, 0xf2, 0);
+    //user code segment
     SetGDTEntry(8, 0, 0, 0xfa, 0x20);
+    //9 IS RESERVED FOR TSS
 
    
 
