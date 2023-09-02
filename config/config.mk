@@ -14,7 +14,7 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 
 
 ###DEFINE HERE
-SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm gdt.c idt.c isr.asm isr.c panic.c
+SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c tinyprintf.c crti.asm crtn.asm io.asm gdt.c idt.c isr.asm isr.c panic.c kernel.c
 ###DEFINE HERE
 
 

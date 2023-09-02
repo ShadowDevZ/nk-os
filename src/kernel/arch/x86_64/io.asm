@@ -1,8 +1,5 @@
 [bits 64]
 
-global x64_reg_dump
-x64_reg_dump:
-    
 
 global x64_cpu_stop
 x64_cpu_stop:
