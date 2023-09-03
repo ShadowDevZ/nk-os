@@ -10,6 +10,7 @@ x64_enable_sse:
 	mov cr4, rax
 	ret 
 
+
 ; Assembly routine to enable fpu support
 global x64_enable_fpu
 x64_enable_fpu:
@@ -25,19 +26,10 @@ x64_enable_fpu:
 
 global x64_enable_avx
 x64_enable_avx:
-    push rax
-    push rcx
-    push rdx
- 
-    xor rcx, rcx
-    xgetbv ;Load XCR0 register
-    or eax, 7 ;Set AVX, SSE, X87 bits
-    xsetbv ;Save back to XCR0
- 
-    pop rdx
-    pop rcx
-    pop rax
-    ret
+    mov rax, cr4
+	bts rax, 14		
+	mov cr4, rax
+	ret 
 
 global x64_cpu_stop
 x64_cpu_stop:

@@ -135,7 +135,7 @@ asm("sti");
 
 x64_enable_sse();
 x64_enable_fpu();
-
+x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
 
 int ret = kmain();
