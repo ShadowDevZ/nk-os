@@ -43,10 +43,7 @@ static void hcf(void) {
 
 
 
-static inline void outb(u16 port, u8 data)
-{
-	__asm volatile("outb %0,%w1" : : "a" (data), "d" (port));
-}
+
 
 void _start(void) {
     // Ensure we got a terminal
@@ -57,20 +54,7 @@ void _start(void) {
         hcf();
     }
 
-           //bool status = InitializeFramebuffers();
-
-
-    // We should now be able to call the Limine terminal to print out
-    // a simple "Hello World" to screen.
-  //  const char *hello_msg = "Hello World";
-
-    
-
-  //print(terminal ,hello_msg);
-  
-
- 
-//KVER_INFO bi = GetKernelVersion();
+           
 
 
 InitializeFramebuffers(framebuffer_request, terminal_request);
@@ -120,9 +104,6 @@ bi.buildDate,
 bi.buildTime,
 bi.version->versionStr);
 
-//todo add this to device manager to keep it organized.
-//Too lazy to do the interface now
-//also we should call 'real' kernel entry from here
 
 
 gdt_init();
