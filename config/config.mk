@@ -27,9 +27,9 @@ export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/lib
 export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
- -march=x86-64 -mabi=sysv -mno-80387 -mno-mmx -mno-sse -mno-sse2 -mno-red-zone -mcmodel=kernel \
+ -march=x86-64 -mabi=sysv -mno-80387  -mno-red-zone -mcmodel=kernel \
  -Wunknown-pragmas -Wno-attributes 
-
+#-mno-mmx -mno-sse -mno-sse2
 
 export HOST_CC=gcc
 
