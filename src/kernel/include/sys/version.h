@@ -8,8 +8,8 @@
 #define STR(...) #__VA_ARGS__
 #define STRSTR(...) STR(__VA_ARGS__)
 
-#define __KERNEL_BASE nk
-#define __KERNEL_CODENAME icefox
+#define __KERNEL_BASE "nk"
+#define __KERNEL_CODENAME "icefox"
 #define __KERNEL_VER_MAJOR 0
 #define __KERNEL_VER_MINOR 1
 #define __KERNEL_VER_PATCH 1
@@ -19,18 +19,18 @@
 #define __KERNEL_ARCH_INT 64
 #endif
 
-#define __KERNEL_PREFIX_CLASS dev
+#define __KERNEL_PREFIX_CLASS "dev"
 
-#define __KERNEL_CROSSCC gcc
+#define __KERNEL_CROSSCC "gcc"
 
 #define __KERNEL_COMPILER_VERSION STRSTR(__KERNEL_CROSSCC) " " __VERSION__
 
-#define __KERNEL_SUFFIX DEBUG
+#define __KERNEL_SUFFIX "DEBUG"
 
 #if KMODE_DBG == 1 
-#define __KERNEL_SUFFIX DEBUG
+#define __KERNEL_SUFFIX "DEBUG"
 #else
-#define __KERNEL_SUFFIX RELEASE
+#define __KERNEL_SUFFIX "RELEASE"
 #endif
 
 
@@ -45,7 +45,7 @@
 
 
 
-#define __KERNEL_FULL_NAME __KERNEL_CLASS_TYPE " " "(" STRSTR(__KERNEL_ARCH) ") " "[" __KERNEL_VERSION_STR "] "  STRSTR(__KERNEL_SUFFIX) " "
+//#define __KERNEL_FULL_NAME __KERNEL_CLASS_TYPE " " "(" STRSTR(__KERNEL_ARCH) ") " "[" __KERNEL_VERSION_STR "] "  STRSTR(__KERNEL_SUFFIX) " "
 
 #define MAX_ELEM_VERLEN 80
 

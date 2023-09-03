@@ -2,8 +2,10 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "dev/fbdev.h"
-#include <tinyprintf.h>
+#include <printf.h>
 #include "include/io.h"
+#define NULLSTR "(null)"
+
 int strcmp(const char* s1, const char* s2);
 char* strncpy(char* destination, const char* source, size_t num);
 int strncmp( const char * s1, const char * s2, size_t n );
@@ -26,6 +28,9 @@ void putchar(char c);
 #define FLAG_SET(x, flag) x |= flag
 #define FLAG_UNSET(x, flag) x &= ~(flag);
 
+void BroadcastPrintf(const char* format, ...);
+void BroadcastPuts(const char* str);
 
+void BroadcastPutc(char c);
 
 int toupper(int ch);

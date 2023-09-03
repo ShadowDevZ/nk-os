@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "tinyprintf.h"
+#include "printf.h"
 #include "limine.h"
 #define FB_MAX_SUPPORT 5
 #define FBDEV_MAX_LEN 10

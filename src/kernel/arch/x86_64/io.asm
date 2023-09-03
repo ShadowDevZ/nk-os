@@ -1,6 +1,44 @@
 [bits 64]
 
 
+; Assembly routine to enable sse support
+global x64_enable_sse
+x64_enable_sse:
+	mov rax, cr4
+	bts rax, 9		
+	bts rax, 10		
+	mov cr4, rax
+	ret 
+
+; Assembly routine to enable fpu support
+global x64_enable_fpu
+x64_enable_fpu:
+	mov rax, cr0
+	bts rax, 1		
+	btr rax, 2		
+	bts rax, 5		
+	btr rax, 3		
+	mov cr0, rax
+
+	finit
+	ret
+
+global x64_enable_avx
+x64_enable_avx:
+    push rax
+    push rcx
+    push rdx
+ 
+    xor rcx, rcx
+    xgetbv ;Load XCR0 register
+    or eax, 7 ;Set AVX, SSE, X87 bits
+    xsetbv ;Save back to XCR0
+ 
+    pop rdx
+    pop rcx
+    pop rax
+    ret
+
 global x64_cpu_stop
 x64_cpu_stop:
     cli
