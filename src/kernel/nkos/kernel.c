@@ -19,8 +19,8 @@ KERNEL_ENTRY kmain() {
     #endif
     debugf("bing bong\n");
    
-printf("pi value: %e\n", 3.14);
-   
+printf("FPU test: %f\n", 3.141592);
+
   
     UNREACHABLE();
 }
