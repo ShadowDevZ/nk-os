@@ -197,6 +197,20 @@ void debugf(const char* format, ...) {
     
 
 }
+void BroadcastPrintf(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    COMMON_PRINTF(format, FB_OUTPUT_BROADCAST, args);
+    va_end(args);
+}
+void BroadcastPuts(const char* str) {
+    COMMON_PUTS(str, FB_OUTPUT_BROADCAST);
+}
+
+void BroadcastPutc(char c) {
+    COMMON_PUTC(c, FB_OUTPUT_BROADCAST);
+}
+
 
 void debugs(const char* str) {
     COMMON_PUTS(str, FB_OUTPUT_DBG_E9);

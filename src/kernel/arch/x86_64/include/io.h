@@ -15,8 +15,9 @@ uint16_t  x64_insw(port_t port, void *addr, int cnt);
 void  x64_outsb(port_t port, const void *addr, int cnt);
 void  x64_outsw(port_t port, const void *addr, int cnt);
 
-
-
+void x64_enable_avx();
+void x64_enable_fpu();
+void x64_enable_sse();
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
 

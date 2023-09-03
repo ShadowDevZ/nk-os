@@ -151,9 +151,9 @@ $(KERNEL_NAME).iso: kernel ksyms
 	$(LIMINE_BOOT_DIR)/limine.sys $(BUILD_DIR)/iso/
 
 	@xorriso -as mkisofs -b limine-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table \
-	--protective-msdos-label $(BUILD_DIR)/iso -o $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null
+	--protective-msdos-label $(BUILD_DIR)/iso -o $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 
-	@$(LIMINE_BOOT_DIR)/limine-deploy $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null
+	@$(LIMINE_BOOT_DIR)/limine-deploy $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 	@cp $(BUILD_DIR)/iso/$(KERNEL_NAME).iso $(BUILD_DIR)
 #	@/$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso
 	@rm -rf $(BUILD_DIR)/iso/*

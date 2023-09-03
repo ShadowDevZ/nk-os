@@ -7,20 +7,20 @@
 #include "../arch/x86_64/include/gdt.h"
 #include "../arch/x86_64/include/isr.h"
 #include "../arch/x86_64/include/idt.h"
-static volatile struct limine_terminal_request terminal_request = {
+volatile struct limine_terminal_request terminal_request = {
     .id = LIMINE_TERMINAL_REQUEST,
     .revision = 0
 };
 
-static volatile struct limine_framebuffer_request framebuffer_request = {
+volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
     .revision = 0
 };
-static volatile struct limine_kernel_file_request kernel_request = {
+volatile struct limine_kernel_file_request kernel_request = {
     .id = LIMINE_KERNEL_FILE_REQUEST,
     .revision = 0
 };
-static volatile struct limine_kernel_address_request address_request = {
+volatile struct limine_kernel_address_request address_request = {
     .id = LIMINE_KERNEL_ADDRESS_REQUEST,
     .revision = 0
 };
@@ -34,6 +34,8 @@ static void hcf(void) {
 #include "sys/version.h"
 #include "dev/fbdev.h"
 #include "include/panic.h"
+
+
 
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
@@ -68,7 +70,7 @@ void _start(void) {
   
 
  
-KVER_INFO bi = GetKernelVersion();
+//KVER_INFO bi = GetKernelVersion();
 
 
 InitializeFramebuffers(framebuffer_request, terminal_request);
@@ -100,6 +102,9 @@ kernel_request.response->kernel_file->part_uuid.c,
 *kernel_request.response->kernel_file->part_uuid.d
 );
 
+
+
+KVER_INFO bi = GetKernelVersion();
 printf("Kernel Version Info\n");
 printf("Version String: %s" \
 "Codename: %s\n" \
@@ -107,7 +112,7 @@ printf("Version String: %s" \
 "CC: %s\n" \
 "Build time %s %s\n" \
 "Version: %s",
-__KERNEL_FULL_NAME,
+"giggity",
 bi.codename,
 (bi.archType == 64)? "x86_64" : "x86",
 bi.ccVersion,
@@ -128,6 +133,8 @@ Initialize_IDT();
 ISR_Init();
 asm("sti");
 
+x64_enable_sse();
+x64_enable_fpu();
 
 //SystemRaiseHardError("Test", "Debug");
 

@@ -1,8 +1,14 @@
 #include "kattributes.h"
 #include "kstdio.h"
 #include "ksyms.h"
+#include "../arch/x86_64/include/io.h"
+
+void fpu_load_control_word(const uint16_t control)
+{
+    asm volatile("fldcw %0;"::"m"(control)); 
+}
 KERNEL_ENTRY kmain() {
-    printf("\n");
+    BroadcastPrintf("\n");
     printf("Kernel main reached at 0x%x\n", kmain);
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
@@ -12,6 +18,8 @@ KERNEL_ENTRY kmain() {
     
     #endif
     debugf("bing bong\n");
+   
+printf("pi value: %e\n", 3.14);
    
   
     UNREACHABLE();
