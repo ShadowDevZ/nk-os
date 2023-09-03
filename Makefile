@@ -66,6 +66,12 @@ all: kernel iso
 	@$(ECHO) $(COLOR_GREEN)COMPLETED$(COLOR_RESET)
 #	@$(ECHO) $(AS_SOURCES)
 
+rerun: clean run
+	@echo $(COLOR_GREEN)Cleanup completed$(COLOR_RESET)
+	@$(ECHO) $(COLOR_GREEN)COMPLETED$(COLOR_RESET)
+#	@$(ECHO) $(AS_SOURCES)
+
+
 debug: kernel asmdump ksyms
 	@$(ECHO) $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
 
