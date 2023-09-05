@@ -96,7 +96,7 @@ printf("Version String: %s" \
 "CC: %s\n" \
 "Build time %s %s\n" \
 "Version: %s",
-"giggity",
+"NK icefox",
 bi.codename,
 (bi.archType == 64)? "x86_64" : "x86",
 bi.ccVersion,
@@ -112,11 +112,11 @@ Initialize_IDT();
 
 
 ISR_Init();
-asm("sti");
+//asm("sti");
 
 x64_enable_sse();
 x64_enable_fpu();
-x64_enable_avx();
+//x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
 
 int ret = kmain();

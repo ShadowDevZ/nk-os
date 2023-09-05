@@ -11,7 +11,7 @@
 #define GDT_SEG_DATAUSR 7
 #define GDT_SEG_CODEUSR 8
 #define GDT_SEG_TSS 9
-GDTEntry g_GDT[GTD_DESC_COUNT];
+GDTEntry g_GDT[GDT_DESC_COUNT];
 GDT_PTR g_GDT_PTR;
 //reserved for future use
 int g_GdtEntriesCount = 0;
@@ -94,13 +94,13 @@ void gdt_init(void) {
     //NULL segment
     SetGDTEntry(0, 0, 0, 0, 0); 
     //16-bit code segment
-    SetGDTEntry(1, 0, 0xffff, 0x9a, 0x80);
+    SetGDTEntry(1, 0, 0xFFFF, 0x9a, 0x80);
      //16-bit data segment
-    SetGDTEntry(2, 0, 0xffff, 0x92, 0x80);
+    SetGDTEntry(2, 0, 0xFFFF, 0x92, 0x80);
     //32-bit code segment
-    SetGDTEntry(3, 0, 0xffff, 0x9a, 0xcf);
+    SetGDTEntry(3, 0, 0xFFFFFFFF, 0x9a, 0xcf);
     //32-bit data segment
-    SetGDTEntry(4, 0, 0xffff, 0x92, 0xcf);
+    SetGDTEntry(4, 0, 0xFFFFFFFF, 0x92, 0xcf);
     //64-bit code segment
     SetGDTEntry(5, 0, 0, 0x9a, 0xa2);
     //64-bit data segment
