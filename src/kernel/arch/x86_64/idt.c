@@ -2,11 +2,11 @@
 #include "include/io.h"
 #include "krnlcfg.h"
 __attribute__((aligned(0x10))) 
-IDT_ENTRY64 g_IDT[256];
+IDT_ENTRY64 g_IDT[GD];
 IDT_DESCRIPTOR64 g_Desc;
 #include "kstdio.h"
 void Initialize_IDT() {
-    g_Desc.base = &g_IDT;
+    g_Desc.base = (uint64_t)&g_IDT;
     g_Desc.limit = (256 * sizeof(IDT_ENTRY64)) -1;
     memset(g_IDT, 0, sizeof(IDT_ENTRY64) * 256);
 
