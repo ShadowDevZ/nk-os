@@ -12,7 +12,8 @@
                 "/home/shadow/Projects/OperatingSystems/nkos/src/kernel/include/sys/**",
                 "${workspaceFolder}/src/kernel/libs/klibc/include",
                 "${workspaceFolder}/src/kernel/libs/klibc/include",
-                "${workspaceFolder}/src/kernel/include"
+                "${workspaceFolder}/src/kernel/include",
+                "${workspaceFolder}/src/kernel/include/sys"
             ],
             "defines": [],
             "compilerPath": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",

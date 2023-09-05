@@ -5,12 +5,12 @@ __attribute__((aligned(0x10)))
 IDT_ENTRY64 g_IDT[256];
 IDT_DESCRIPTOR64 g_Desc;
 #include "kstdio.h"
-void Initialize_IDT() {
+void InitializeIDT() {
     g_Desc.base = (uint64_t)&g_IDT;
     g_Desc.limit = (256 * sizeof(IDT_ENTRY64)) -1;
     memset(g_IDT, 0, sizeof(IDT_ENTRY64) * 256);
 
-    load_idt(&g_Desc);
+    x64_load_idt(&g_Desc);
 }
 
 void IDT_SetGate(int gate, void* handler, int flags) {

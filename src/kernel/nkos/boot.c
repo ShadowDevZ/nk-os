@@ -106,9 +106,9 @@ bi.version->versionStr);
 
 
 
-gdt_init();
+InitializeGDT();
 
-Initialize_IDT();
+InitializeIDT();
 
 
 ISR_Init();

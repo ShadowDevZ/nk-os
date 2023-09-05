@@ -2,7 +2,7 @@
 #include "kstdio.h"
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
-
+#include "sys/nkkerrr.h"
 
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
@@ -15,6 +15,8 @@ KERNEL_ENTRY kmain() {
     
     #endif
     debugf("bing bong\n");
+    NkkSetLastSystemError(E_NKK_SUCCESS);
+    printf(NkkGetLastErrorAsString());
    
 //printf("FPU test: %f\n", 3.141592);
 

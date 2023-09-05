@@ -99,9 +99,9 @@ x64_outsw:
 
 
 
-global load_idt
+global x64_load_idt
 
-load_idt:
+x64_load_idt:
     push rbp
     mov rbp, rsp
     
@@ -114,8 +114,8 @@ load_idt:
 
 
 
-global gdt_flush
-gdt_flush:
+global x64_gdt_flush
+x64_gdt_flush:
     lgdt [rdi]
     mov ax, 0x10
     mov ds, ax
@@ -130,7 +130,7 @@ gdt_flush:
     retfq
 
 global tss_flush
-tss_flush:
+x64_tss_flush:
     mov ax, 0x48
     ltr ax
     ret

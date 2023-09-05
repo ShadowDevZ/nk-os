@@ -79,7 +79,7 @@ void SetGDTEntry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8
 
 //todo implement TSS next and interrupts
 
-void gdt_init(void) {
+void InitializeGDT(void) {
   
 #if KF_GDT_DEBUG == 1
     debugf("\n=====GDT DUMP BEGIN=====\n");
@@ -113,7 +113,7 @@ void gdt_init(void) {
 
    
 
-    gdt_flush(&g_GDT_PTR);
+    x64_gdt_flush(&g_GDT_PTR);
 #if KF_GDT_DEBUG == 1
     debugf("\n======GDT DUMP END======\n");
 #endif
