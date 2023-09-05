@@ -2,7 +2,7 @@
 #include "include/io.h"
 #include "krnlcfg.h"
 __attribute__((aligned(0x10))) 
-IDT_ENTRY64 g_IDT[GD];
+IDT_ENTRY64 g_IDT[256];
 IDT_DESCRIPTOR64 g_Desc;
 #include "kstdio.h"
 void Initialize_IDT() {

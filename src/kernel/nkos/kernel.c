@@ -3,10 +3,7 @@
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
 
-void fpu_load_control_word(const uint16_t control)
-{
-    asm volatile("fldcw %0;"::"m"(control)); 
-}
+
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     printf("Kernel main reached at 0x%x\n", kmain);
@@ -19,7 +16,7 @@ KERNEL_ENTRY kmain() {
     #endif
     debugf("bing bong\n");
    
-printf("FPU test: %f\n", 3.141592);
+//printf("FPU test: %f\n", 3.141592);
 
   
     UNREACHABLE();
