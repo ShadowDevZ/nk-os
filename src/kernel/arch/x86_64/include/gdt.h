@@ -21,7 +21,7 @@ typedef struct {
 #define GDT_DESC_COUNT 10
 
 void SetGDTEntry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
-void GDT_Init();
 
 
-void gdt_init(void);
+
+void InitializeGDT(void);
