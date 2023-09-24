@@ -74,6 +74,7 @@ TODOLIST:
 - &#9744; Syscalls
 - &#9745; FPU
 - &#9745; SSE
+- &#9745; kernel error reporting
 
 
 # External used libraries
