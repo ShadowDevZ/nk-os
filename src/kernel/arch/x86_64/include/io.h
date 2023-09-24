@@ -21,7 +21,7 @@ void x64_enable_sse();
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
 
-
+#define x64_iowait() x64_outb(0x80, 0);
 void x64_gdt_flush(void* gdt);
 #include "idt.h"
 void x64_load_idt(IDT_DESCRIPTOR64* idt);

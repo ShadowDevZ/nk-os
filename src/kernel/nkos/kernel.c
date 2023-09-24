@@ -3,11 +3,16 @@
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
 #include "sys/nkkerrr.h"
+#include "../arch/x86_64/include/pic.h"
+
+void pootas(isr_state_t* srv) {
+    printf("ngga\n");
+}
 
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     printf("Kernel main reached at 0x%x\n", kmain);
-    printf("FPU test: %f\n", 3.141592);
+   
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
      while (KsymEnumSymbol(&st)) {
@@ -17,9 +22,16 @@ KERNEL_ENTRY kmain() {
     #endif
     debugf("bing bong\n");
     NkkSetLastSystemError(E_NKK_SUCCESS);
-    printf(NkkGetLastErrorAsString());
-   
+    printf("%s\n",NkkGetLastErrorAsString());
     
+    
+
+  
+  asm ("sti");
+
+   printf("FPU test: %f\n", 3.141592);
+  //asm("int $0xD");
+
 
   
     UNREACHABLE();
