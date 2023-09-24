@@ -595,11 +595,19 @@ void ISR_Handler(isr_state_t* regs) {
   //  PrintRegs(regs);
 
     //x64_cpu_stop();
+    if (g_ISRHandlers[regs->isr_number != NULL]) {
+         g_ISRHandlers[regs->isr_number](regs);
+    }
+    else if (regs->isr_number >= 32) {
+        printf("Unhandled interrupt %d!", regs->isr_number);
+        
+    }
+    else {
     ISR_SystemRaiseHardError("CPU exception has occured", regs);
 
-  //  printf("INT[%lu] %s\n", regs->isr_number, exception_messages[regs->isr_number]);
+   printf("INT[%lu] %s\n", regs->isr_number, exception_messages[regs->isr_number]);
    // PrintRegs(regs);
-    
+    }
 }
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
     g_ISRHandlers[interrupt] = handler;

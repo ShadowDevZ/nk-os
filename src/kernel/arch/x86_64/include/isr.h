@@ -44,4 +44,7 @@ typedef struct
 void ISR_Handler(isr_state_t* regs);
 void ISR_Init();
 char** GetIsrExceptionList();
+
 typedef void (*ISR_HANDLER)(isr_state_t* regs);
+
+void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler);
