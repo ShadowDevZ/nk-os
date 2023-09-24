@@ -1,0 +1,7 @@
+#pragma once
+
+#define PORT_PIC_MASTER_CMD 0x20
+#define PORT_PIC_MASTER_DATA 0x21
+
+#define PORT_PIC_SLAVE_CMD 0xA0
+#define PORT_PIC_SLAVE_DATA 0xA1

@@ -7,6 +7,7 @@
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     printf("Kernel main reached at 0x%x\n", kmain);
+    printf("FPU test: %f\n", 3.141592);
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
      while (KsymEnumSymbol(&st)) {
@@ -18,7 +19,7 @@ KERNEL_ENTRY kmain() {
     NkkSetLastSystemError(E_NKK_SUCCESS);
     printf(NkkGetLastErrorAsString());
    
-//printf("FPU test: %f\n", 3.141592);
+    
 
   
     UNREACHABLE();
