@@ -2,6 +2,12 @@
 #include <stdint.h>
 
 typedef struct {
+    uint64_t rax, rbx, rcx, rdx, rsi, rdi, r8, \
+    r9,r10,r11,r12,r13,r14,r15,rsp
+}registers_t;
+
+
+typedef struct {
     uint64_t r15;
     uint64_t r14;
     uint64_t r13;
@@ -46,5 +52,8 @@ void ISR_Init();
 char** GetIsrExceptionList();
 
 typedef void (*ISR_HANDLER)(isr_state_t* regs);
+
+typedef void (*IRQ_HANDLER)(registers_t* regs);
+void IRQ_RegisterHandler(uint8_t irq, IRQ_HANDLER handler);
 
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler);

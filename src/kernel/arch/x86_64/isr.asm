@@ -42,7 +42,7 @@ X64_ISR%1:
 
 %endmacro
 
-
+global isr_common
 isr_common:
     cld
     pusha64
