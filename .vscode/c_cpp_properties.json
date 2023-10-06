@@ -13,7 +13,8 @@
                 "${workspaceFolder}/src/kernel/libs/klibc/include",
                 "${workspaceFolder}/src/kernel/libs/klibc/include",
                 "${workspaceFolder}/src/kernel/include",
-                "${workspaceFolder}/src/kernel/include/sys"
+                "${workspaceFolder}/src/kernel/include/sys",
+                "${workspaceFolder}/src/kernel/arch/x86_64/include"
             ],
             "defines": [],
             "compilerPath": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",
