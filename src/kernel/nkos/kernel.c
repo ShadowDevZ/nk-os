@@ -3,11 +3,10 @@
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
 #include "sys/nkkerrr.h"
+#include "../arch/x86_64/include/irq.h"
 
+#include "../hal/timer/include/uptime.h"
 
-void timercb(registers_t* rg) {
-    printf(".");
-}
 
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
@@ -32,7 +31,9 @@ KERNEL_ENTRY kmain() {
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
 
-    IRQ_RegisterHandler(0, timercb);
+   IRQ_RegisterHandler(0, _timercb_internal_);
+  printf("timer: %llu\n", GetSystemTicks());
+  printf("timer: %llu\n", GetSystemTicks());
   
     UNREACHABLE();
 }

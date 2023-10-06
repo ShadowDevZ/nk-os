@@ -15,16 +15,16 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 
 ###DEFINE HERE
 SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c printf.c crti.asm crtn.asm io.asm gdt.c idt.c \
-isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm
+isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm irq.c uptime.c
 ###DEFINE HERE
 
 
 export C_VERSION=gnu11
 
 export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include -Isrc/kernel/arch/$(HOST_ARCH) \
--Isrc/kernel/include/sys
+-Isrc/kernel/include/sys -Isrc/kernel/arch/$(HOST_ARCH)/include
 
-export TARGET_CFLAGS=-g -ffreestanding -O2 -Wno-unused-local-typedefs -Wall \
+export TARGET_CFLAGS=-g -ffreestanding -O -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
  -march=x86-64 -mabi=sysv -mno-80387  -mno-red-zone -mcmodel=kernel \

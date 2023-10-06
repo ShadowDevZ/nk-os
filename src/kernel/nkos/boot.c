@@ -34,7 +34,7 @@ static void hcf(void) {
 #include "sys/version.h"
 #include "dev/fbdev.h"
 #include "include/panic.h"
-
+#include "../hal/timer/include/uptime.h"
 
 
 // The following will be our kernel's entry point.
@@ -116,6 +116,7 @@ ISR_Init();
 
 x64_enable_sse();
 x64_enable_fpu();
+PIT_SetFrequency(100);
 //x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
 
