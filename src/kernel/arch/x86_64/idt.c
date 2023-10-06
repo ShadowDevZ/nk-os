@@ -10,6 +10,17 @@ void InitializeIDT() {
     g_Desc.limit = (256 * sizeof(IDT_ENTRY64)) -1;
     memset(g_IDT, 0, sizeof(IDT_ENTRY64) * 256);
 
+    x64_outb(0x20, 0x11);
+    x64_outb(0xA0, 0x11);
+    x64_outb(0x21, 0x20);
+    x64_outb(0xA1, 0x28);
+    x64_outb(0x21, 0x04);
+    x64_outb(0xA1, 0x02);
+    x64_outb(0x21, 0x01);
+    x64_outb(0xA1, 0x01);
+    x64_outb(0x21, 0x0);
+    x64_outb(0xA1, 0x0);
+
     x64_load_idt(&g_Desc);
 }
 
