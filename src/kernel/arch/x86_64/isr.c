@@ -599,8 +599,10 @@ void ISR_Handler(isr_state_t* regs) {
    
    
   //  PrintRegs(regs);
+  
+    
 
-    //x64_cpu_stop();
+
     if (g_ISRHandlers[regs->isr_number != NULL]) {
          g_ISRHandlers[regs->isr_number](regs);
     }
@@ -620,12 +622,27 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
     IDT_EnableGate(interrupt);
 }
 
-void IRQ_Handler(isr_state_t regs) {
-    printf("here beep %llu\n", regs.gp.rdi);
-    if (regs.gp.rdi >= 40) {
+
+
+IRQ_HANDLER g_IRQ[16];
+
+void IRQ_RegisterHandler(uint8_t irq, IRQ_HANDLER handler) {
+    g_IRQ[irq] = handler;
+}
+
+void IRQ_Handler(uint64_t intno) {
+   // printf("here beep %llu\n", intno - 32);
+    
+    if (intno >= 40) {
         x64_outb(0xA0, 0x20);
     }
     x64_outb(0x20,0x20);
+
+    if (g_IRQ[intno - 32] != NULL) {
+        registers_t rg = x64_rdump();
+        g_IRQ[intno - 32](&rg);
+    }
     
     
 }
+

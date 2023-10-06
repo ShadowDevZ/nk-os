@@ -5,8 +5,8 @@
 #include "sys/nkkerrr.h"
 
 
-void pootas(isr_state_t* srv) {
-    printf("ngga\n");
+void timercb(registers_t* rg) {
+    printf(".");
 }
 
 KERNEL_ENTRY kmain() {
@@ -32,7 +32,7 @@ KERNEL_ENTRY kmain() {
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
 
-
+    IRQ_RegisterHandler(0, timercb);
   
     UNREACHABLE();
 }
