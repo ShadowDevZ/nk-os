@@ -6,7 +6,7 @@
 //#define KERNEL_ENTRY void
 
 typedef int _KERNEL_ENTRY;
-#define KERNEL_ENTRY __attribute__((section(".kernel64")))
+#define KERNEL_ENTRY __attribute__((section(".kernel64"))) int
 
 #define NATIVECALL __attribute__((optimize("O0")))
 #define PACKED __attribute__((packed))

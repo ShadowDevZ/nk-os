@@ -39,7 +39,7 @@ typedef struct
     
 } isr_state_t;
 
-
+extern void (*irqHandlers[16]);
 
 void ISR_Handler(isr_state_t* regs);
 void ISR_Init();

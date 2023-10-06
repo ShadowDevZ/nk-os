@@ -337,6 +337,11 @@ void IsrInstallGates() {
     IDT_SetGate(29, X64_ISR29,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(30, X64_ISR30,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(31, X64_ISR31,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
+
+    for (int i =0; i < 16; i++) {
+        IDT_SetGate(i+32, irqHandlers[i], 0x8E);
+    }
+  /* 
     IDT_SetGate(32, X64_ISR32,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(33, X64_ISR33,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(34, X64_ISR34,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
@@ -353,6 +358,8 @@ void IsrInstallGates() {
     IDT_SetGate(45, X64_ISR45,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(46, X64_ISR46,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(47, X64_ISR47,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
+  */
+  
     IDT_SetGate(48, X64_ISR48,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(49, X64_ISR49,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(50, X64_ISR50,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
@@ -481,7 +488,6 @@ void IsrInstallGates() {
     IDT_SetGate(166, X64_ISR166,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(167, X64_ISR167,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(168, X64_ISR168,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
-    IDT_SetGate(169, X64_ISR169,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(170, X64_ISR170,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(171, X64_ISR171,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
     IDT_SetGate(172, X64_ISR172,  IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT);
@@ -614,3 +620,12 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
     IDT_EnableGate(interrupt);
 }
 
+void IRQ_Handler(isr_state_t regs) {
+    printf("here beep %llu\n", regs.gp.rdi);
+    if (regs.gp.rdi >= 40) {
+        x64_outb(0xA0, 0x20);
+    }
+    x64_outb(0x20,0x20);
+    
+    
+}

@@ -3,7 +3,7 @@
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
 #include "sys/nkkerrr.h"
-#include "../arch/x86_64/include/pic.h"
+
 
 void pootas(isr_state_t* srv) {
     printf("ngga\n");
@@ -30,7 +30,7 @@ KERNEL_ENTRY kmain() {
   asm ("sti");
 
    printf("FPU test: %f\n", 3.141592);
-  //asm("int $0xD");
+ // asm("int $0xD");
 
 
   
