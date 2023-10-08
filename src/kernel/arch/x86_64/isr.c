@@ -623,6 +623,28 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
 }
 
 
-
+isr_state_t Regs2ISRState(registers_t* regs) {
+    if (regs == NULL) {
+        return;
+    }
+    isr_state_t state;
+    memset(&state, 0, sizeof(state));
+    state.gp.rax = regs->rax;
+    state.gp.rbx = regs->rbx;
+    state.gp.rcx = regs->rcx;
+    state.gp.rdx = regs->rdx;
+    state.gp.rsi = regs->rsi;
+    state.gp.rdi = regs->rdi;
+    state.gp.r8 = regs->r8;
+    state.gp.r9 = regs->r9;
+    state.gp.r10 = regs->r10;
+    state.gp.r11 = regs->r11;
+    state.gp.r12 = regs->r12;
+    state.gp.r13 = regs->r13;
+    state.gp.r14 = regs->r14;
+    state.gp.r15 = regs->r15;
+    
+    return state;
+}
 
 
