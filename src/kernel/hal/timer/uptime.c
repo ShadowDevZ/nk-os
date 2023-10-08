@@ -16,13 +16,13 @@ static uint64_t ticks = 0;
  void _timercb_internal_(registers_t* rg) {
     ticks++;
     //works correctly and prints every new PIT tick
-    printf("DEBUG_TICKS: %lu\n", ticks);
+ //   printf("DEBUG_TICKS: %lu\n", ticks);
     
     
 }
 
 uint64_t GetSystemTicks() {
     //doesnt work correctly and displays 0
-    printf("DEBUG_TICKS: %lu\n", ticks);
+   // printf("DEBUG_TICKS: %lu\n", ticks);
  return ticks;   
 }

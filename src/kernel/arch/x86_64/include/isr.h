@@ -52,6 +52,6 @@ char** GetIsrExceptionList();
 
 typedef void (*ISR_HANDLER)(isr_state_t* regs);
 
-
+isr_state_t Regs2ISRState(registers_t* regs);
 
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler);
