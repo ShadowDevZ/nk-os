@@ -5,3 +5,6 @@
 
 #define PORT_PIC_SLAVE_CMD 0xA0
 #define PORT_PIC_SLAVE_DATA 0xA1
+
+#define PORT_KBD_CMD 0x64
+#define PORT_KBD_DATA 0x60

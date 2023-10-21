@@ -6,8 +6,8 @@
 #include "../arch/x86_64/include/irq.h"
 
 #include "../hal/timer/include/uptime.h"
-
-
+#include "../hal/keyboard/include/keyboard.h"
+#include "../hal/keyboard/include/kbctl.h"
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     printf("Kernel main reached at 0x%x\n", kmain);
@@ -32,8 +32,11 @@ KERNEL_ENTRY kmain() {
  // asm("int $0xD");
 
    IRQ_RegisterHandler(0, _timercb_internal_);
-  printf("timer: %llu\n", GetSystemTicks());
-  printf("timer: %llu\n", GetSystemTicks());
+   IRQ_RegisterHandler(1, _keyboardcb_);
+
+
+    KeyboardInit();
+    clrscr();
   
     UNREACHABLE();
 }

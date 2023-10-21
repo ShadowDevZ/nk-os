@@ -34,3 +34,4 @@ void BroadcastPuts(const char* str);
 void BroadcastPutc(char c);
 
 int toupper(int ch);
+void clrscr();

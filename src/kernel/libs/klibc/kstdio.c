@@ -230,3 +230,7 @@ int toupper(int ch) {
         return ch;
     }
 }
+
+void clrscr() {
+    ClearFbScreen(FBDEV_DEFAULT);
+}

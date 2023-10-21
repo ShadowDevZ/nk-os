@@ -17,7 +17,8 @@
         "stddef.h": "c",
         "sysdefs.h": "c",
         "krnlcfg.h": "c",
-        "limattr.h": "c"
+        "limattr.h": "c",
+        "ports.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

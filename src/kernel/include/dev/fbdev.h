@@ -33,6 +33,9 @@ STREAM_TYPE Fb_GetStreamType(int fbIndex);
 
 
 void _FbPutString(const char* str);
+void ClearFbScreen([[_unused_]]int fbIndex);
+
+
 //print to the default TERM set by kernel
 #define FB_OUTPUT_STDIO 0xDE5
 //print to e9 debug port
