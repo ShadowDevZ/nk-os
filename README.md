@@ -2,7 +2,11 @@
 Hobyist x64 kernel
 Requirements: elf compatible x64 cross compiler (auto script will be added in future update to match all requirements),
 limine bootloader `v4.x` is pulled and builded as dependency automatically. Note newer version than 4 won't work beacuse the developer
-decided to remove the limine_terminal feature from version 5, 
+decided to remove the limine_terminal feature from version 5 and newer releases. 
+
+In the future this project is going to be upgraded to `v5.x` branch  and instead it is going to use the [flanterm](https://github.com/mintsuki/flanterm) provided by the developer
+as replacement. It is also possible that the project is going to migrate to `MULTIBOOT2` compatible bootloader for more compatibility and the linear framebuffer is going to be implemented
+manually which may break some current system functions exposed by the kernel. 
 
 Build is currently only supported on linux (the script requires /dev/null device, will make it compatible for windows in future)
 !!!Bochs may not work properly if it was not compiled with graphics option!!!
