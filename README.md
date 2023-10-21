@@ -37,14 +37,15 @@ TODOLIST:
 - &#9744; IRQ
 - &#9744; Better build system (CMake)
 - &#9744; TSS
-- &#9744; PIT
-- &#9744; PIC
+- &#9745; PIT
+- &#9745; PIC
 - &#9745; PS2 keyboard
 - &#9745; Debugging support
 - &#9744; Paging
 - &#9744; VMM
 - &#9744; PMM
 - &#9744; SMP
+- &#9744; TarFS (bsd or ustar)
 - &#9744; Threads
 - &#9744; Custom remote debugger using unix socket via qemu
 - &#9744; Usermode
@@ -54,7 +55,7 @@ TODOLIST:
 - &#9744; Kconfig like customization
 - &#9744; µGUI port
 - &#9744; Add support for floats inside printf
-- &#9744; Toolchain builder
+- &#9744; More user friendly toolchain builder
 - &#9744; C++ support
 - &#9744; Device manager
 - &#9744; ATA support
