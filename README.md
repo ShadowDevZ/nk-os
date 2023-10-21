@@ -7,6 +7,7 @@ decided to remove the limine_terminal feature from version 5,
 Build is currently only supported on linux (the script requires /dev/null device, will make it compatible for windows in future)
 !!!Bochs may not work properly if it was not compiled with graphics option!!!
 - xorriso
+- bash
 - nm
 - od
 - nasm
