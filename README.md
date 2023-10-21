@@ -39,7 +39,7 @@ TODOLIST:
 - &#9744; TSS
 - &#9744; PIT
 - &#9744; PIC
-- &#9744; PS2 keyboard
+- &#9745; PS2 keyboard
 - &#9745; Debugging support
 - &#9744; Paging
 - &#9744; VMM
