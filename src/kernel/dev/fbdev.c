@@ -46,6 +46,10 @@ void _FbPutString(const char* str) {
  terminal_request.response->write(terminal_request.response->terminals[FBDEV_DEFAULT], str, strlen(str));
 }
 
+void ClearFbScreen([[_unused_]]int fbIndex) {
+  _FbPutString("\e[1;1H\e[2J");
+}
+
 void _putchar(char character) {
   _FbPutChar(NULL, character);
 }
