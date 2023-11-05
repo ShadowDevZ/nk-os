@@ -2,11 +2,16 @@
 Hobyist x64 kernel
 Requirements: elf compatible x64 cross compiler (auto script will be added in future update to match all requirements),
 limine bootloader `v4.x` is pulled and builded as dependency automatically. Note newer version than 4 won't work beacuse the developer
-decided to remove the limine_terminal feature from version 5, 
+decided to remove the limine_terminal feature from version 5 and newer releases. 
+
+In the future this project is going to be upgraded to `v5.x` branch  and instead it is going to use the [flanterm](https://github.com/mintsuki/flanterm) provided by the developer
+as replacement. It is also possible that the project is going to migrate to `MULTIBOOT2` compatible bootloader for more compatibility and the linear framebuffer is going to be implemented
+manually which may break some current system functions exposed by the kernel. 
 
 Build is currently only supported on linux (the script requires /dev/null device, will make it compatible for windows in future)
 !!!Bochs may not work properly if it was not compiled with graphics option!!!
 - xorriso
+- bash
 - nm
 - od
 - nasm
@@ -37,14 +42,15 @@ TODOLIST:
 - &#9744; IRQ
 - &#9744; Better build system (CMake)
 - &#9744; TSS
-- &#9744; PIT
-- &#9744; PIC
-- &#9744; PS2 keyboard
+- &#9745; PIT
+- &#9745; PIC
+- &#9745; PS2 keyboard
 - &#9745; Debugging support
 - &#9744; Paging
 - &#9744; VMM
 - &#9744; PMM
 - &#9744; SMP
+- &#9744; TarFS (bsd or ustar)
 - &#9744; Threads
 - &#9744; Custom remote debugger using unix socket via qemu
 - &#9744; Usermode
@@ -54,7 +60,7 @@ TODOLIST:
 - &#9744; Kconfig like customization
 - &#9744; µGUI port
 - &#9744; Add support for floats inside printf
-- &#9744; Toolchain builder
+- &#9744; More user friendly toolchain builder
 - &#9744; C++ support
 - &#9744; Device manager
 - &#9744; ATA support
@@ -77,5 +83,6 @@ TODOLIST:
 - &#9745; kernel error reporting
 
 
-# External used libraries
-[printf library](https://github.com/mpaland/printf/tree/master) MIT license
+# External used libraries and assets
+[printf library](https://github.com/mpaland/printf/tree/master) MIT license \
+[limine bootloader](https://github.com/limine-bootloader/limine) BSD-2-Clause license
