@@ -2,6 +2,7 @@
 #include "kattributes.h"
 #include "bitsets.h"
 #include "ports.h"
+#include "irq.h"
 #include "include/kbctl.h"
 unsigned char kbd_tbl[128] =
 {
@@ -233,7 +234,9 @@ void NATIVECALL _keyboardcb_(registers_t* regs) {
     else {
        kbputchar(kbd_tbl[scanCode]);
     }
-   
+
+
+  // IRQ_SendEOI(1);
 
 //    keyflags = 0;
 
