@@ -11,18 +11,30 @@ void PIT_SetFrequency(int hz) {
     x64_outb(0x40, divisor >> 8);     // high byte
 }
 
-
-static uint64_t ticks = 0;
+volatile uint64_t secs = 0;
+volatile uint64_t ticks = 0;
  void _timercb_internal_(registers_t* rg) {
     ticks++;
-    //works correctly and prints every new PIT tick
- //   printf("DEBUG_TICKS: %lu\n", ticks);
-    
+ 
+
+   // IRQ_SendEOI(0);
+
     
 }
 
-uint64_t GetSystemTicks() {
-    //doesnt work correctly and displays 0
-   // printf("DEBUG_TICKS: %lu\n", ticks);
+volatile uint64_t GetSystemTicks() {
  return ticks;   
+}
+
+void kusleep(uint64_t ms) {
+    uint64_t ticks = GetSystemTicks();
+    uint64_t saved = ticks;
+
+    //less or equal in case the processor doesnt get the chance
+    //to responds, it would loop endlessly
+    while (ticks <= saved + ms) {
+        ticks = GetSystemTicks();
+
+    }
+
 }

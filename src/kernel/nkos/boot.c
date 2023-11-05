@@ -116,7 +116,7 @@ ISR_Init();
 
 x64_enable_sse();
 x64_enable_fpu();
-PIT_SetFrequency(100);
+
 //x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
 
