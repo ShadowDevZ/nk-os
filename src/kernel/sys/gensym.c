@@ -58,7 +58,7 @@ const KsymList symbols[] = {
 { 0xFFFFFFFF80002577,"PIT_SetFrequency"},
 { 0xFFFFFFFF800025BD,"_timercb_internal_"},
 { 0xFFFFFFFF800025D0,"GetSystemTicks"},
-{ 0xFFFFFFFF800025D8,"Ksleep"},
+{ 0xFFFFFFFF800025D8,"kusleep"},
 { 0xFFFFFFFF800025F1,"SetKbctlEvent"},
 { 0xFFFFFFFF80002625,"GetKbctl"},
 { 0xFFFFFFFF8000262D,"GetKbctlEvent"},

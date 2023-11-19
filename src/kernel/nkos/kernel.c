@@ -30,17 +30,17 @@ KERNEL_ENTRY kmain() {
 
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
-  
+ 
   IRQ_RegisterHandler(0, _timercb_internal_);
   PIT_SetFrequency(1000);
+
    IRQ_RegisterHandler(1, _keyboardcb_);
-
-
+ 
     KeyboardInit();
     clrscr();
     
     
-    Ksleep(5000);
+    kusleep(5000);
     printf("working sleep\n");
    
   
