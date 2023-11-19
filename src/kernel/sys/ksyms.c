@@ -3,13 +3,7 @@
 #include <stddef.h>
 #include "sysdefs.h"
 #include <stdbool.h>
-void KsymDebugDump() {
-    for (uint64_t i = 0; symbols[i].addr != NULL; ++i) {
-        printf("ADDR: 0x%x NAME: %s\n", symbols[i].addr, symbols[i].name);
-    }
-    printf("\n");
 
-}
 NATIVECALL uint64_t KsymCount() {
     uint64_t i = 0;
     for (i; symbols[i].addr != NULL; ++i);

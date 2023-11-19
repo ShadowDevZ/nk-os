@@ -4,6 +4,11 @@
 #include "kstdio.h"
 #include "io.h"
 
+void PIT_Init(int hz) {
+    PIT_SetFrequency(hz);
+    IRQ_RegisterHandler(0, _timercb_internal_);;
+}
+
 void PIT_SetFrequency(int hz) {
     int divisor = 1193180 / hz;
     x64_outb(0x43, 0x36);
