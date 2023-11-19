@@ -16,7 +16,7 @@ void  x64_outsb(port_t port, const void *addr, int cnt);
 void  x64_outsw(port_t port, const void *addr, int cnt);
 
 registers_t x64_rdump();
-
+void x64_pgon();
 void x64_enable_avx();
 void x64_enable_fpu();
 void x64_enable_sse();

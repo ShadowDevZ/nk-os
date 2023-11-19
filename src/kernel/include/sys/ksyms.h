@@ -10,7 +10,6 @@ typedef struct {
     const char name[SYM_NAME_MAXLEN];
 }KsymList;
 extern const KsymList symbols[];
-void KsymDebugDump();
 uint64_t KsymCount();
 void* KsymFind(const char* name);
 const char* KsymResolveAddress(void* addr);

@@ -75,9 +75,16 @@ rerun: clean run
 debug: kernel asmdump ksyms
 	@$(ECHO) $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
 
+
+
+
 _run: $(KERNEL_NAME).iso 
 	@$(ECHO) $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
 	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -monitor stdio -d int
+
+vbox: $(KERNEL_NAME).iso 
+	@$(ECHO) $(COLOR_GREEN)[VBOX]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
+	@VBoxManage startvm NKOS
 	
 
 run_dbg:
