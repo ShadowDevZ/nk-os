@@ -2,7 +2,7 @@
 #include "include/idt.h"
 #include "include/panic.h"
 #include "include/irq.h"
-
+#include "ports.h"
 IRQ_HANDLER g_IRQ[16];
 
 void IRQ_RegisterHandler(uint8_t irq, IRQ_HANDLER handler) {
@@ -10,9 +10,9 @@ void IRQ_RegisterHandler(uint8_t irq, IRQ_HANDLER handler) {
 }
 void IRQ_SendEOI(uint8_t irq) {
     if (irq >= 40) {
-        x64_outb(0xA0, 0x20);
+        x64_outb(PORT_PIC_SLAVE_CMD, PORT_PIC_MASTER_CMD);
     }
-    x64_outb(0x20,0x20);
+    x64_outb(PORT_PIC_MASTER_CMD,PORT_PIC_MASTER_CMD);
 }
 void IRQ_Handler(uint8_t intno) {
    // printf("here beep %llu\n", intno - 32);

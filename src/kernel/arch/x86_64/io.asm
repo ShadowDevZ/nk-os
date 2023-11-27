@@ -154,3 +154,10 @@ x64_rdump:
     mov [rdi + 104], r15
     mov [rdi + 120], rsp
     ret
+
+global x64_panic
+
+x64_panic:
+    cli
+    hlt
+    jmp $x64_panic

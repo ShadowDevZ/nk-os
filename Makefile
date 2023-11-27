@@ -32,7 +32,7 @@ endif
 
 
 
-.PHONY: all kernel clean run iso limine distclean ksyms asmdump debug run_dbg
+.PHONY: all kernel clean run iso bootstrap debootstrap distclean ksyms asmdump debug run_dbg
 
 override _C_SOURCES := $(abspath $(shell find -P src -type f -name '*.c'))
 override _AS_SOURCES := $(abspath $(shell find -P src -type f -name '*.asm'))
@@ -80,7 +80,7 @@ debug: kernel asmdump ksyms
 
 _run: $(KERNEL_NAME).iso 
 	@$(ECHO) $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -monitor stdio -d int
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -debugcon stdio
 
 vbox: $(KERNEL_NAME).iso 
 	@$(ECHO) $(COLOR_GREEN)[VBOX]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
@@ -147,16 +147,23 @@ ksyms: kernel
 
 
 
+bootstrap: limine all
+	@$(ECHO) BOOTSTRAPPING ...
 
+debootstrap: clean
+	@$(ECHO) DEBOOTSTRAPPING ...
+	@rm -rf $(LIMINE_BOOT_DIR)
+	@rm -f $(LIMINE_INC_DIR)/limine.h
 
 limine:	
 	git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1 $(LIMINE_BOOT_DIR)
 #	$(MAKE) -C limine CC=gcc CFLAGS="-Wall -Wextra"
-	$(MAKE) -C $(LIMINE_BOOT_DIR)
+	$(MAKE) -C $(LIMINE_BOOT_DIR) CC="${HOST_CC}"
+	@cp $(LIMINE_BOOT_DIR)/limine.h $(LIMINE_INC_DIR)
 	@$(ECHO) $(COLOR_GREEN)[DEP]$(COLOR_RESET) Successfully built Limine bootloader dependency
 
 
-$(KERNEL_NAME).iso: kernel ksyms
+$(KERNEL_NAME).iso: kernel ksyms 
 	@rm -rf $(BUILD_DIR)/iso
 	@mkdir -p $(BUILD_DIR)/iso
 	

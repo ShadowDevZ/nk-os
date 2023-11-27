@@ -1,4 +1,4 @@
-megs: 128
+megs: 512
 romimage: file=/usr/share/bochs/BIOS-bochs-latest
 vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
 ata0-master: type=cdrom, path=$HOME/Projects/OperatingSystems/nkos/build/nkos.iso, status=inserted

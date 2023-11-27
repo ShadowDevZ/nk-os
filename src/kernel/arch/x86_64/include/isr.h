@@ -23,7 +23,7 @@ typedef struct {
     uint64_t rbx;
     uint64_t rax;
 
-}general_registers_t;
+}__attribute__((packed)) general_registers_t;
 
 typedef struct {
     uint64_t rip;

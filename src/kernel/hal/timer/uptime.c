@@ -3,22 +3,23 @@
 #include "irq.h"
 #include "kstdio.h"
 #include "io.h"
-
+#include "ports.h"
 void PIT_Init(int hz) {
-    PIT_SetFrequency(hz);
+    
     IRQ_RegisterHandler(0, _timercb_internal_);;
+    PIT_SetFrequency(hz);
 }
 
 void PIT_SetFrequency(int hz) {
     int divisor = 1193180 / hz;
-    x64_outb(0x43, 0x36);
-    x64_outb(0x40, divisor & 0xFF);   // low byte
-    x64_outb(0x40, divisor >> 8);     // high byte
+    x64_outb(PORT_PIT_CMD_W, 0x36);
+    x64_outb(PORT_PIT_DCH0_RW , divisor & 0xFF);   // low byte
+    x64_outb(PORT_PIT_DCH0_RW , divisor >> 8);     // high byte
 }
 
 volatile uint64_t secs = 0;
 volatile uint64_t ticks = 0;
- void _timercb_internal_(registers_t* rg) {
+NATIVECALL void _timercb_internal_(registers_t* rg) {
     ticks++;
  
 
