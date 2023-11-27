@@ -598,8 +598,8 @@ ISR_HANDLER g_ISRHandlers[256];
 void ISR_Handler(isr_state_t* regs) {
    
    
-  //  PrintRegs(regs);
-  
+    //PrintRegs(regs);
+    printf("dd\n");
     
 
 
@@ -607,7 +607,7 @@ void ISR_Handler(isr_state_t* regs) {
          g_ISRHandlers[regs->isr_number](regs);
     }
     else if (regs->isr_number >= 32) {
-        printf("Unhandled interrupt %d!", regs->isr_number);
+        printf("Unhandled interrupt %llu!\n", regs->isr_number);
         
     }
     else {

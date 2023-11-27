@@ -5,15 +5,13 @@
 #include "limine/limine.h"
 #include "limattr.h"
 //FBDEV g_Fb[FB_MAX_SUPPORT];
-
-
-STREAM_TYPE gStream[FB_MAX_SUPPORT];
-
-
-
+#include "ports.h"
+//ah yes these global variables do not work again
+static volatile STREAM_TYPE gStream[FB_MAX_SUPPORT] = {0};
 
 
 STREAM_TYPE Fb_GetStreamType([[_unused_]]int fbIndex) {
+
   return gStream[FBDEV_DEFAULT];
 }
 
@@ -62,12 +60,13 @@ void _FbPutChar(_unused_ void* putp, char c) {
  // x64_outb(0xE9, c);
  // return;
  //}
+ 
  switch(Fb_GetStreamType(FBDEV_DEFAULT)) {
   case FB_OUTPUT_DBG_E9:
-    x64_outb(0xE9, c);
+    x64_outb(PORT_FB_VMDEBUG, c);
     break;
   case FB_OUTPUT_BROADCAST:
-    x64_outb(0xE9, c);
+    x64_outb(PORT_FB_VMDEBUG, c);
     _FbPutString(str);
     break;
   case FB_OUTPUT_STDIO:
@@ -87,7 +86,7 @@ void _FbPutChar(_unused_ void* putp, char c) {
 bool InitializeFramebuffers(struct limine_framebuffer_request lbf, struct limine_terminal_request term) {
    
 
-  
+
   //  init_printf(NULL, _FbPutChar);
 
     return true;            

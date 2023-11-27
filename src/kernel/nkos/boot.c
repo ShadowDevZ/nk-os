@@ -119,6 +119,7 @@ x64_enable_fpu();
 
 //x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
+Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_BROADCAST);
 
 int ret = kmain();
 SystemRaiseHardError("KMAIN_RETURNED", "Kernel main returned, this should not be happening");
