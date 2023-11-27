@@ -21,7 +21,7 @@ typedef struct {
 }FBDEV;
 
 #define FBDEV_DEFAULT 0
-bool InitializeFramebuffers(struct limine_framebuffer_request* lbf);
+bool InitializeFramebuffers(volatile struct limine_framebuffer_request* lbf);
 
 void _FbPutChar(void* putp, char c);
 #define FbPutChar(c) _FbPutChar(NULL, c);

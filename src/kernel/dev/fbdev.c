@@ -12,7 +12,7 @@
 extern struct flanterm_context *ft_ctx;
 
 //ah yes these global variables do not work again
-static volatile STREAM_TYPE gStream[FB_MAX_SUPPORT] = {0};
+STREAM_TYPE gStream[FB_MAX_SUPPORT] = {0};
 
 
 STREAM_TYPE Fb_GetStreamType([[_unused_]]int fbIndex) {
@@ -37,6 +37,8 @@ switch(streamType) {
     gStream[FBDEV_DEFAULT] = FB_OUTPUT_STDIO;
     
 }
+
+
 return true;
 
 
@@ -89,7 +91,7 @@ void _FbPutChar(_unused_ void* putp, char c) {
 
 
 
-bool InitializeFramebuffers(struct limine_framebuffer_request* lbf) {
+bool InitializeFramebuffers(volatile struct limine_framebuffer_request* lbf) {
 
 
   //  init_printf(NULL, _FbPutChar);

@@ -46,7 +46,9 @@ struct flanterm_context *ft_ctx;
 
 void _start(void) {
     // Ensure we got a terminal
-
+if (framebuffer_request.response->framebuffer_count < 1 || framebuffer_request.response->framebuffers[0] == NULL) {
+    hcf();
+} 
    
    
 ft_ctx = flanterm_fb_simple_init(
