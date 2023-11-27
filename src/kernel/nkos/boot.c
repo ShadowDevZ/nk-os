@@ -7,10 +7,9 @@
 #include "../arch/x86_64/include/gdt.h"
 #include "../arch/x86_64/include/isr.h"
 #include "../arch/x86_64/include/idt.h"
-volatile struct limine_terminal_request terminal_request = {
-    .id = LIMINE_TERMINAL_REQUEST,
-    .revision = 0
-};
+#include "../dev/flanterm/flanterm.h"
+#include "../dev/flanterm/backends/fb.h"
+
 
 volatile struct limine_framebuffer_request framebuffer_request = {
     .id = LIMINE_FRAMEBUFFER_REQUEST,
@@ -42,22 +41,22 @@ static void hcf(void) {
 // linker script accordingly.
 
 
-
+struct flanterm_context *ft_ctx;
 
 
 void _start(void) {
     // Ensure we got a terminal
 
    
-    if (terminal_request.response == NULL
-     || terminal_request.response->terminal_count < 1) {
-        hcf();
-    }
+   
+ft_ctx = flanterm_fb_simple_init(
+    framebuffer_request.response->framebuffers[0]->address, framebuffer_request.response->framebuffers[0]->width, framebuffer_request.response->framebuffers[0]->height, \
+     framebuffer_request.response->framebuffers[0]->pitch);
 
-           
+const char msg[] = "Hello world\n";
+flanterm_write(ft_ctx, msg, sizeof(msg));
 
-
-InitializeFramebuffers(framebuffer_request, terminal_request);
+InitializeFramebuffers(&framebuffer_request);
 
 
 printf("Kernel booted\n");

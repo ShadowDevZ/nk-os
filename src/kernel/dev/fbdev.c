@@ -6,6 +6,11 @@
 #include "limattr.h"
 //FBDEV g_Fb[FB_MAX_SUPPORT];
 #include "ports.h"
+#include "../dev/flanterm/flanterm.h"
+#include "../dev/flanterm/backends/fb.h"
+
+extern struct flanterm_context *ft_ctx;
+
 //ah yes these global variables do not work again
 static volatile STREAM_TYPE gStream[FB_MAX_SUPPORT] = {0};
 
@@ -41,7 +46,8 @@ return true;
 
 void _FbPutString(const char* str) {
  // g_Fb[FBDEV_DEFAULT].lr.response->write(g_Fb[FBDEV_DEFAULT].lr.response->terminals[FBDEV_DEFAULT], str, strlen(str));
- terminal_request.response->write(terminal_request.response->terminals[FBDEV_DEFAULT], str, strlen(str));
+// terminal_request.response->write(terminal_request.response->terminals[FBDEV_DEFAULT], str, strlen(str));
+flanterm_write(ft_ctx, str, strlen(str));
 }
 
 void ClearFbScreen([[_unused_]]int fbIndex) {
@@ -83,8 +89,7 @@ void _FbPutChar(_unused_ void* putp, char c) {
 
 
 
-bool InitializeFramebuffers(struct limine_framebuffer_request lbf, struct limine_terminal_request term) {
-   
+bool InitializeFramebuffers(struct limine_framebuffer_request* lbf) {
 
 
   //  init_printf(NULL, _FbPutChar);

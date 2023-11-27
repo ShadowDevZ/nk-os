@@ -149,31 +149,39 @@ ksyms: kernel
 
 bootstrap: limine all
 	@$(ECHO) BOOTSTRAPPING ...
+	
 
 debootstrap: clean
 	@$(ECHO) DEBOOTSTRAPPING ...
 	@rm -rf $(LIMINE_BOOT_DIR)
 	@rm -f $(LIMINE_INC_DIR)/limine.h
+	@rm -rf $(abspath src/kernel/dev/flanterm)
 
 limine:	
-	git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1 $(LIMINE_BOOT_DIR)
+	git clone https://github.com/limine-bootloader/limine.git --branch=v5.x-branch-binary --depth=1 $(LIMINE_BOOT_DIR)
 #	$(MAKE) -C limine CC=gcc CFLAGS="-Wall -Wextra"
 	$(MAKE) -C $(LIMINE_BOOT_DIR) CC="${HOST_CC}"
 	@cp $(LIMINE_BOOT_DIR)/limine.h $(LIMINE_INC_DIR)
 	@$(ECHO) $(COLOR_GREEN)[DEP]$(COLOR_RESET) Successfully built Limine bootloader dependency
+
+	git clone https://github.com/mintsuki/flanterm.git --depth=1 $(abspath src/kernel/dev/flanterm)
+
+	
 
 
 $(KERNEL_NAME).iso: kernel ksyms 
 	@rm -rf $(BUILD_DIR)/iso
 	@mkdir -p $(BUILD_DIR)/iso
 	
-	@cp $(BUILD_DIR)/$(KERNEL_FILE) $(CFG_DIR)/limine.cfg $(LIMINE_BOOT_DIR)/limine-cd.bin \
-	$(LIMINE_BOOT_DIR)/limine.sys $(BUILD_DIR)/iso/
+	
+	@cp $(BUILD_DIR)/$(KERNEL_FILE) $(CFG_DIR)/limine.cfg $(LIMINE_BOOT_DIR)/limine-bios-cd.bin \
+	$(LIMINE_BOOT_DIR)/limine-bios.sys $(BUILD_DIR)/iso/
 
-	@xorriso -as mkisofs -b limine-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table \
+	
+	@xorriso -as mkisofs -b limine-bios-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table \
 	--protective-msdos-label $(BUILD_DIR)/iso -o $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 
-	@$(LIMINE_BOOT_DIR)/limine-deploy $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
+	@$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 	@cp $(BUILD_DIR)/iso/$(KERNEL_NAME).iso $(BUILD_DIR)
 #	@/$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso
 	@rm -rf $(BUILD_DIR)/iso/*
