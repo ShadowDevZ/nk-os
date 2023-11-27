@@ -603,7 +603,7 @@ void ISR_Handler(isr_state_t* regs) {
     
 
 
-    if (g_ISRHandlers[regs->isr_number != NULL]) {
+    if (g_ISRHandlers[regs->isr_number] != NULL) {
          g_ISRHandlers[regs->isr_number](regs);
     }
     else if (regs->isr_number >= 32) {
@@ -625,7 +625,8 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
 
 isr_state_t Regs2ISRState(registers_t* regs) {
     if (regs == NULL) {
-        return;
+        isr_state_t t = {0};
+        return t;
     }
     isr_state_t state;
     memset(&state, 0, sizeof(state));

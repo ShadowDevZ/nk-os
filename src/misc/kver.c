@@ -30,7 +30,8 @@ KVER_INFO GetKernelVersion() {
     VERCPY(ki.kernelBase, __KERNEL_BASE);
     VERCPY(ki.prefix, __KERNEL_PREFIX_CLASS);
     VERCPY(ki.suffix, __KERNEL_SUFFIX);
-    VERCPY(ki.version, NULLSTR);
+   // VERCPY(ki.version->versionStr, NULLSTR);
+
     
     
    

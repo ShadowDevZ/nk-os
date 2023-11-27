@@ -37,12 +37,12 @@ bool KsymEnumSymbol(SYM_ENUM_STATE* state) {
     }
     return false;
 }
-void* KsymGetSymbolIndex(uint64_t* addr) {
+int KsymGetSymbolIndex(uint64_t* addr) {
     for (uint64_t i = 0; symbols[i].addr != NULL; ++i) {
        if (symbols[i].addr == addr) {
         return i;
        }
     }
-    return NULL;
+    return -1;
   
 }
