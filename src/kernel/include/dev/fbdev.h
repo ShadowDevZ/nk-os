@@ -16,12 +16,12 @@ typedef struct {
     uint64_t bpp;
     //eg. is locked, readonly, systemprotected,
     uint32_t statusFlags; 
-    struct limine_terminal_request lr;
+
 
 }FBDEV;
 
 #define FBDEV_DEFAULT 0
-bool InitializeFramebuffers(struct limine_framebuffer_request lbf, struct limine_terminal_request term);
+bool InitializeFramebuffers(struct limine_framebuffer_request* lbf);
 
 void _FbPutChar(void* putp, char c);
 #define FbPutChar(c) _FbPutChar(NULL, c);
