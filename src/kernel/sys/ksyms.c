@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include "sysdefs.h"
 #include <stdbool.h>
-
+/*
 NATIVECALL uint64_t KsymCount() {
     uint64_t i = 0;
     for (i; symbols[i].addr != NULL; ++i);
@@ -46,3 +46,12 @@ int KsymGetSymbolIndex(uint64_t* addr) {
     return -1;
   
 }
+
+void DumpSymbolTable() {
+     SYM_ENUM_STATE st = {0};
+     while (KsymEnumSymbol(&st)) {
+        debugf("AD: 0x%llX NM: %s()\n", st.list.addr, st.list.name); // Updated format specifiers
+    }
+    
+}
+*/

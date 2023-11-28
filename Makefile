@@ -138,7 +138,7 @@ asmdump: kernel
 
 ksyms: kernel
 	@nm -C $(BUILD_DIR)/$(KERNEL_FILE) --numeric-sort | grep -i -F " T " > $(SYM_DIR)/$(KERNEL_NAME).ksymx
-	awk {'print $$1 "\t" $$3'} $(SYM_DIR)/$(KERNEL_FILE).ksym > $(SYM_DIR)/$(KERNEL_FILE).ksym
+	@awk {'print $$1 "\t" $$3'} $(SYM_DIR)/$(KERNEL_FILE).ksym > $(SYM_DIR)/$(KERNEL_FILE).ksym
 	@awk {'print "0x" toupper($$1) "\t" $$3'} $(SYM_DIR)/$(KERNEL_NAME).ksymx | tee $(SYM_DIR)/$(KERNEL_NAME).ksym > /dev/null 2>&1
 	@rm $(SYM_DIR)/$(KERNEL_NAME).ksymx
 	@$(ECHO) NM ' ' $(KERNEL_NAME).ksym
