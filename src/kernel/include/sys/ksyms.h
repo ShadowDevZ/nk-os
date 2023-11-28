@@ -20,3 +20,4 @@ typedef struct {
 
 bool KsymEnumSymbol(SYM_ENUM_STATE* state);
 
+void DumpSymbolTable();

@@ -28,7 +28,7 @@ NATIVECALL void _timercb_internal_(registers_t* rg) {
     
 }
 
-volatile uint64_t GetSystemTicks() {
+uint64_t GetSystemTicks() {
  return ticks;   
 }
 

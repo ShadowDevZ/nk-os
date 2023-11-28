@@ -27,5 +27,8 @@ typedef unsigned long ulong;
 typedef unsigned long long ullong;
 
 typedef uint32_t HEXCLR;
+
+#define KERNEL_LOAD_ADDR 0xffffffff80000000
+
 #include "limine.h"
 #define UNUSED(x) (void)(x)

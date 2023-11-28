@@ -6,7 +6,9 @@
 //#define KERNEL_ENTRY void
 
 typedef int _KERNEL_ENTRY;
-#define KERNEL_ENTRY __attribute__((section(".kernel64"))) int
+//#define KERNEL_ENTRY __attribute__((section(".kernel64"))) int
+#define KERNEL_ENTRY int
+
 
 #define NATIVECALL __attribute__((optimize("O0")))
 #define PACKED __attribute__((packed))
@@ -30,5 +32,7 @@ typedef int _KERNEL_ENTRY;
 
 #define _unused_
 #define _reserved_
+
+#define UNSAFE
 
 KERNEL_ENTRY kmain();
