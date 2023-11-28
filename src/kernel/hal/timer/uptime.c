@@ -33,14 +33,20 @@ volatile uint64_t GetSystemTicks() {
 }
 
 void kusleep(uint64_t ms) {
+    asm("cli");
     uint64_t ticks = GetSystemTicks();
     uint64_t saved = ticks;
 
     //less or equal in case the processor doesnt get the chance
     //to responds, it would loop endlessly
     while (ticks <= saved + ms) {
+        asm("sti");
         ticks = GetSystemTicks();
+        asm("cli");
 
     }
+    asm("sti");
+
+    
 
 }

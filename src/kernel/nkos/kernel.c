@@ -45,7 +45,10 @@ KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
     printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
-   
+    ISR_RegisterHandler(14, page_fault_handler);
+    pmm_init();
+    slab_init();
+
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
      while (KsymEnumSymbol(&st)) {
@@ -56,7 +59,7 @@ KERNEL_ENTRY kmain() {
     debugf("bing bong\n");
     NkkSetLastSystemError(E_NKK_SUCCESS);
     printf("%s\n",NkkGetLastErrorAsString());
-    ISR_RegisterHandler(14, page_fault_handler);
+   
     
 
   
@@ -64,12 +67,8 @@ KERNEL_ENTRY kmain() {
 
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
-  pmm_init();
-   // slab_init();
-   // int* a = slab_alloc(sizeof(int));
-   // *a = 1337;
-   // printf("%d\n", *a);
-  //  slab_free(a);
+    
+   
   
    PIT_Init(1000);
 
@@ -80,6 +79,10 @@ KERNEL_ENTRY kmain() {
     
     
     kusleep(3000); 
+     int* a = slab_alloc(sizeof(int));
+    *a = 1337;
+    printf("%d\n", *a);
+    slab_free(a);
     
      printf("working sleep %d\n", GetSystemTicks());
    
