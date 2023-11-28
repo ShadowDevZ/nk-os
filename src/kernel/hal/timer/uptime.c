@@ -7,7 +7,7 @@
 void PIT_Init(int hz) {
     
     IRQ_RegisterHandler(0, _timercb_internal_);;
-    PIT_SetFrequency(hz);
+    PIT_SetFrequency(1000);
 }
 
 void PIT_SetFrequency(int hz) {
@@ -17,13 +17,13 @@ void PIT_SetFrequency(int hz) {
     x64_outb(PORT_PIT_DCH0_RW , divisor >> 8);     // high byte
 }
 
-volatile uint64_t secs = 0;
+
 volatile uint64_t ticks = 0;
 NATIVECALL void _timercb_internal_(registers_t* rg) {
-    ticks++;
- 
+    ticks += 1;
+ //printf(".");
 
-   // IRQ_SendEOI(0);
+    IRQ_SendEOI(0);
 
     
 }

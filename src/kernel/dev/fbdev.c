@@ -92,7 +92,7 @@ void _FbPutChar(_unused_ void* putp, char c) {
 
 
 bool InitializeFramebuffers(volatile struct limine_framebuffer_request* lbf) {
-
+  
 
   //  init_printf(NULL, _FbPutChar);
 

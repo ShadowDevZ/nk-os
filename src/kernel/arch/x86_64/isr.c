@@ -595,7 +595,8 @@ void ISR_Init() {
 ISR_HANDLER g_ISRHandlers[256];
 #include "../arch/x86_64/include/panic.h"
 #include "kstdio.h"
-void ISR_Handler(isr_state_t* regs) {
+uint64_t ISR_Handler(uint64_t rsp) {
+    isr_state_t* regs = (isr_state_t*)rsp;
    
    
     //PrintRegs(regs);
@@ -616,6 +617,8 @@ void ISR_Handler(isr_state_t* regs) {
    printf("INT[%lu] %s\n", regs->isr_number, exception_messages[regs->isr_number]);
    // PrintRegs(regs);
     }
+
+    return rsp;
 }
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
     g_ISRHandlers[interrupt] = handler;

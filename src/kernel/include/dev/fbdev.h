@@ -44,3 +44,4 @@ void ClearFbScreen([[_unused_]]int fbIndex);
 #define FB_OUTPUT_BROADCAST 0xF86
 //for now, later use function to reset to previous
 #define FB_OUTPUT_RESET FB_OUTPUT_STDIO
+

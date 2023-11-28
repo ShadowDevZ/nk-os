@@ -64,9 +64,14 @@ KERNEL_ENTRY kmain() {
 
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
- 
+  pmm_init();
+   // slab_init();
+   // int* a = slab_alloc(sizeof(int));
+   // *a = 1337;
+   // printf("%d\n", *a);
+  //  slab_free(a);
   
-   //PIT_Init(1000);
+   PIT_Init(1000);
 
    IRQ_RegisterHandler(1, _keyboardcb_);
  
@@ -74,18 +79,14 @@ KERNEL_ENTRY kmain() {
    
     
     
-     //kusleep(1000); 
-     printf("working sleep\n");
+    kusleep(3000); 
     
+     printf("working sleep %d\n", GetSystemTicks());
    
-    pmm_init();
-    slab_init();
-    int* a = slab_alloc(sizeof(int));
-    *a = 1337;
-    printf("%d\n", *a);
-    slab_free(a);
+   
+   
    // BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
-    
+   
   //  asm("int $0x3");
     UNREACHABLE();
 }
