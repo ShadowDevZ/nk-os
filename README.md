@@ -1,12 +1,10 @@
 # nk-os
 Hobyist x64 kernel
 Requirements: elf compatible x64 cross compiler (auto script will be added in future update to match all requirements),
-limine bootloader `v4.x` is pulled and builded as dependency automatically. Note newer version than 4 won't work beacuse the developer
+limine bootloader `v5.x` is pulled and builded as dependency automatically. Note newer version than 4 won't work beacuse the developer
 decided to remove the limine_terminal feature from version 5 and newer releases. 
 
-In the future this project is going to be upgraded to `v5.x` branch  and instead it is going to use the [flanterm](https://github.com/mintsuki/flanterm) provided by the developer
-as replacement. It is also possible that the project is going to migrate to `MULTIBOOT2` compatible bootloader for more compatibility and the linear framebuffer is going to be implemented
-manually which may break some current system functions exposed by the kernel. 
+In the future the os is going to use custom linear framebuffer
 
 Build is currently only supported on linux (the script requires /dev/null device, will make it compatible for windows in future)
 !!!Bochs may not work properly if it was not compiled with graphics option!!!
@@ -39,7 +37,7 @@ TODOLIST:
 - &#9745; Versioning scheme
 - &#9745; Limine bootloader
 - &#9744; HAL
-- &#9744; IRQ
+- &#9745; IRQ
 - &#9744; Better build system (CMake)
 - &#9744; TSS
 - &#9745; PIT
@@ -59,7 +57,6 @@ TODOLIST:
 - &#9745; Kernel main
 - &#9744; Kconfig like customization
 - &#9744; µGUI port
-- &#9744; Add support for floats inside printf
 - &#9744; More user friendly toolchain builder
 - &#9744; C++ support
 - &#9744; Device manager
