@@ -1,6 +1,6 @@
 #include "nkkerrr.h"
 
-const char *nkkerrstr[] = {
+char *nkkerrstr[] = {
   [E_NKK_SUCCESS] =   "The operation was successfully completed",
   [E_NKK_FAIL] = "Unexpected error",
   [E_NKK_INTERNAL] =  "Internal error",

@@ -227,7 +227,7 @@ void NATIVECALL _keyboardcb_(registers_t* regs) {
 
    
 
-    if ((keyflags & KF_LSHIFT) || (keyflags & KF_CAPSLK) && (kbd_tbl[scanCode] != 0)) {
+    if ((keyflags & KF_LSHIFT) || ((keyflags & KF_CAPSLK) && (kbd_tbl[scanCode] != 0))) {
       kbputchar(kbd_tbl_shift[scanCode]);
 
     }

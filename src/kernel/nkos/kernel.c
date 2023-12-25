@@ -83,6 +83,7 @@ void gpf_handler(isr_state_t* regs) {
 }
 
 typedef void (*cab());
+
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
@@ -131,8 +132,8 @@ KERNEL_ENTRY kmain() {
     
      printf("working sleep %d\n", GetSystemTicks());
 
-   
-   
+    
+    
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    
   //  asm("int $0x3");

@@ -15,12 +15,12 @@ typedef struct
 typedef struct {
     uint16_t limit;       // limit size of all GDT segments
     uint64_t base_address;  // base address of the first GDT segment
-} __attribute__((packed)) GDT_PTR;
+} __attribute__((packed)) GDT;
 
 
 #define GDT_DESC_COUNT 10
 
-void SetGDTEntry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
+void SetGDTEntry(int16_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 
 
 

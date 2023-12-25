@@ -1,6 +1,7 @@
 #include "kstdio.h"
 #include "include/gdt.h"
 #include "krnlcfg.h"
+#include "bitsets.h"
 #define GDT_SEG_NULL 0
 #define GDT_SEG_CODE16 1
 #define GDT_SEG_DATA16 2
@@ -12,24 +13,87 @@
 #define GDT_SEG_CODEUSR 8
 #define GDT_SEG_TSS 9
 GDTEntry g_GDT[GDT_DESC_COUNT];
-GDT_PTR g_GDT_PTR;
+GDT g_KGDT;
 //reserved for future use
-int g_GdtEntriesCount = 0;
-void SetGDTEntry(int index, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran) {
+#define GDT_ENTRY_MAX 8192
+int16_t g_GdtEntriesCount = 0;
+
+//defines the ACCESS BYTE, intel volume 3a table 3.1  code and data segment types
+/*
+definitions from intel manual
+
+expand down: Expand-down data segment. The flag is called the B flag and it specifies the upper bound of
+the segment. If the flag is set, the upper bound is FFFFFFFFH (4 GBytes); if the flag is clear, the
+upper bound is FFFFH (64 KBytes)
+
+Code segments can be either conforming or nonconforming. A transfer of execution into a more-privileged
+conforming segment allows execution to continue at the current privilege level. A transfer into a nonconforming
+segment at a different privilege level results in a general-protection exception (#GP), unless a call gate or task gate
+is used
+*/
+//there are more additional ones like data direction if segment grows downward or upward but its useless in this case
+typedef enum {
+  /*  
+    //data
+    GDTA_DATA_R = 0,             //read only
+    GDTA_DATA_RA = 1,           //read only, accessed
+    GDTA_DATA_RW = 2,           //read write
+    GDTA_DATA_RWA = 3,          //read write, accessed
+    GDTA_DATA_RE = 4,        //read, expand down
+    GDTA_DATA_RE = 5,       //read expand down, accessed
+    GDTA_DATA_RWE = 6,       //read write,expand down
+    GDTA_DATA_RWEA = 7,      //read write expand down, accessed
+    
+    //code
+
+    GDTA_CODE_X = 8,        //execute
+    GDTA_CODE_XA = 9,       //execute, accessed
+    GDTA_CODE_RX = 10,      //read execute
+    GDTA_CODE_RXA = 11,     //read execute, accessed
+    GDTA_CODE_XC = 12,      //execute, conforming      
+    GDTA_CODE_XCA = 13,     //execute conforming accessed
+    GDTA_CODE_RXC = 14,     //read execute, conforming
+    GDTA_CODE_RXCA = 15     //read exeture, conforming, accessed
+*/
+    GDTA_CODE_R = 0x02,
+    GDTA_DATA_W = 0x02,
+    GDTA_DATA_CF = 0x04
+    ,
+    GDTA_DATA_SEGMENT = 0x10,
+    GDTA_CODE_SEGMENT = 0x18,
+    GDTA_TSS_SEGMENT = 0x0,
+
+    GDTA_RING0 = 0x0,
+    GDTA_RING1 = 0x20,
+    GDTA_RING2 = 0x40,
+    GDTA_RING3 = 0x60,
+
+    GDTA_PRESENT = 0x80
+
+
+}GDT_ACCESS;
+
+typedef enum {
+    GDTF_LONGMODE = 0x20,
+    GDTF_PROTMODE = 0x40,
+    GDTF_REALMODE = 0x0,
+    GDTF_GRAN4K = 0x80
+
+}GDT_FLAGS;
+
+void SetGDTEntry(int16_t index, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags) {
 
     
 
-    GDTEntry *this = &g_GDT[index];
+    GDTEntry* gdt = &g_GDT[index];
     g_GdtEntriesCount++;
-    this->LimitLow = limit & 0xFFFF;
-    this->BaseLow = base & 0xFFFF;
-    this->BaseMiddle = (base >> 16) & 0xFF;
-    this->Access = access;
+    gdt->LimitLow = LOWORD(limit);
+    gdt->BaseLow = LOWORD(base);
+    gdt->BaseMiddle = (base >> 16) & 0xFF;
+    gdt->Access = access;
 
-    this->FlagsLimitHi = (limit >> 16) & 0x0F;
-    this->FlagsLimitHi = this->FlagsLimitHi | (gran & 0xF0);
-
-    this->BaseHigh = (base >> 24 & 0xFF);
+    gdt->FlagsLimitHi = ((limit >> 16) & 0x0F) | (flags & 0xF0);
+    gdt->BaseHigh = (base >> 24 & 0xFF);
 
 
 #if KF_GDT_DEBUG == 1
@@ -86,34 +150,34 @@ void InitializeGDT(void) {
 #endif
     
     
-    g_GDT_PTR.limit = sizeof(g_GDT) - 1;
-    g_GDT_PTR.base_address = (uint64_t)g_GDT;
+    g_KGDT.limit = sizeof(g_GDT) - 1;
+    g_KGDT.base_address = (uint64_t)g_GDT;
 //index, base, limit, access, grann
 
 
     //NULL segment
-    SetGDTEntry(0, 0, 0, 0, 0); 
+    SetGDTEntry(GDT_SEG_NULL, 0, 0, 0, 0); 
     //16-bit code segment
-    SetGDTEntry(1, 0, 0xFFFF, 0x9a, 0x80);
+    SetGDTEntry(GDT_SEG_CODE16, 0, UINT16_MAX, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_GRAN4K);
      //16-bit data segment
-    SetGDTEntry(2, 0, 0xFFFF, 0x92, 0x80);
+    SetGDTEntry(GDT_SEG_DATA16, 0, UINT16_MAX, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_GRAN4K);
     //32-bit code segment
-    SetGDTEntry(3, 0, 0xFFFFFFFF, 0x9a, 0xcf);
+    SetGDTEntry(GDT_SEG_CODE32, 0, UINT32_MAX, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_PROTMODE | GDTF_GRAN4K);
     //32-bit data segment
-    SetGDTEntry(4, 0, 0xFFFFFFFF, 0x92, 0xcf);
+    SetGDTEntry(GDT_SEG_DATA32, 0, UINT32_MAX, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_PROTMODE | GDTF_GRAN4K);
     //64-bit code segment
-    SetGDTEntry(5, 0, 0, 0x9a, 0xa2);
+    SetGDTEntry(GDT_SEG_CODE64, 0, 0, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_GRAN4K | GDTF_LONGMODE);
     //64-bit data segment
-    SetGDTEntry(6, 0, 0, 0x92, 0xa0);
+    SetGDTEntry(GDT_SEG_DATA64, 0, 0, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_GRAN4K | GDTF_LONGMODE);
     //user data segment 
-    SetGDTEntry(7, 0, 0, 0xf2, 0);
+    SetGDTEntry(GDT_SEG_DATAUSR, 0, 0, GDTA_PRESENT | GDTA_DATA_SEGMENT | GDTA_DATA_W |GDTA_RING3, GDTF_GRAN4K | GDTF_LONGMODE);
     //user code segment
-    SetGDTEntry(8, 0, 0, 0xfa, 0x20);
+    SetGDTEntry(GDT_SEG_CODEUSR, 0, 0, GDTA_PRESENT | GDTA_CODE_SEGMENT | GDTA_DATA_W |GDTA_RING3, GDTF_GRAN4K | GDTF_LONGMODE);
     //9 IS RESERVED FOR TSS
 
    
 
-    x64_gdt_flush(&g_GDT_PTR);
+    x64_gdt_flush(&g_KGDT);
 #if KF_GDT_DEBUG == 1
     debugf("\n======GDT DUMP END======\n");
 #endif
