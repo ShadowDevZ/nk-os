@@ -20,6 +20,6 @@ VMakxfile.old
 src/kernel/sys/gensym.c
 
 *.todo
-
+src/_internal_stash/*
 # for now
 src/kernel/arch/x86_64/mm/*
