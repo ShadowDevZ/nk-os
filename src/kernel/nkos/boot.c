@@ -39,12 +39,16 @@ static void hcf(void) {
 // The following will be our kernel's entry point.
 // If renaming _start() to something else, make sure to change the
 // linker script accordingly.
-
+//extern void _init();
 
 struct flanterm_context *ft_ctx;
 
+extern uint8_t __bss_start;
+extern uint8_t __bss_end;
 
 void _start(void) {
+    memset(&__bss_start, 0, (&__bss_end) - (&__bss_start));
+    
     // Ensure we got a terminal
 if (framebuffer_request.response->framebuffer_count < 1 || framebuffer_request.response->framebuffers[0] == NULL) {
     hcf();
