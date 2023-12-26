@@ -161,3 +161,13 @@ x64_panic:
     cli
     hlt
     jmp $x64_panic
+
+global x64_cli
+x64_cli:
+    cli
+    ret
+
+global x64_sti
+x64_sti:
+    sti
+    ret

@@ -1,6 +1,8 @@
 #include "include/bitsets.h"
 
-bool IsValidFlag(uint32_t flag) {
+
+
+bool IsValidFlag(uint64_t flag) {
     if (flag == 0) {
         return false;
     }

@@ -21,6 +21,6 @@
 #define LODWORD(x) __LOEXT(x, 0xFFFFFFFF, 32)
 #define HIDWORD(x) __HIEXT(x, 0xFFFFFFFF, 32)
 
+#define IsPowerOf2(x) (IsValidFlag(x))
 
-
-bool IsValidFlag(uint32_t flag);
+bool IsValidFlag(uint64_t flag);

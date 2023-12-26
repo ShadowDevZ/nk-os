@@ -87,12 +87,16 @@ typedef void (*cab());
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
+    
     printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
     ISR_RegisterHandler(14, page_fault_handler);
     ISR_RegisterHandler(13, gpf_handler);
-    pmm_init();
+    
+    
+    pmm_init(DEFAULT_PAGE_SIZE);
+    
     slab_init();
-
+   // PIT_Init(1000);
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
      while (KsymEnumSymbol(&st)) {
@@ -113,10 +117,10 @@ KERNEL_ENTRY kmain() {
  // asm("int $0xD");
     
    
-
+    
       
   
-   PIT_Init(1000);
+   
 
    IRQ_RegisterHandler(1, _keyboardcb_);
  
@@ -125,13 +129,20 @@ KERNEL_ENTRY kmain() {
   //  DebugPageFault(NULL);
     
   //  kusleep(3000); 
+  //printf("\n");
+
+  
      int* a = slab_alloc(sizeof(int));
     *a = 1337;
-    printf("%d\n", *a);
+    printf("allocated var at 0x%x with size of %llu bytes\n", a, sizeof(int));
+    printf("dereferenced %d\n", *a);
     slab_free(a);
+    printf("value freed\n");
     
-     printf("working sleep %d\n", GetSystemTicks());
+    PIT_Init(1000);
 
+     printf("working sleep %d\n", GetSystemTicks());
+    printf("page:size %llu\n", GetKernelPageSize());
     
     
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
