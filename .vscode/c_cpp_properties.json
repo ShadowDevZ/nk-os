@@ -20,7 +20,7 @@
             "compilerPath": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",
             "cStandard": "c11",
             "cppStandard": "c++14",
-            "intelliSenseMode": "clang-x64",
+            "intelliSenseMode": "gcc-x64",
             "compilerPathInCppPropertiesJson": "/home/shadow/shadow/toolchain/x86_64-elf/bin/x86_64-elf-gcc",
             "mergeConfigurations": false,
             "configurationProvider": "ms-vscode.makefile-tools",

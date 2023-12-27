@@ -1,12 +1,12 @@
 #pragma once
 #include <stdint.h>
 #include <stdbool.h>
-#define SET_MASK(x, y) (x |= (y))
-#define UNSET_MASK(x, y) (x &= ~(y))
+#define SET_MASK(x, y) ((x |= (y)))
+#define UNSET_MASK(x, y) ((x &= ~(y)))
 
-#define FLIP_MASK(x, y) (x ^= (y))
+#define FLIP_MASK(x, y) ((x ^= (y)))
 
-#define CHECK_MASK (x, y) (x & y)
+#define CHECK_MASK(x, y) ((x & y))
 
 
 #define __LOEXT(x, y, b) ((uint ## b ## _t)(x) & (y))

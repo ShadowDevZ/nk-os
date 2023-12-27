@@ -18,7 +18,9 @@
         "sysdefs.h": "c",
         "krnlcfg.h": "c",
         "limattr.h": "c",
-        "ports.h": "c"
+        "ports.h": "c",
+        "uptime.h": "c",
+        "kbctl.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

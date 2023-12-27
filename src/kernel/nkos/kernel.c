@@ -1,4 +1,4 @@
-#include "kattributes.h"
+
 #include "kstdio.h"
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
@@ -11,8 +11,9 @@
 #include "memconv.h"
 #include "mm/pmm.h"
 #include "panic.h"
-#include "mm/slab.h"
-#include "panic.h"
+#include "mm/liballoc.h"
+#include "kattributes.h"
+#include "limattr.h"
 void page_fault_handler(isr_state_t* regs)
 {
     uint64_t faulting_address;
@@ -48,9 +49,7 @@ void gpf_handler(isr_state_t* regs) {
       int32_t tbl = ((regs->error_code >> 1) & 0x3);
       int32_t index = ((regs->error_code >> 3) & 0x1fff);
 
-      if (external)
-          puts("External cpu exception")
-       if (tbl) {
+      if (tbl) {
             puts("CPU table exception: \n");
          puts("\tTable: (");
          switch (tbl) {
@@ -95,7 +94,7 @@ KERNEL_ENTRY kmain() {
     
     pmm_init(DEFAULT_PAGE_SIZE);
     
-    slab_init();
+   // slab_init();
    // PIT_Init(1000);
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
@@ -108,10 +107,10 @@ KERNEL_ENTRY kmain() {
     NkkSetLastSystemError(E_NKK_SUCCESS);
     printf("%s\n",NkkGetLastErrorAsString());
    
-    
+    debugf("%llu a %llu", sizeof(uint8_t), sizeof(unsigned char));
 
   
-  asm ("sti");
+ 
 
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
@@ -132,17 +131,17 @@ KERNEL_ENTRY kmain() {
   //printf("\n");
 
   
-     int* a = slab_alloc(sizeof(int));
+     uint64_t* a = kmalloc(sizeof(uint64_t));
     *a = 1337;
-    printf("allocated var at 0x%x with size of %llu bytes\n", a, sizeof(int));
-    printf("dereferenced %d\n", *a);
-    slab_free(a);
-    printf("value freed\n");
+    printf("allocated var at 0x%x with size of %llu bytes\n", a, sizeof(a));
+    printf("dereferenced %llu\n", *a);
+    kfree(a);
+    printf("value freed %llu\n ",*a);
     
     PIT_Init(1000);
 
      printf("working sleep %d\n", GetSystemTicks());
-    printf("page:size %llu\n", GetKernelPageSize());
+    printf("page size %lluKiB\n", GetKernelPageSize() / 1024);
     
     
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
