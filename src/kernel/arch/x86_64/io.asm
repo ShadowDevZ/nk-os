@@ -171,3 +171,14 @@ global x64_sti
 x64_sti:
     sti
     ret
+
+global x64_rdtsc
+x64_rdtsc:
+    cli     ;just in case so the IRQ0 doesn't mess things up
+    rdtsc   ;gets TSC into EDX:EAX, so we need to combine becasuse we are unable to use 32bit registers
+    sti
+
+
+    shl rdx, 32
+    or rax, rdx
+    ret

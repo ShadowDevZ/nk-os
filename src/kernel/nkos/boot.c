@@ -47,6 +47,7 @@ extern uint8_t __bss_start;
 extern uint8_t __bss_end;
 
 void _start(void) {
+    
     memset(&__bss_start, 0, (&__bss_end) - (&__bss_start));
     
     // Ensure we got a terminal
@@ -63,7 +64,7 @@ const char msg[] = "Hello world\n";
 flanterm_write(ft_ctx, msg, sizeof(msg));
 
 InitializeFramebuffers(&framebuffer_request);
-
+debugf("\n[%llu] Control reached by kernel\n", x64_rdtsc());
 
 printf("Kernel booted\n");
 printf("0x%02llx - Physical base\n\
