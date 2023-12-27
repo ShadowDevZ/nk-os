@@ -1,4 +1,4 @@
-
+#include "kattributes.h"
 #include "kstdio.h"
 #include "ksyms.h"
 #include "../arch/x86_64/include/io.h"
@@ -12,12 +12,11 @@
 #include "mm/pmm.h"
 #include "panic.h"
 #include "mm/liballoc.h"
-#include "kattributes.h"
 #include "limattr.h"
 void page_fault_handler(isr_state_t* regs)
 {
     uint64_t faulting_address;
-    __asm__ __volatile__("movq %%cr2, %0" : "=r" (faulting_address));
+    asm ("movq %%cr2, %0" : "=r" (faulting_address));
 
     int32_t present = !(regs->error_code & 0x1);
     int32_t rw = regs->error_code & 0x2;
@@ -35,7 +34,7 @@ void page_fault_handler(isr_state_t* regs)
     if (reserved)
         puts("reserved ");
 
-    printf(") at %p\n",faulting_address);
+    printf(") at 0x%p\n",faulting_address);
     printf("%llu", faulting_address);
     x64_panic();
     
@@ -107,7 +106,7 @@ KERNEL_ENTRY kmain() {
     NkkSetLastSystemError(E_NKK_SUCCESS);
     printf("%s\n",NkkGetLastErrorAsString());
    
-    debugf("%llu a %llu", sizeof(uint8_t), sizeof(unsigned char));
+  
 
   
  
@@ -142,7 +141,7 @@ KERNEL_ENTRY kmain() {
 
      printf("working sleep %d\n", GetSystemTicks());
     printf("page size %lluKiB\n", GetKernelPageSize() / 1024);
-    
+    printf("RDTSC: %llu\n", x64_rdtsc());
     
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    
