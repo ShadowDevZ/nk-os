@@ -4,7 +4,7 @@
 #include "../arch/x86_64/include/io.h"
 #include "sys/nkkerrr.h"
 #include "../arch/x86_64/include/irq.h"
-
+#include "operands.h"
 #include "../hal/timer/include/uptime.h"
 #include "../hal/keyboard/include/keyboard.h"
 #include "../hal/keyboard/include/kbctl.h"
@@ -91,7 +91,7 @@ KERNEL_ENTRY kmain() {
     ISR_RegisterHandler(13, gpf_handler);
     
     
-    pmm_init(DEFAULT_PAGE_SIZE);
+    PmmInit(DEFAULT_PAGE_SIZE);
     
    // slab_init();
    // PIT_Init(1000);
@@ -136,6 +136,21 @@ KERNEL_ENTRY kmain() {
     printf("dereferenced %llu\n", *a);
     kfree(a);
     printf("value freed %llu\n ",*a);
+   void* x = kmalloc(9999);
+    kfree(x);
+    
+    void* b = kmalloc(9999);
+    kfree(b);
+    int aaa,baa;
+    aaa=10;
+    baa = 11;
+    SWAP(aaa,baa);
+    printf("a:%d b:%d\nsw:\na: %db: %d\n", aaa,baa,aaa,baa);
+    
+
+
+
+   
     
     PIT_Init(1000);
 
