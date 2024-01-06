@@ -39,7 +39,10 @@
         "string_view": "c",
         "format": "c",
         "initializer_list": "c",
-        "span": "c"
+        "span": "c",
+        "valarray": "c",
+        "panic.h": "c",
+        "liballoc.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

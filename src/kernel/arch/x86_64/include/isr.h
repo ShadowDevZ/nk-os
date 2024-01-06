@@ -46,6 +46,8 @@ typedef struct
 
 extern void (*irqHandlers[16]);
 
+
+
 uint64_t ISR_Handler(uint64_t rsp);
 void ISR_Init();
 char** GetIsrExceptionList();

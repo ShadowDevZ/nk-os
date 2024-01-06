@@ -30,6 +30,15 @@ typedef enum
     IDT_FLAG_PRESENT                = 0x80,
 
 } IDT_FLAGS;
+
+
+#define IDT_INT0_FLAGS IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT | IDT_FLAG_PRESENT
+#define IDT_INT3_FLAGS IDT_FLAG_RING3 | IDT_FLAG_GATE_64BIT_INT | IDT_FLAG_PRESENT
+#define IDT_TRAP0_FLAGS IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_TRAP | IDT_FLAG_PRESENT
+#define IDT_TRAP3_FLAGS IDT_FLAG_RING3 | IDT_FLAG_GATE_64BIT_TRAP | IDT_FLAG_PRESENT
+
+
+
 void IDT_SetGate(int gate, void* handler, int flags);
 void InitializeIDT();
 void IDT_EnableGate(int interrupt);
