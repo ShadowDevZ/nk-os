@@ -129,10 +129,11 @@ KERNEL_ENTRY kmain() {
   //  kusleep(3000); 
   //printf("\n");
 
-  
+  /**/
      uint64_t* a = kmalloc(sizeof(uint64_t));
     *a = 1337;
     printf("allocated var at 0x%x with size of %llu bytes\n", a, sizeof(a));
+  
     printf("dereferenced %llu\n", *a);
     kfree(a);
     printf("value freed %llu\n ",*a);
