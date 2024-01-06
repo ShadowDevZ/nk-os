@@ -15,6 +15,8 @@ extern uint16_t  x64_insw(port_t port, void *addr, int cnt);
 extern void  x64_outsb(port_t port, const void *addr, int cnt);
 extern void  x64_outsw(port_t port, const void *addr, int cnt);
 
+extern uint64_t x64_readcs();
+extern uint64_t x64_readds();
 extern registers_t x64_rdump();
 extern void x64_panic();
 extern void x64_enable_avx();

@@ -115,5 +115,18 @@ isr_state_t Regs2ISRState(registers_t* regs) {
     
     return state;
 }
+//Converts code segment selector value to the DPL (ring level)
+
+#define CODEUSR 64
+int CS2DPL() {
+    uint64_t cs = x64_readcs();
+    //rings 1 and 2 are not used in the kernel at all yet
+    if (cs == CODEUSR) {
+        return 3;
+    }
+    else {
+        return 0;
+    }
+}
 
 

@@ -155,25 +155,33 @@ void InitializeGDT(void) {
 //index, base, limit, access, grann
 
 
-    //NULL segment
+
+
+
+
+
+
+
+    //DO NOT REARRANGE THE ENTRIES, THINGS WILL BREAK
+    //NULL segment 0x0
     SetGDTEntry(GDT_SEG_NULL, 0, 0, 0, 0); 
-    //16-bit code segment
+    //16-bit code segment 0x8
     SetGDTEntry(GDT_SEG_CODE16, 0, UINT16_MAX, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_GRAN4K);
-     //16-bit data segment
+     //16-bit data segment 0x10
     SetGDTEntry(GDT_SEG_DATA16, 0, UINT16_MAX, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_GRAN4K);
-    //32-bit code segment
+    //32-bit code segment 0x18
     SetGDTEntry(GDT_SEG_CODE32, 0, UINT32_MAX, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_PROTMODE | GDTF_GRAN4K);
-    //32-bit data segment
+    //32-bit data segment 0x20
     SetGDTEntry(GDT_SEG_DATA32, 0, UINT32_MAX, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_PROTMODE | GDTF_GRAN4K);
-    //64-bit code segment
+    //64-bit code segment 0x28
     SetGDTEntry(GDT_SEG_CODE64, 0, 0, GDTA_CODE_R|GDTA_PRESENT|GDTA_CODE_SEGMENT, GDTF_GRAN4K | GDTF_LONGMODE);
-    //64-bit data segment
+    //64-bit data segment 0x30
     SetGDTEntry(GDT_SEG_DATA64, 0, 0, GDTA_DATA_W | GDTA_PRESENT | GDTA_DATA_SEGMENT, GDTF_GRAN4K | GDTF_LONGMODE);
-    //user data segment 
+    //user data segment  0x38
     SetGDTEntry(GDT_SEG_DATAUSR, 0, 0, GDTA_PRESENT | GDTA_DATA_SEGMENT | GDTA_DATA_W |GDTA_RING3, GDTF_GRAN4K | GDTF_LONGMODE);
-    //user code segment
+    //user code segment 0x40
     SetGDTEntry(GDT_SEG_CODEUSR, 0, 0, GDTA_PRESENT | GDTA_CODE_SEGMENT | GDTA_DATA_W |GDTA_RING3, GDTF_GRAN4K | GDTF_LONGMODE);
-    //9 IS RESERVED FOR TSS
+    //9 IS RESERVED FOR TSS 0x48
 
    
 
