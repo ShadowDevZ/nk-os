@@ -1,19 +1,21 @@
 #include "include/panic.h"
 #include "include/isr.h"
 #include "sysdefs.h"
+#include "kattributes.h"
 #define STOP_CODE_MAXLEN 60
 
 NORET void DebugPageFault(void* addr) {
-    int* v;
+    uint64_t* v;
     if (addr != NULL) {
-        v = (int*)addr;
+        v = (uint64_t*)addr;
     }
     else {
-        v = KERNEL_LOAD_ADDR + 111111111111111;
+        v = (uint64_t*)(KERNEL_LOAD_ADDR + 111111111111111UL);
     }
 
    
    printf("%d", *v);
+   UNREACHABLE();
 }
 
 NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reason, const char* description, isr_state_t* regs) {
@@ -48,6 +50,7 @@ NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reaso
     printf("\n\n\033[31m===KERNEL PANIC===\033[0m\n\n");
    
     x64_cpu_stop();
+    UNREACHABLE();
 
 }
 
