@@ -139,14 +139,17 @@ KERNEL_ENTRY kmain() {
    void* x = kmalloc(9999);
     kfree(x);
     
-    void* b = kmalloc(9999);
+    void* b = kmalloc(9999999);
     kfree(b);
-    int aaa,baa;
-    aaa=10;
-    baa = 11;
-    SWAP(aaa,baa);
-    printf("a:%d b:%d\nsw:\na: %db: %d\n", aaa,baa,aaa,baa);
     
+   int* aaa = kmalloc(sizeof(int));
+    *aaa=10;
+   int*  baa = kmalloc(sizeof(int));
+    *baa = 11;
+    SWAP(*aaa,*baa);
+    printf("a:%d b:%d\nsw:\na: %db: %d\n", *aaa,*baa,*aaa,*baa);
+    kfree(aaa);
+    kfree(baa);
 
 
 

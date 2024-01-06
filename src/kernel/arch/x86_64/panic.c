@@ -19,7 +19,7 @@ NORET void DebugPageFault(void* addr) {
 NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reason, const char* description, isr_state_t* regs) {
     printf("\n\n\033[31m===KERNEL PANIC===\033[0m\n\n");
   
-    if (_file_ != NULL || line != NULL) {
+    if (_file_ != NULL || line != -1) {
         printf("[%s]:%d\n", _file_, line);
     }
     

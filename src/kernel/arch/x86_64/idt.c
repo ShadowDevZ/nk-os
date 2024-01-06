@@ -34,7 +34,7 @@ void IDT_SetGate(int gate, void* handler, int flags) {
         .kernelCs = 0x28,
         .reserved = 0,
         //0x60 is user mode access
-        .attributes = flags | 0x60,
+        .attributes = flags,
         .isrMid = middle_16,
         .isrHigh = high_32,
         .ist = 0

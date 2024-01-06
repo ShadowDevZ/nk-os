@@ -126,12 +126,13 @@ uint32_t GetRawKeyboardFlags() {
   return keyflags;
 }
 
-#define kbputchar(c) \ 
+#define kbputchar(c) \
 ({ \
    if (GetKbctlEvent(KBCTL_ECHO)) { \
       putchar(c); \
-      } \
-}) \
+   } \
+})
+
 
 void NATIVECALL _keyboardcb_(registers_t* regs) {
    volatile unsigned char scanCode;
