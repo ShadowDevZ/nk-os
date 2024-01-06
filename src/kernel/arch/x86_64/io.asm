@@ -7,8 +7,8 @@ x64_enable_sse:
     push rbp
     mov rbp, rsp
 	mov rax, cr4
-	bts rax, 9		
-	bts rax, 10		
+	bts rax, 9	 ;enable SSE and FXSAVE/FXRSTOR for FPU	
+	bts rax, 10		;unmasked SSE excpetions
 	mov cr4, rax
     mov rsp, rbp
     pop rbp
@@ -21,13 +21,16 @@ x64_enable_fpu:
     push rbp
     mov rbp, rsp
 	mov rax, cr0
-	bts rax, 1		
-	btr rax, 2		
-	bts rax, 5		
-	btr rax, 3		
-	mov cr0, rax
+    bts rax, 5 ;enable FPU error reporting
+	bts rax, 1 ; Monitor coprocessor
 
-	finit
+
+	btr rax, 2 ; clear the bit 0 means FPU is present
+	btr rax, 3	;allows to save FPU context during task switch even if the unit is not called before
+	
+    mov cr0, rax
+    
+	finit   ;initialize FPU
 
     mov rsp, rbp
     pop rbp
@@ -38,7 +41,7 @@ x64_enable_avx:
     push rbp
     mov rbp, rsp
     mov rax, cr4
-	bts rax, 14		
+	bts rax, 14		; safer mode extensions
 	mov cr4, rax
     mov rsp, rbp
     pop rbp
@@ -152,28 +155,28 @@ x64_load_idt:
     
     ret
 
-
-
+%define DS64 0x30
+%define CS64 0x28
 global x64_gdt_flush
 x64_gdt_flush:
     
 
     lgdt [rdi]
-    mov ax, 0x30
+    mov ax, DS64     ;update DS as it is not updated automatically upon GDT reload
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
     pop rdi
-    mov rax, 0x28
+    mov rax, CS64
     push rax
     push rdi
-    retfq
+    retfq   ; far return, jump to the new CS
 
 global tss_flush
 x64_tss_flush:
-    mov ax, 0x48
+    mov ax, 0x48 ;todo change later
     ltr ax
     ret
 

@@ -1,3 +1,4 @@
+;amd64 pltform for some reason decided to remove pusha instruction
 %macro pusha64 0
     push rax
     push rbx

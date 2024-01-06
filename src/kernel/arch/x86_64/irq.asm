@@ -6,7 +6,7 @@ X64_IRQ%1:
     cld ; just in case the DF is set, clearing it is required by SYSVABI
     cli
     push rdi
-    mov rdi, %2
+    mov rdi, %2 ;pass remapped address to the handler
     call IRQ_Handler
     pop rdi
     sti
