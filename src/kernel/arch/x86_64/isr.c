@@ -1,7 +1,7 @@
 #include "include/isr.h"
 #include "include/idt.h"
 #include "include/panic.h"
-
+#include "irq.h"
 char *exception_messages[] = {
     "Division by Zero",
     "Debug",
@@ -44,10 +44,8 @@ char** GetIsrExceptionList() {
 }
 
 #include "include/idt.h"
-#include "isrs_autogen.h"
-
 #include "kstdio.h"
-#include "isrs_autogen.h"
+
 void ISR_Init() {
     IsrsGateSetup();
     for (int i = 0; i < 256; i++) {
@@ -56,6 +54,38 @@ void ISR_Init() {
   //  IDT_DisableGate(0x80);
     
 }
+
+inline void SetGates(int start, int end, int flags) {
+    for (int i = start; i <= end; i++) {
+        IDT_SetGate(i, X64_ISRHANDLERS[i], flags);
+    }
+}
+
+void IsrsGateSetup() {
+
+
+    //generated using vim macros
+    
+    SetGates(0, 31, IDT_INT0_FLAGS);
+
+    //irq
+    for (int i =0; i < 16; i++) {
+        IDT_SetGate(i+32, irqHandlers[i], IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT | IDT_FLAG_PRESENT);
+    } 
+    SetGates(48, 127, IDT_INT0_FLAGS);
+
+    //syscall 0x80
+    IDT_SetGate(128, X64_ISRHANDLERS[128],  IDT_INT3_FLAGS);    
+    SetGates(129, 255, IDT_INT0_FLAGS);
+
+   
+
+ 
+
+
+
+}
+
 
 ISR_HANDLER g_ISRHandlers[256];
 #include "../arch/x86_64/include/panic.h"

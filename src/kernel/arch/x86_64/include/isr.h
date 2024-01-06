@@ -44,6 +44,8 @@ typedef struct
     
 } isr_state_t;
 
+extern void (*X64_ISRHANDLERS[256]);
+void IsrsGateSetup();
 int CS2DPL();
 uint64_t ISR_Handler(uint64_t rsp);
 void ISR_Init();
