@@ -1,6 +1,7 @@
 #include "idt.h"
 #include "isr.h"
 #include "isrs_autogen.h"
+#include "irq.h"
 void IsrsGateSetup() {
     //generated using vim macros
     IDT_SetGate(0, X64_ISR0,  IDT_INT0_FLAGS);

@@ -4,16 +4,22 @@
 ; Assembly routine to enable sse support
 global x64_enable_sse
 x64_enable_sse:
+    push rbp
+    mov rbp, rsp
 	mov rax, cr4
 	bts rax, 9		
 	bts rax, 10		
 	mov cr4, rax
+    mov rsp, rbp
+    pop rbp
 	ret 
 
 
 ; Assembly routine to enable fpu support
 global x64_enable_fpu
 x64_enable_fpu:
+    push rbp
+    mov rbp, rsp
 	mov rax, cr0
 	bts rax, 1		
 	btr rax, 2		
@@ -22,13 +28,20 @@ x64_enable_fpu:
 	mov cr0, rax
 
 	finit
+
+    mov rsp, rbp
+    pop rbp
 	ret
 
 global x64_enable_avx
 x64_enable_avx:
+    push rbp
+    mov rbp, rsp
     mov rax, cr4
 	bts rax, 14		
 	mov cr4, rax
+    mov rsp, rbp
+    pop rbp
 	ret 
 
 global x64_cpu_stop
@@ -49,51 +62,78 @@ x64_DisableInterrupts:
 
 global x64_outb
 x64_outb:
+    push rbp
+    mov rbp, rsp
     mov rax, rsi
     mov dx, di
     out dx, al
+    mov rsp, rbp
+    pop rbp
     ret
 
 global x64_inb
 x64_inb:
+    push rbp
+    mov rbp, rsp
     mov dx, di
     in al, dx
+    mov rsp, rbp
+    pop rbp
     ret
 
 global x64_insb
 x64_insb:
+    push rbp
+    mov rbp, rsp
     cld
     mov dx, di
     mov rdi, rsi
     mov rcx, rcx
     repne insb
+    mov rsp, rbp
+    pop rbp
     ret
 
 global x64_insw
 x64_insw:
+    push rbp
+    mov rbp, rsp
     cld
     mov dx, di
     mov rdi, rsi
     mov rcx, rcx
     repne insw
+
+    mov rsp, rbp
+    pop rbp
     ret
 
 global x64_outsb
 x64_outsb:
+    push rbp
+    mov rbp, rsp
     cld
     mov dx, di
     mov rsi, rsi
     mov rcx, rcx
     repne outsb
+    
+    mov rsp, rbp
+    pop rbp
     ret
 
 global x64_outsw
 x64_outsw:
+    push rbp
+    mov rbp, rsp
     cld
     mov dx, di
     mov rsi, rsi
     mov rcx, rcx
     repne outsw
+
+    mov rsp, rbp
+    pop rbp
     ret
 
 
@@ -116,8 +156,10 @@ x64_load_idt:
 
 global x64_gdt_flush
 x64_gdt_flush:
+    
+
     lgdt [rdi]
-    mov ax, 0x10
+    mov ax, 0x30
     mov ds, ax
     mov es, ax
     mov fs, ax
@@ -174,6 +216,8 @@ x64_sti:
 
 global x64_rdtsc
 x64_rdtsc:
+    push rbp
+    mov rbp, rsp
     cli     ;just in case so the IRQ0 doesn't mess things up
     rdtsc   ;gets TSC into EDX:EAX, so we need to combine becasuse we are unable to use 32bit registers
     sti
@@ -181,4 +225,27 @@ x64_rdtsc:
 
     shl rdx, 32
     or rax, rdx
+
+    mov rsp, rbp
+    pop rbp
+    ret
+
+global x64_readcs
+
+x64_readcs:
+    push rbp
+    mov rbp, rsp
+    mov rax, cs
+
+    mov rsp, rbp
+    pop rbp
+    ret
+global x64_readds
+x64_readds:
+    push rbp
+    mov rbp, rsp
+    mov rax, ds
+
+    mov rsp, rbp
+    pop rbp
     ret

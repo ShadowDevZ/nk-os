@@ -153,7 +153,7 @@ KERNEL_ENTRY kmain() {
     kfree(baa);
 
 
-
+    debugf("CS: 0x%02x DS: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(), CS2DPL());
    
     
     PIT_Init(1000);

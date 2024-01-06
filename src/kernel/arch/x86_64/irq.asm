@@ -1,8 +1,9 @@
 extern IRQ_Handler
 
-%macro IRQ 2
-global IRQ%1
-IRQ%1:
+%macro X64_IRQ 2
+global X64_IRQ%1
+X64_IRQ%1:
+    cld ; just in case the DF is set, clearing it is required by SYSVABI
     cli
     push rdi
     mov rdi, %2
@@ -12,39 +13,40 @@ IRQ%1:
     iretq
 %endmacro
 
-IRQ 0, 32
-IRQ 1, 33
-IRQ 2, 34
-IRQ 3, 35
-IRQ 4, 36
-IRQ 5, 37
-IRQ 6, 38
-IRQ 7, 39
-IRQ 8, 40
-IRQ 9, 41
-IRQ 10, 42
-IRQ 11, 43
-IRQ 12, 44
-IRQ 13, 45
-IRQ 14, 46
-IRQ 15, 47
+X64_IRQ 0, 32
+X64_IRQ 1, 33
+X64_IRQ 2, 34
+X64_IRQ 3, 35
+X64_IRQ 4, 36
+X64_IRQ 5, 37
+X64_IRQ 6, 38
+X64_IRQ 7, 39
+X64_IRQ 8, 40
+X64_IRQ 9, 41
+X64_IRQ 10, 42
+X64_IRQ 11, 43
+X64_IRQ 12, 44
+X64_IRQ 13, 45
+X64_IRQ 14, 46
+X64_IRQ 15, 47
+
 
 global irqHandlers
 irqHandlers:
-    dq IRQ0
-    dq IRQ1
-    dq IRQ2
-    dq IRQ3
-    dq IRQ4
-    dq IRQ5
-    dq IRQ6
-    dq IRQ7
-    dq IRQ8
-    dq IRQ9
-    dq IRQ10
-    dq IRQ11
-    dq IRQ12
-    dq IRQ13
-    dq IRQ14
-    dq IRQ15
+    dq X64_IRQ0
+    dq X64_IRQ1
+    dq X64_IRQ2
+    dq X64_IRQ3
+    dq X64_IRQ4
+    dq X64_IRQ5
+    dq X64_IRQ6
+    dq X64_IRQ7
+    dq X64_IRQ8
+    dq X64_IRQ9
+    dq X64_IRQ10
+    dq X64_IRQ11
+    dq X64_IRQ12
+    dq X64_IRQ13
+    dq X64_IRQ14
+    dq X64_IRQ15
 
