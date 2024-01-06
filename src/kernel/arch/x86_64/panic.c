@@ -20,8 +20,8 @@ NORET void DebugPageFault(void* addr) {
 
 NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reason, const char* description, isr_state_t* regs) {
     printf("\n\n\033[31m===KERNEL PANIC===\033[0m\n\n");
-  
-    if (_file_ != NULL || line != -1) {
+    
+    if (_file_ != NULL || line != NULL) {
         printf("[%s]:%d\n", _file_, line);
     }
     
@@ -41,7 +41,7 @@ NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reaso
 
     if (regs != NULL) {
         char** exception_messages = GetIsrExceptionList();
-      printf("Hardware interrupt [%lu]::Interrupt description: %s\n", regs->isr_number, exception_messages[regs->isr_number]);
+      printf("Hardware interrupt [0x%02x]::Interrupt description: %s\n", regs->isr_number, exception_messages[regs->isr_number]);
         PrintRegs(regs);
     }
     else {

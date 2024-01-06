@@ -85,8 +85,9 @@ typedef void (*cab());
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
-    
+     asm("int $0x10");
     printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
+   
     ISR_RegisterHandler(14, page_fault_handler);
     ISR_RegisterHandler(13, gpf_handler);
     
