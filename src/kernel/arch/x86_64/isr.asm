@@ -33,7 +33,7 @@ isr_common:
     call ISR_Handler
     mov rsp, rax    ;update stack from the rax returned by function
     popa64
-    add rsp, 8 ; pop error code from the stack
+    add rsp, 16 ; pop error code and isr number from the stack
     iretq       ;interrupt return
 
 
