@@ -82,6 +82,13 @@ void gpf_handler(isr_state_t* regs) {
 
 typedef void (*cab());
 
+volatile struct limine_smbios_request smbios_request = {
+    .id = LIMINE_SMBIOS_REQUEST,
+    .revision = 0
+};
+#include "smbios.h"
+
+
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
@@ -105,21 +112,41 @@ KERNEL_ENTRY kmain() {
     #endif
     debugf("bing bong\n");
     NkkSetLastSystemError(E_NKK_SUCCESS);
-    printf("%s\n",NkkGetLastErrorAsString());
-   
-  
+    printf("%s\n",NkkGetLastErrorAsString()); 
 
-  
+  clrscr();
  
 
    printf("FPU test: %f\n", 3.141592);
  // asm("int $0xD");
     
    
+   SMBIOS sm = {0};
     
-      
-  
-   
+ 
+
+    bool smret = InitSMBIOS(smbios_request.response, &sm);
+    if (smret) {
+        debugf("SMBIOS v%u.%u\n", sm.sm64.verMajor,sm.sm64.verMinor);
+
+   // smbios_dump((SMBIOS_HEADER*)sm.sm64.tableAddr);
+    
+
+    
+
+    SMBIOS_TABLE cputable = {0};
+    GetSMBIOSTable(SMBIOS_TBL_CPU, &cputable);
+
+    smbios_processor* cpu  = (smbios_processor*)cputable.table;
+    debugf("\nManufacturer: [%s]\n", SmbiosGetStr(&cpu->hd, cpu->cpuManufacturer));
+    debugf("Cpu speed %u Mhz\n", cpu->currentSpeed);
+    debugf("Active cores %u\n", cpu->coreCount2);
+    
+
+   //smbios_dump((SMBIOS_HEADER*)&sm.sm64.tableAddr);
+    }
+    
+    
 
    IRQ_RegisterHandler(1, _keyboardcb_);
  

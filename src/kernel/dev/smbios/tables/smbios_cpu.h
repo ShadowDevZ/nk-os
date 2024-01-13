@@ -1,0 +1,32 @@
+#pragma once
+#include <stdint.h>
+#include "smbios.h"
+typedef struct  {
+	SMBIOS_HEADER hd;
+	uint8_t socketDesignation;
+	uint8_t cpuType;
+	uint8_t cpuFamily;
+	uint8_t cpuManufacturer;
+	uint64_t cpuID;
+	uint8_t cpuVer;
+	uint8_t voltage;
+	uint16_t externClock;
+	uint16_t maxSpeed;
+	uint16_t currentSpeed;
+	uint8_t status;
+	uint8_t cpuUpgrade;
+	uint16_t l1cacheHandle;
+	uint16_t l2cacheHandle;
+	uint16_t l3cacheHandle;
+	uint8_t serialNumber;
+	uint8_t assetTag;
+	uint8_t partNum;
+	uint8_t coreCount;
+	uint8_t coreEnabled;
+	uint8_t threadCount;
+	uint16_t cpuCharacteristics;
+	uint16_t cpuFamily2;
+	uint16_t coreCount2;
+	uint16_t coreEnabled2;
+	uint16_t threadCount2;
+} __attribute__((packed)) smbios_processor;

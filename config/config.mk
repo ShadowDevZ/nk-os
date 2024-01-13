@@ -16,7 +16,7 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -z max-page-size=0x1000 -Wl,-Map,$
 ###DEFINE HERE
 SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c printf.c crti.asm crtn.asm io.asm gdt.c idt.c \
 isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm irq.c uptime.c keyboard.c \
-kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c 
+kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c smbios.c
 #
 ###DEFINE HERE
 
@@ -24,7 +24,7 @@ kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c
 export C_VERSION=gnu11
 
 export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include -Isrc/kernel/arch/$(HOST_ARCH) \
--Isrc/kernel/include/sys -Isrc/kernel/arch/$(HOST_ARCH)/include -Isrc/kernel/dev/flanterm
+-Isrc/kernel/include/sys -Isrc/kernel/arch/$(HOST_ARCH)/include -Isrc/kernel/dev/flanterm -Isrc/kernel/dev/smbios
 
 export TARGET_CFLAGS=-g -ffreestanding -O -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
