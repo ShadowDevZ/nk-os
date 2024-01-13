@@ -63,6 +63,7 @@ VPATH := $(dirs)
 
 
 all: kernel iso
+	
 	@$(ECHO) $(COLOR_GREEN)COMPLETED$(COLOR_RESET)
 #	@$(ECHO) $(AS_SOURCES)
 
