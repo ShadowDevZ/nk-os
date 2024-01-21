@@ -15,12 +15,13 @@ typedef struct {
     uint64_t r10;
     uint64_t r9;
     uint64_t r8;
-    uint64_t rbp;
     uint64_t rdi;
     uint64_t rsi;
+    uint64_t rbp;
+    uint64_t rsp;
+    uint64_t rbx;
     uint64_t rdx;
     uint64_t rcx;
-    uint64_t rbx;
     uint64_t rax;
 
 }__attribute__((packed)) general_registers_t;
@@ -29,10 +30,9 @@ typedef struct {
     uint64_t rip;
     uint64_t cs;
     uint64_t rflags;
-    uint64_t rsp;
     uint64_t ss;
 
-}extended_registers_t;
+}__attribute__((packed)) extended_registers_t;
 typedef struct
 {
     general_registers_t gp;
@@ -42,7 +42,7 @@ typedef struct
     extended_registers_t er;
     
     
-} isr_state_t;
+}__attribute__((packed)) isr_state_t;
 
 extern void (*X64_ISRHANDLERS[256]);
 void IsrsGateSetup();

@@ -27,12 +27,12 @@ X64_ISR%1:
 global isr_common
 isr_common:
     cld     ;DF may be set by cpu, clearing it is required when calling c function using sysvabi
-    pusha64
+    PUSHAQ
 
     mov rdi, rsp    ; push stack to the handler
     call ISR_Handler
     mov rsp, rax    ;update stack from the rax returned by function
-    popa64
+    POPAQ
     add rsp, 16 ; pop error code and isr number from the stack
     iretq       ;interrupt return
 

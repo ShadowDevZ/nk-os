@@ -113,7 +113,7 @@ KERNEL_ENTRY kmain() {
     debugf("bing bong\n");
     NkkSetLastSystemError(E_NKK_SUCCESS);
     printf("%s\n",NkkGetLastErrorAsString()); 
-
+   
   clrscr();
  
 

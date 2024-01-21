@@ -1,12 +1,13 @@
 ;amd64 pltform for some reason decided to remove pusha instruction
-%macro pusha64 0
+%macro PUSHAQ 0
     push rax
-    push rbx
     push rcx
     push rdx
+    push rbx
+    push rsp
     push rbp
-    push rdi
     push rsi
+    push rdi
     push r8
     push r9
     push r10
@@ -17,7 +18,7 @@
     push r15
 %endmacro
 
-%macro popa64 0
+%macro POPAQ 0
     pop r15
     pop r14
     pop r13
@@ -26,11 +27,12 @@
     pop r10
     pop r9
     pop r8
-    pop rbp
     pop rdi
     pop rsi
+    pop rbp
+    pop rsp
+    pop rbx
     pop rdx
     pop rcx
-    pop rbx
     pop rax
 %endmacro
