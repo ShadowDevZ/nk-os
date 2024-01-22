@@ -43,7 +43,7 @@ def WriteSymbols(f2w):
     f.write("#pragma GCC diagnostic ignored \"-Wint-conversion\"\n")
     f.write("#pragma GCC diagnostic ignored \"-Wmissing-braces\"\n")
 
-    f.write("const KsymList symbols[] = {\n")
+    f.write("const KsymList __symbols__[] = {\n")
     for sym in g_symbolList:
           f.write("{ " + sym[0] + ",\""+ sym[1] + "\"},\n")
 

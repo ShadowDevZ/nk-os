@@ -189,7 +189,7 @@ KERNEL_ENTRY kmain() {
      printf("working sleep %d\n", GetSystemTicks());
     printf("page size %lluKiB\n", GetKernelPageSize() / 1024);
     printf("RDTSC: %llu\n", x64_rdtsc());
-    
+   // DumpSymbolTable();
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    
   //  asm("int $0x3");
