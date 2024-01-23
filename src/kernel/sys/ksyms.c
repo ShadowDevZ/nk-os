@@ -8,7 +8,11 @@
 #ifndef BUILD_BOOTSTRAP
 NATIVECALL uint64_t KsymCount() {
     uint64_t i = 0;
-    for (i; __symbols__[i].addr != NULL; ++i);
+  //  for (i; __symbols__[i].addr != NULL; ++i);
+
+    while (__symbols__[i].addr != NULL) {
+        ++i;
+    }
     return i;
 }
 

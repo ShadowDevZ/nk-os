@@ -18,11 +18,14 @@ NORET void DebugPageFault(void* addr) {
    UNREACHABLE();
 }
 
-NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reason, const char* description, isr_state_t* regs) {
+NORET void _SystemRaiseHardError(const char* _file_, int* line, const char* reason, const char* description, isr_state_t* regs) {
     printf("\n\n\033[31m===KERNEL PANIC===\033[0m\n\n");
     //line can be set to NULL if the function is called manually without macro
+    
+
     if (_file_ != NULL || line != NULL) {
-        printf("[%s]:%d\n", _file_, line);
+
+        printf("[%s]:%d\n", _file_, *line);
     }
     
     char stopCode[STOP_CODE_MAXLEN];
@@ -57,23 +60,27 @@ NORET void _SystemRaiseHardError(const char* _file_, int line, const char* reaso
 
 void PrintRegs(isr_state_t* reg)
 {
-    #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat"
 
+    if (reg == NULL) {
+        printf("<NULL>\n");
+    }
 
 
     printf("CPU Register dump:\n\n");
-    printf("rax: 0x%llx, rbx:    0x%llx, rcx: 0x%llx, rdx: 0x%llx\n"
-          "rsi: 0x%llx, rdi:    0x%llx, rbp: 0x%llx, r8 : 0x%llx\n"
-          "r9 : 0x%llx, r10:    0x%llx, r11: 0x%llx, r12: 0x%llx\n"
-          "r13: 0x%llx, r14:    0x%llx, r15: 0x%llx, ss : 0x%llx\n"
-          "rsp: 0x%llx, rflags: 0x%llx, cs : 0x%llx, rip: 0x%llx\n",
-          reg->gp.rax, reg->gp.rbx,    reg->gp.rcx, reg->gp.rdx,
-          reg->gp.rsi, reg->gp.rdi,    reg->gp.rbp, reg->gp.r8,
-          reg->gp.r9,  reg->gp.r10,    reg->gp.r11, reg->gp.r12,
-          reg->gp.r13, reg->gp.r14,    reg->gp.r15, reg->er.ss,
-          reg->er, reg->er.rflags, reg->er.cs,  reg->er.rip);
-#pragma GCC diagnostic pop
+    //todo make it print in columns
+    printf("     rax: 0x%04X  rbx: 0x%04X rcx: 0x%04X  rdx: 0x%04X \n \
+    rsp: 0x%04X  rbp: 0x%04X  rsi: 0x%04x \n \
+    rdi: 0x%04X  r8: 0x%04X  r9: 0x%04X  r10: 0x%04X \n \
+    r11: 0x%04X  r12: 0x%04X r13: 0x%04X  r14: 0x%04X \n \
+    r15: 0x%04X  ss: 0x%04X  rflag: 0x%04X  cs: 0x%04X \n \
+    rip: 0x%04x  err: 0x%04X  isr: 0x%04X",
+    reg->gp.rax, reg->gp.rbx, reg->gp.rcx, reg->gp.rdx,
+    reg->gp.rsp, reg->gp.rbp, reg->gp.rsi, reg->gp.rdi,
+    reg->gp.r8, reg->gp.r9, reg->gp.r10, reg->gp.r11,
+    reg->gp.r12, reg->gp.r13, reg->gp.r14, reg->gp.r15,
+    reg->er.ss, reg->er.rflags, reg->er.cs, reg->er.rip,
+    reg->error_code, reg->isr_number);
+
 }
 
 NORET void _SystemRaiseHardErrorEx(const char* reason, const char* description, isr_state_t* regs);

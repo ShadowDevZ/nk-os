@@ -7,7 +7,7 @@
 #include "sysdefs.h"
 typedef struct {
     void* addr;
-    const char name[SYM_NAME_MAXLEN];
+    char name[SYM_NAME_MAXLEN];
 }KsymList;
 extern const KsymList __symbols__[];
 uint64_t KsymCount();
