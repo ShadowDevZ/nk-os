@@ -15,8 +15,14 @@ extern IRQ_Handler
 %include "macros.inc"
 %macro X64_IRQ 1
 global X64_IRQ%1
+%define IRQ_MAGIC_NUMBER 0xEF85A2C
+
 X64_IRQ%1:
     cld
+    ;IRQ_MAGIC_NUMBER means that the register dump was obtained
+    ;during the IRQ call and not ISR
+    push IRQ_MAGIC_NUMBER
+    push %1
     PUSHAQ
     
     
@@ -28,6 +34,7 @@ X64_IRQ%1:
     call IRQ_Handler
    
     POPAQ
+    add rsp, 16
 
     iretq
 

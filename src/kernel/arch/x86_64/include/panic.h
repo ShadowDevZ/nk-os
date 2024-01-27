@@ -20,3 +20,4 @@ static inline void SystemRaiseHardError(const char* reason, const char* desc) {
 
 
 #define DebugRaiseKernelPanic() _SystemRaiseHardError(__FILE__, NULL, "DEBUG_STOP", "Manually invoked panic", NULL)
+void PrintRegs(reg_state_t* reg);
