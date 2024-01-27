@@ -3,9 +3,9 @@
 #include "isr.h"
 extern void x64_cpu_stop();
 
-void _SystemRaiseHardError(const char* _file_, int* line, const char* reason, const char* description, isr_state_t* regs);
+void _SystemRaiseHardError(const char* _file_, int* line, const char* reason, const char* description, reg_state_t* regs);
 
-void PrintRegs(isr_state_t *reg);
+void PrintRegs(reg_state_t *reg);
 
 NORET UNSAFE void DebugPageFault(void* addr);
 

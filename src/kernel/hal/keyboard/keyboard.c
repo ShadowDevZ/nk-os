@@ -134,7 +134,7 @@ uint32_t GetRawKeyboardFlags() {
 })
 
 
-void NATIVECALL _keyboardcb_(registers_t* regs) {
+void NATIVECALL _keyboardcb_(reg_state_t* regs) {
    volatile unsigned char scanCode;
    volatile unsigned char kbdStatus;
 

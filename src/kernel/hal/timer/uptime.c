@@ -19,7 +19,7 @@ void PIT_SetFrequency(int hz) {
 
 
 volatile uint64_t ticks = 0;
-NATIVECALL void _timercb_internal_(registers_t* rg) {
+NATIVECALL void _timercb_internal_(reg_state_t* rg) {
     ticks++;
  //printf(".");
 

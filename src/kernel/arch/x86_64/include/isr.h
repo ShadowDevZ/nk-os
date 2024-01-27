@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-
+//DO NOT USE, subject for removal
 typedef struct {
     uint64_t rax, rbx, rcx, rdx, rsi, rdi, r8, r9, r10, r11, r12, r13, r14, r15, rsp;
 }registers_t;
@@ -42,7 +42,7 @@ typedef struct
     extended_registers_t er;
     
     
-}__attribute__((packed)) isr_state_t;
+}__attribute__((packed)) reg_state_t;
 
 extern void (*X64_ISRHANDLERS[256]);
 void IsrsGateSetup();
@@ -51,8 +51,8 @@ uint64_t ISR_Handler(uint64_t rsp);
 void ISR_Init();
 char** GetIsrExceptionList();
 
-typedef void (*ISR_HANDLER)(isr_state_t* regs);
+typedef void (*ISR_HANDLER)(reg_state_t* regs);
 
-isr_state_t Regs2ISRState(registers_t* regs);
+reg_state_t Regs2ISRState(registers_t* regs);
 
 void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler);

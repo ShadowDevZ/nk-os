@@ -39,4 +39,4 @@
 #define PS2_CAPSLK 0x3A
 
 void KeyboardInit();
-void NATIVECALL _keyboardcb_(registers_t* regs);
+void NATIVECALL _keyboardcb_(reg_state_t* regs);

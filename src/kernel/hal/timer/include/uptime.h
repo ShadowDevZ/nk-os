@@ -5,7 +5,7 @@
 
 //#define PIT_HZ 100 //for some reason it crashes over 100hz ?
 
-void _timercb_internal_(registers_t* rg);
+void _timercb_internal_(reg_state_t* rg);
 uint64_t GetSystemTicks();
 void PIT_SetFrequency(int hz);
 uint64_t GetSystemUptime();

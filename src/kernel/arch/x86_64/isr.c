@@ -90,7 +90,7 @@ ISR_HANDLER g_ISRHandlers[256];
 #include "../arch/x86_64/include/panic.h"
 #include "kstdio.h"
 uint64_t ISR_Handler(uint64_t rsp) {
-    isr_state_t* regs = (isr_state_t*)rsp;
+    reg_state_t* regs = (reg_state_t*)rsp;
    
    
     //PrintRegs(regs);
@@ -120,12 +120,12 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
 }
 
 
-isr_state_t Regs2ISRState(registers_t* regs) {
+reg_state_t Regs2ISRState(registers_t* regs) {
     if (regs == NULL) {
-        isr_state_t t = {0};
+        reg_state_t t = {0};
         return t;
     }
-    isr_state_t state;
+    reg_state_t state;
     memset(&state, 0, sizeof(state));
     state.gp.rax = regs->rax;
     state.gp.rbx = regs->rbx;

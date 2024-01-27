@@ -18,7 +18,7 @@ NORET void DebugPageFault(void* addr) {
    UNREACHABLE();
 }
 
-NORET void _SystemRaiseHardError(const char* _file_, int* line, const char* reason, const char* description, isr_state_t* regs) {
+NORET void _SystemRaiseHardError(const char* _file_, int* line, const char* reason, const char* description, reg_state_t* regs) {
     printf("\n\n\033[31m===KERNEL PANIC===\033[0m\n\n");
     //line can be set to NULL if the function is called manually without macro
     
@@ -58,7 +58,7 @@ NORET void _SystemRaiseHardError(const char* _file_, int* line, const char* reas
 }
 
 
-void PrintRegs(isr_state_t* reg)
+void PrintRegs(reg_state_t* reg)
 {
 
     if (reg == NULL) {
@@ -83,4 +83,4 @@ void PrintRegs(isr_state_t* reg)
 
 }
 
-NORET void _SystemRaiseHardErrorEx(const char* reason, const char* description, isr_state_t* regs);
+NORET void _SystemRaiseHardErrorEx(const char* reason, const char* description, reg_state_t* regs);

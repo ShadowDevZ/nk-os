@@ -1,16 +1,36 @@
 extern IRQ_Handler
 
+;%macro X64_IRQ 1
+;global X64_IRQ%1
+;X64_IRQ%1:
+;    cld ; just in case the DF is set, clearing it is required by SYSVABI
+;    cli
+;    push rdi
+;    mov rdi, %1+32 ;pass remapped address to the handler
+;    call IRQ_Handler
+;    pop rdi
+;    sti
+;    iretq
+;%endmacro
+%include "macros.inc"
 %macro X64_IRQ 1
 global X64_IRQ%1
 X64_IRQ%1:
-    cld ; just in case the DF is set, clearing it is required by SYSVABI
-    cli
-    push rdi
-    mov rdi, %1+32 ;pass remapped address to the handler
+    cld
+    PUSHAQ
+    
+    
+    ;first argument is intno
+    mov rdi, %1 + 32
+
+    ;second argument are registers
+    mov rsi, rsp
     call IRQ_Handler
-    pop rdi
-    sti
+   
+    POPAQ
+
     iretq
+
 %endmacro
 
 X64_IRQ 0

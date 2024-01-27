@@ -14,7 +14,7 @@
 #include "mm/liballoc.h"
 #include "limattr.h"
 
-void page_fault_handler(isr_state_t* regs)
+void page_fault_handler(reg_state_t* regs)
 {
     uint64_t faulting_address;
     asm ("movq %%cr2, %0" : "=r" (faulting_address));
@@ -41,7 +41,7 @@ void page_fault_handler(isr_state_t* regs)
     
    // panicf("PAGING","Page fault");
 }
-void gpf_handler(isr_state_t* regs) {
+void gpf_handler(reg_state_t* regs) {
     printf("General protection fault\n");
         //if it is segment related
     if (regs->error_code > 0) {
@@ -93,7 +93,7 @@ volatile struct limine_smbios_request smbios_request = {
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     clrscr();
- 
+ PIT_Init(1000);
     printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
    
     ISR_RegisterHandler(14, page_fault_handler);
@@ -180,7 +180,7 @@ KERNEL_ENTRY kmain() {
     printf("a:%d b:%d\nsw:\na: %db: %d\n", *aaa,*baa,*aaa,*baa);
     kfree(aaa);
     kfree(baa);
-    // PIT_Init(1000);
+     
 
 
     debugf("CS: 0x%02x DS: 0x%02x TR: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(),x64_readtr(), CS2DPL());
