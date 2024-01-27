@@ -54,10 +54,9 @@ void ISR_Init() {
   //  IDT_DisableGate(0x80);
     
 }
-
-inline void SetGates(int start, int end, int flags) {
+void SetGates(int start, int end, int flags) {
     for (int i = start; i <= end; i++) {
-        IDT_SetGate(i, X64_ISRHANDLERS[i], flags);
+        IDT_SetGate(i, X64_ISRHANDLERS[i], flags, 0);
     }
 }
 
@@ -70,12 +69,12 @@ void IsrsGateSetup() {
 
     //irq
     for (int i =0; i < 16; i++) {
-        IDT_SetGate(i+32, irqHandlers[i], IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT | IDT_FLAG_PRESENT);
+        IDT_SetGate(i+32, irqHandlers[i], IDT_FLAG_RING0 | IDT_FLAG_GATE_64BIT_INT | IDT_FLAG_PRESENT, 0);
     } 
     SetGates(48, 127, IDT_INT0_FLAGS);
 
     //syscall 0x80
-    IDT_SetGate(128, X64_ISRHANDLERS[128],  IDT_INT3_FLAGS);    
+    IDT_SetGate(128, X64_ISRHANDLERS[128],  IDT_INT3_FLAGS, 0);    
     SetGates(129, 255, IDT_INT0_FLAGS);
 
    

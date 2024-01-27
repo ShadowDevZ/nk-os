@@ -24,7 +24,7 @@ void InitializeIDT() {
     x64_load_idt(&g_Desc);
 }
 
-void IDT_SetGate(int gate, void* handler, int flags) {
+void IDT_SetGate(int gate, void* handler, int flags, uint8_t ist) {
     uint16_t low_16 = (uint16_t) ((uint64_t)handler & 0xFFFF);
     uint16_t middle_16 = (uint16_t) (((uint64_t)handler >> 16) & 0xFFFF);
     uint32_t high_32 = (uint32_t) (((uint64_t)handler >> 32) & 0xFFFFFFFF);
@@ -37,7 +37,7 @@ void IDT_SetGate(int gate, void* handler, int flags) {
         .attributes = flags,
         .isrMid = middle_16,
         .isrHigh = high_32,
-        .ist = 0
+        .ist = ist
 
     };
     g_IDT[gate] = entry;

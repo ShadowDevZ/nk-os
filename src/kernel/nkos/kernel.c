@@ -13,6 +13,7 @@
 #include "panic.h"
 #include "mm/liballoc.h"
 #include "limattr.h"
+
 void page_fault_handler(isr_state_t* regs)
 {
     uint64_t faulting_address;
@@ -98,7 +99,7 @@ KERNEL_ENTRY kmain() {
     ISR_RegisterHandler(14, page_fault_handler);
     ISR_RegisterHandler(13, gpf_handler);
     
-    
+     
     PmmInit(DEFAULT_PAGE_SIZE);
     
    // slab_init();
@@ -123,7 +124,7 @@ KERNEL_ENTRY kmain() {
    
    SMBIOS sm = {0};
     
- 
+
 
     bool smret = InitSMBIOS(smbios_request.response, &sm);
     if (smret) {
@@ -168,8 +169,8 @@ KERNEL_ENTRY kmain() {
    void* x = kmalloc(9999);
     kfree(x);
     
-    void* b = kmalloc(9999999);
-    kfree(b);
+   // void* b = kmalloc(9999999);
+   // kfree(b);
     
    int* aaa = kmalloc(sizeof(int));
     *aaa=10;
@@ -179,16 +180,19 @@ KERNEL_ENTRY kmain() {
     printf("a:%d b:%d\nsw:\na: %db: %d\n", *aaa,*baa,*aaa,*baa);
     kfree(aaa);
     kfree(baa);
+    // PIT_Init(1000);
 
 
-    debugf("CS: 0x%02x DS: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(), CS2DPL());
+    debugf("CS: 0x%02x DS: 0x%02x TR: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(),x64_readtr(), CS2DPL());
    
     
-    PIT_Init(1000);
+   
 
-     printf("working sleep %d\n", GetSystemTicks());
+    // printf("working sleep %d\n", GetSystemTicks());
     printf("page size %lluKiB\n", GetKernelPageSize() / 1024);
     printf("RDTSC: %llu\n", x64_rdtsc());
+   // printf("aaaaaaaaaaaaaa: %llu\n", GetSystemTicks());
+   // printf("aaaaaaaaaaaaaa: %llu\n", GetSystemTicks());
    // DumpSymbolTable();
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    

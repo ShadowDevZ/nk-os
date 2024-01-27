@@ -23,23 +23,35 @@ SECTIONS
     /* that is the beginning of the region. */
     . = 0xffffffff80000000;
 
+    __text_start__ = .;
+
     .text : {
         *(.text .text.*)
     } :text
 
+    __text_end__ = .;
     /* Move to the next memory page for .rodata */
     . += CONSTANT(MAXPAGESIZE);
 
+    __rodata_start__ = .;
     .rodata : {
         *(.rodata .rodata.*)
     } :rodata
 
+    __rodata_end__ = .;
+
     /* Move to the next memory page for .data */
     . += CONSTANT(MAXPAGESIZE);
 
+    __data_start__ = .;
+    
     .data : {
         *(.data .data.*)
     } :data
+
+
+   
+
 
     /* Dynamic section for relocations, both in its own PHDR and inside data PHDR */
     .dynamic : {
@@ -56,7 +68,7 @@ SECTIONS
         *(COMMON)
         __bss_end = .;
     } :data
-
+    __data_end__ = .;
     /* Discard .note.* and .eh_frame since they may cause issues on some hosts. */
     /DISCARD/ : {
         *(.eh_frame)

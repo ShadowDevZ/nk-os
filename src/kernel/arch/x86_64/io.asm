@@ -155,28 +155,35 @@ x64_load_idt:
     
     ret
 
-%define DS64 0x30
-%define CS64 0x28
+;%define DS64 0x30
+;%define CS64 0x28
+;%define TSS64 0x48
 global x64_gdt_flush
 x64_gdt_flush:
     
-
+    ;pointer to GDTR arg1
     lgdt [rdi]
-    mov ax, DS64     ;update DS as it is not updated automatically upon GDT reload
+   ; mov ax, DS64     ;update DS as it is not updated automatically upon GDT reload
+    ;DS 64 arg2
+    mov ax, si
+    
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
     mov ss, ax
     pop rdi
-    mov rax, CS64
+    ;mov rax, CS64
+    ;CS64 arg3
+    mov rax, rdx
     push rax
     push rdi
     retfq   ; far return, jump to the new CS
 
-global tss_flush
+global x64_tss_flush
 x64_tss_flush:
-    mov ax, 0x48 ;todo change later
+    ;mov ax, TSS64 ;todo change later
+    mov ax, di
     ltr ax
     ret
 
@@ -243,6 +250,16 @@ x64_readcs:
     mov rsp, rbp
     pop rbp
     ret
+global x64_readtr
+x64_readtr:
+    push rbp
+    mov rbp, rsp
+    ;store task register
+    str ax
+    mov rsp, rbp
+    pop rbp
+    ret
+
 global x64_readds
 x64_readds:
     push rbp

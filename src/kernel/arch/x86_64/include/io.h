@@ -17,6 +17,8 @@ extern void  x64_outsw(port_t port, const void *addr, int cnt);
 
 extern uint64_t x64_readcs();
 extern uint64_t x64_readds();
+extern uint16_t x64_readtr();
+
 extern registers_t x64_rdump();
 extern void x64_panic();
 extern void x64_enable_avx();
@@ -24,12 +26,12 @@ extern void x64_enable_fpu();
 extern void x64_enable_sse();
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
-
+extern void x64_tss_flush(uint16_t segmentOffset);
 extern void x64_cli();
 extern void x64_sti();
 
 #define x64_iowait() x64_outb(0x80, 0);
-extern void x64_gdt_flush(void* gdt);
+
 #include "idt.h"
 extern void x64_load_idt(IDT_DESCRIPTOR64* idt);
 

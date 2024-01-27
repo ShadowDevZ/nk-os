@@ -43,7 +43,11 @@
         "valarray": "c",
         "panic.h": "c",
         "liballoc.h": "c",
-        "smbios_cpu.h": "c"
+        "smbios_cpu.h": "c",
+        "compare": "c",
+        "cstdint": "c",
+        "pmm.h": "c",
+        "smbios.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

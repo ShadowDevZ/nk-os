@@ -20,10 +20,10 @@ void PIT_SetFrequency(int hz) {
 
 volatile uint64_t ticks = 0;
 NATIVECALL void _timercb_internal_(registers_t* rg) {
-    ticks += 1;
+    ticks++;
  //printf(".");
 
-    IRQ_SendEOI(0);
+   // IRQ_SendEOI(0);
 
     
 }
