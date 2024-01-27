@@ -16,7 +16,7 @@
 GDT_DESCRIPTORS g_Pack;
 
 //reserved for future use
-#define GDT_ENTRY_MAX 8192
+
 int16_t g_GdtEntriesCount = 0;
 
 

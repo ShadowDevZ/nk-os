@@ -43,3 +43,5 @@ void IDT_SetGate(int gate, void* handler, int flags, uint8_t ist);
 void InitializeIDT();
 void IDT_EnableGate(int interrupt);
 void IDT_DisableGate(int interrupt) ;
+void IDT_DisableIST(int interrupt);
+void IDT_SetIST(int interrupt, uint8_t ist);

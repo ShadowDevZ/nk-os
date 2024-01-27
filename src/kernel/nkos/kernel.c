@@ -13,91 +13,29 @@
 #include "panic.h"
 #include "mm/liballoc.h"
 #include "limattr.h"
-
-void page_fault_handler(reg_state_t* regs)
-{
-    uint64_t faulting_address;
-    asm ("movq %%cr2, %0" : "=r" (faulting_address));
-
-    int32_t present = !(regs->error_code & 0x1);
-    int32_t rw = regs->error_code & 0x2;
-    int32_t us = regs->error_code & 0x4;
-    int32_t reserved = regs->error_code & 0x8;
-    int32_t id = regs->error_code & 0x10;
-
-    puts("Page fault! ( ");
-    if (present)
-        puts("present ");
-    if (rw)
-        puts("read-only ");
-    if (us)
-        puts("user-mode ");
-    if (reserved)
-        puts("reserved ");
-
-    printf(") at 0x%p\n",faulting_address);
-    printf("%llu", faulting_address);
-    x64_panic();
-    
-   // panicf("PAGING","Page fault");
-}
-void gpf_handler(reg_state_t* regs) {
-    printf("General protection fault\n");
-        //if it is segment related
-    if (regs->error_code > 0) {
-      int32_t external = (regs->error_code & 1);
-      int32_t tbl = ((regs->error_code >> 1) & 0x3);
-      int32_t index = ((regs->error_code >> 3) & 0x1fff);
-
-      if (tbl) {
-            puts("CPU table exception: \n");
-         puts("\tTable: (");
-         switch (tbl) {
-              case 0b00:
-                   puts("GDT ");
-                   break;
-                case 0b01:
-              case 0b11:
-                   puts("IDT ");
-                 break;
-             case 0b10:
-                  puts("LDT ");
-                   break;
-              default:
-                  puts("UNKWN ");
-                  break;
-
-            
-         }
-
-           printf(")Index: %d, Selector 0o%o\n" + index);
-       }
-    }
+#include "../arch/x86_64/include/gdt.h"
+#include "bitsets.h"
 
 
-    PrintRegs(regs);
 
-     
-    x64_panic();
-}
 
-typedef void (*cab());
+
 
 volatile struct limine_smbios_request smbios_request = {
     .id = LIMINE_SMBIOS_REQUEST,
     .revision = 0
 };
 #include "smbios.h"
-
+#include "handlers.h"
 
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
+    InitFaultHandlers();
     clrscr();
- PIT_Init(1000);
+    
+ 
     printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
-   
-    ISR_RegisterHandler(14, page_fault_handler);
-    ISR_RegisterHandler(13, gpf_handler);
+    
     
      
     PmmInit(DEFAULT_PAGE_SIZE);
@@ -116,9 +54,9 @@ KERNEL_ENTRY kmain() {
     printf("%s\n",NkkGetLastErrorAsString()); 
    
   clrscr();
- 
+    
 
-   printf("FPU test: %f\n", 3.141592);
+   printf("FPU test: %f\n", 3.141592653589793);
  // asm("int $0xD");
     
    
@@ -147,9 +85,9 @@ KERNEL_ENTRY kmain() {
    //smbios_dump((SMBIOS_HEADER*)&sm.sm64.tableAddr);
     }
     
-    
-
-   IRQ_RegisterHandler(1, _keyboardcb_);
+   
+    HIWORD(33333);
+   IRQ_RegisterHandler(IRQ_KEYBOARD, _keyboardcb_);
  
     KeyboardInit();
    
@@ -181,7 +119,7 @@ KERNEL_ENTRY kmain() {
     kfree(aaa);
     kfree(baa);
      
-
+  
 
     debugf("CS: 0x%02x DS: 0x%02x TR: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(),x64_readtr(), CS2DPL());
    

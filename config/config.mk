@@ -16,7 +16,7 @@ export TARGET_LDFLAGS=-nostdlib -static -lgcc -mno-red-zone -mcmodel=kernel -z m
 ###DEFINE HERE
 SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c printf.c crti.asm crtn.asm io.asm gdt.c idt.c \
 isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm irq.c uptime.c keyboard.c \
-kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c smbios.c
+kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c smbios.c handlers.c pic.c
 #
 ###DEFINE HERE
 

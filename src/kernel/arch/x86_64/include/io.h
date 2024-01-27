@@ -19,7 +19,7 @@ extern uint64_t x64_readcs();
 extern uint64_t x64_readds();
 extern uint16_t x64_readtr();
 
-extern registers_t x64_rdump();
+
 extern void x64_panic();
 extern void x64_enable_avx();
 extern void x64_enable_fpu();

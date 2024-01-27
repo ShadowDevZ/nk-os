@@ -5,21 +5,22 @@ __attribute__((aligned(0x10)))
 IDT_ENTRY64 g_IDT[256];
 IDT_DESCRIPTOR64 g_Desc;
 #include "kstdio.h"
+#include "pic.h"
+#include "bitsets.h"
+#include "operands.h"
 void InitializeIDT() {
     g_Desc.base = (uint64_t)&g_IDT;
     g_Desc.limit = (256 * sizeof(IDT_ENTRY64)) -1;
     memset(g_IDT, 0, sizeof(IDT_ENTRY64) * 256);
 
-    x64_outb(0x20, 0x11);
-    x64_outb(0xA0, 0x11);
-    x64_outb(0x21, 0x20);
-    x64_outb(0xA1, 0x28);
-    x64_outb(0x21, 0x04);
-    x64_outb(0xA1, 0x02);
-    x64_outb(0x21, 0x01);
-    x64_outb(0xA1, 0x01);
-    x64_outb(0x21, 0x0);
-    x64_outb(0xA1, 0x0);
+    PIC_Initialize(PIC_UNMASK_ALL);
+    
+    uint32_t mask = Pic_GetMask();
+    uint16_t low = LOWORD(mask);
+    uint16_t high = HIWORD(mask);
+    
+  
+    debugf("PIC_MASK\n  master: 0x%02X\n  slave: 0x%02X\n", high,low); 
 
     x64_load_idt(&g_Desc);
 }
@@ -48,6 +49,13 @@ debugf("HANDLER: 0x%llx FLAGS: 0x%x IST: 0x%x COD_SEG: 0x%x\n", (uint64_t)handle
 
    
 
+}
+
+void IDT_SetIST(int interrupt, uint8_t ist) {
+    g_IDT[interrupt].ist =  ist;
+}
+void IDT_DisableIST(int interrupt) {
+    g_IDT[interrupt].ist =  0;
 }
 
 void IDT_EnableGate(int interrupt) {

@@ -3,31 +3,28 @@
 #include "include/panic.h"
 #include "irq.h"
 char *exception_messages[] = {
-    "Division by Zero",
-    "Debug",
-    "Non-Maskable Interrupt",
-    "Breakpoint",
-    "Overflow",
-    "Out of Bounds",
-    "Invalid Opcode",
-    "No Coprocessor",
-
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Bat TSS",
-    "Segment not Present",
-    "Stack Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Unknown Interrupt",
-
-    "Coprocessor Fault",
-    "Alignment Check",
+    [ISR_DIVIDE_ZERO] = "Division by Zero",
+    [ISR_DEBUG] =   "Debug",
+    [ISR_NMI] = "Non-Maskable Interrupt",
+    [ISR_BREAKPOINT] = "Breakpoint",
+    [ISR_OVERFLOW] = "Overflow",
+    [ISR_OUT_OF_BOUNDS] = "Bound Range Exceeded",
+    [ISR_INVALID_OPCODE] = "Invalid Opcode",
+    [ISR_DEVICE_UNAVAIL] = "Device Not Available",
+    [ISR_DOUBLE_FAULT] = "Double fault",
+    [ISR_COPROCESSOR] = "Coprocessor Segment Overrun",
+    [ISR_INVALID_TSS] = "Invalid TSS",
+    [ISR_SEGMENT_NP] = "Segment Not Present",
+    [ISR_SS_FAULT] = "Stack Segment Fault",
+    [ISR_GEN_PROT] = "General Protection Fault",
+    [ISR_PAGE_FAULT] = "Page fault",
     "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
+    [ISR_X87_FPU] = "x87 FPU Exception",
+    [ISR_ALIGN_CHECK] = "Alignment check",
+    [ISR_MACHINE_CHECK] = "Machine check",
+    [ISR_SIMD_FPU] = "SIMD FPU Exception",
+    [ISR_VIRTUALIZATION] = "Virtualization exception",
+    [ISR_CTRL_PROT] = "Control Protection Exception",
 
     "Reserved",
     "Reserved",
@@ -35,12 +32,23 @@ char *exception_messages[] = {
     "Reserved",
     "Reserved",
     "Reserved",
+    
+    [ISR_HYPERV_INJECT] = "Hypervisor injection",
+    [ISR_VMM_COMM] = "VMM Communication Exception",
+    [ISR_SECURITY] = "Security exception",
+    
     "Reserved",
-    "Reserved"
 };
 
 char** GetIsrExceptionList() {
     return exception_messages;
+}
+char* ISRErrorToMessage(ISR_ERROR_CODES err) {
+    uint8_t len = sizeof(exception_messages)/sizeof(exception_messages[0]);
+    if (err >= len) {
+        return "<NULL>";
+    }
+    return exception_messages[err];
 }
 
 #include "include/idt.h"
@@ -120,30 +128,7 @@ void ISR_RegisterHandler(int interrupt, ISR_HANDLER handler) {
 }
 
 
-reg_state_t Regs2ISRState(registers_t* regs) {
-    if (regs == NULL) {
-        reg_state_t t = {0};
-        return t;
-    }
-    reg_state_t state;
-    memset(&state, 0, sizeof(state));
-    state.gp.rax = regs->rax;
-    state.gp.rbx = regs->rbx;
-    state.gp.rcx = regs->rcx;
-    state.gp.rdx = regs->rdx;
-    state.gp.rsi = regs->rsi;
-    state.gp.rdi = regs->rdi;
-    state.gp.r8 = regs->r8;
-    state.gp.r9 = regs->r9;
-    state.gp.r10 = regs->r10;
-    state.gp.r11 = regs->r11;
-    state.gp.r12 = regs->r12;
-    state.gp.r13 = regs->r13;
-    state.gp.r14 = regs->r14;
-    state.gp.r15 = regs->r15;
-    
-    return state;
-}
+
 //Converts code segment selector value to the DPL (ring level)
 
 #define CODEUSR 64

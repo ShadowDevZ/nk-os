@@ -167,7 +167,7 @@ typedef enum {
 
 
 
-
+#define GDT_ENTRY_MAX 8192
 
 
 extern void x64_gdt_flush(GDT* gdt, uint16_t soData, uint64_t soCode);

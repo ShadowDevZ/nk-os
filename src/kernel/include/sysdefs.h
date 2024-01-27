@@ -19,9 +19,9 @@ typedef int16_t i16_t;
 typedef int32_t i32_t;
 typedef int64_t i64_t;
 
-typedef unsigned int uint;
-typedef unsigned short ushort;
 
+typedef unsigned short ushort;
+typedef unsigned int uint;
 typedef uint16_t word_t;
 typedef unsigned long dword_t;
 typedef uint64_t qword_t;

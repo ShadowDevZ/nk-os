@@ -50,9 +50,9 @@
 #define MAX_ELEM_VERLEN 80
 
 typedef struct {
-    uint major;
-    uint minor;
-    uint patch;
+    uint32_t major;
+    uint32_t minor;
+    uint32_t patch;
     char versionStr[MAX_ELEM_VERLEN];
 }KVER_BINFO;
 

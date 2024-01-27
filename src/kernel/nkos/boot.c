@@ -123,6 +123,9 @@ ISR_Init();
 x64_enable_sse();
 x64_enable_fpu();
 
+PIT_Init(1000);
+
+
 //x64_enable_avx();
 //SystemRaiseHardError("Test", "Debug");
 Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_BROADCAST);

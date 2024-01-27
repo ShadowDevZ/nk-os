@@ -22,15 +22,16 @@ X64_IRQ%1:
     ;IRQ_MAGIC_NUMBER means that the register dump was obtained
     ;during the IRQ call and not ISR
     push IRQ_MAGIC_NUMBER
-    push %1
+    push %1 + 32
     PUSHAQ
     
     
     ;first argument is intno
-    mov rdi, %1 + 32
+    ;mov rdi, %1 + 32
 
     ;second argument are registers
-    mov rsi, rsp
+    ;mov rsi, rsp
+    mov rdi, rsp
     call IRQ_Handler
    
     POPAQ

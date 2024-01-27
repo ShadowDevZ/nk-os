@@ -6,7 +6,7 @@
 #include "ports.h"
 void PIT_Init(int hz) {
     
-    IRQ_RegisterHandler(0, _timercb_internal_);;
+    IRQ_RegisterHandler(IRQ_PIT, _timercb_internal_);;
     PIT_SetFrequency(1000);
 }
 

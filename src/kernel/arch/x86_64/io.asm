@@ -187,25 +187,25 @@ x64_tss_flush:
     ltr ax
     ret
 
-global x64_rdump
+;global x64_rdump
 
-x64_rdump:
-    mov [rdi], rax
-    mov [rdi + 8], rbx
-    mov [rdi + 16], rcx
-    mov [rdi + 24], rdx
-    mov [rdi + 32], rsi
-    mov [rdi + 40], rdi
-    mov [rdi + 48], r8
-    mov [rdi + 56], r9
-    mov [rdi + 64], r10
-    mov [rdi + 72], r11
-    mov [rdi + 80], r12
-    mov [rdi + 88], r13
-    mov [rdi + 96], r14
-    mov [rdi + 104], r15
-    mov [rdi + 120], rsp
-    ret
+;x64_rdump:
+;    mov [rdi], rax
+;    mov [rdi + 8], rbx
+;    mov [rdi + 16], rcx
+;    mov [rdi + 24], rdx
+;    mov [rdi + 32], rsi
+;    mov [rdi + 40], rdi
+;   mov [rdi + 48], r8
+;   mov [rdi + 56], r9
+;    mov [rdi + 64], r10
+;    mov [rdi + 72], r11
+;    mov [rdi + 80], r12
+;    mov [rdi + 88], r13
+;    mov [rdi + 96], r14
+;    mov [rdi + 104], r15
+;    mov [rdi + 120], rsp
+;    ret
 
 global x64_panic
 
