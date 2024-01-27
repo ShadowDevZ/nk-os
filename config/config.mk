@@ -26,7 +26,12 @@ export C_VERSION=gnu11
 export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/libs/klibc/include -Isrc/kernel/arch/$(HOST_ARCH) \
 -Isrc/kernel/include/sys -Isrc/kernel/arch/$(HOST_ARCH)/include -Isrc/kernel/dev/flanterm -Isrc/kernel/dev/smbios
 
-export TARGET_CFLAGS=-g -ffreestanding -Wno-unused-local-typedefs -Wall \
+
+#todo fix, kernel wont compile with O > 1
+OPTIMIZATION_LEVEL=1
+
+
+export TARGET_CFLAGS=-g -O$(OPTIMIZATION_LEVEL) -ffreestanding -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
  -march=x86-64 -mabi=sysv -mno-80387 -mno-red-zone -mcmodel=kernel \
@@ -35,7 +40,10 @@ export TARGET_CFLAGS=-g -ffreestanding -Wno-unused-local-typedefs -Wall \
 
 export HOST_CC=gcc
 
-export TARGET_ASFLAGS=-Wall -felf64 -g -isrc/kernel/arch/x86_64/include/
+export TARGET_ASFLAGS=-Wall -O$(OPTIMIZATION_LEVEL) -felf64 -g -isrc/kernel/arch/x86_64/include/
+
+
+
 export HOST=$(HOST_ARCH)-elf
 export INCLUDE_DIR=$(abspath src/kernel/include)
 export ARCH_DIR=$(abspath src/kernel/$(HOST_ARCH))
