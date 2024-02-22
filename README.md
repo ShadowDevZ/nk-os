@@ -83,4 +83,4 @@ TODOLIST:
 # External used libraries and assets
 [printf library](https://github.com/mpaland/printf/tree/master) MIT license \
 [limine bootloader](https://github.com/limine-bootloader/limine) BSD-2-Clause license \
-[framebuffer](https://github.com/mintsuki/flanterm)
+[framebuffer](https://github.com/mintsuki/flanterm) BSD-2- Clause license
