@@ -1,8 +1,7 @@
 # nk-os
 Hobyist x64 kernel
-Requirements: elf compatible x64 cross compiler (auto script will be added in future update to match all requirements),
-limine bootloader `v5.x` is pulled and builded as dependency automatically. Note newer version than 4 won't work beacuse the developer
-decided to remove the limine_terminal feature from version 5 and newer releases. 
+Requirements: elf compatible x64 cross compiler without libgcc redzone support. For building the cross compiler use [this] (https://github.com/ShadowDevZ/tc-bootstrapper) script.
+limine bootloader `v5.x` is pulled and builded as dependency automatically. 
 
 In the future the os is going to use custom linear framebuffer
 
