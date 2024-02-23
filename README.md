@@ -5,7 +5,7 @@ limine bootloader `v5.x` is pulled and builded as dependency automatically.
 
 In the future the os is going to use custom linear framebuffer
 
-Build is currently only supported on linux (the script requires /dev/null device, will make it compatible for windows in future)
+Build is currently only supported on linux (the script requires /dev/null device and forward slashes as path separator, will make it compatible for windows in future)
 !!!Bochs may not work properly if it was not compiled with graphics option!!!
 - xorriso
 - bash
@@ -22,9 +22,41 @@ Build is currently only supported on linux (the script requires /dev/null device
 - python3 (pathlib, os, sys)
 - VT100 compatible terminal that supports ANSI escape sequence for colored output
 
-TODO: 
-- dependency checking and install if supported by system
-- script for generating cross compiler, need to set the symlink in `confik.mk`
+# Building
+If running for the first time and you do not have separate `x86_64-elf`
+cross compiler set check `configk/config.mk` and run `make first_setup`.
+This will download the whole GNU toolhcian and set the symlink inside
+the source directory for building.
+If you already got working toolchain don't forget to set it inside
+`config/config.mk`.
+
+## Building from clean source tree
+`make clean && make`. After build the ISO and ELF files alongside symbols
+(if requested) are located inside the build directory.
+
+## Downloading dependencies
+If the Makefile doesn't automatically pull all build dependencies
+(limine and flanterm) run `make bootstrap` command.
+
+## Building with more debugging symbols
+`make debug`. This creates external symbols inside file and disassembled source.
+
+# Running
+To run the target inside QEMU use `make run`.
+Settings and parameters can be adjusted inside `config/config.mk`
+
+## Debugging with QEMU/GDB
+To debug the kernel run `make run_dbg` and navigate in second terminal
+to the same source directory and run GDB. This will automatically hook
+the target and set up the symbols. If you get a warning about safe execution you might have to add the init script as trusted inside
+your `~/.gdbinit` config.
+
+# Kernel runtime dependeincies
+- X64 compatible emulator
+- SMBIOS3 only (for now)
+- i8259A PIC with cascaded second PIC wired through IRQ2
+- MBR and BIOS
+- Limine bootloader (for now)
 
 TODOLIST: 
 - &#9745; Basic printing
