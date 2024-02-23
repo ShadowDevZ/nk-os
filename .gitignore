@@ -27,3 +27,6 @@ src/kernel/arch/x86_64/mm/*
 src/kernel/dev/flanterm/*
 src/kernel/include/limine/limine.h
 src/libs/boot/limine
+tc-work
+tc-install
+toolchain

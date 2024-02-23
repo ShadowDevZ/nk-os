@@ -1,13 +1,17 @@
+#modify accordingly
+export _BOOTSTRAP_MAKEOPTS=8
+export _BOOTSTRAP_TC_INSTALL=$(PWD)/tc-in
 export HOST_ARCH=x86_64
 export KERNEL_NAME=nkos
-export TARGET_AR=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ar
+export TARGET_AR=$(PWD)/toolchain/bin/$(HOST)-ar
 
 export TARGET_AS=/bin/nasm 
-export TARGET_CC=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-gcc
-export TARGET_LD=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-ld
-export TARGET_GAS=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-as
-
-
+export TARGET_CC=$(PWD)/toolchain/bin/$(HOST)-gcc
+export TARGET_LD=$(PWD)/toolchain/bin/$(HOST)-ld
+export TARGET_GAS=$(PWD)/toolchain/bin/$(HOST)-as
+export TARGET_NM=$(PWD)/toolchain/bin/$(HOST)-nm
+export TARGET_OBJDUMP=$(PWD)/toolchain/bin/$(HOST)-objdump
+export TARGET_STRIP=$(PWD)/toolchain/bin/$(HOST)-strip
 
 export TARGET_LDFLAGS=-nostdlib -static -lgcc -mno-red-zone -mcmodel=kernel -z max-page-size=0x1000 -Wl,-Map,$(SYM_DIR)/$(KERNEL_NAME).map
 
