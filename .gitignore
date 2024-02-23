@@ -25,3 +25,5 @@ src/_internal_stash/*
 src/kernel/arch/x86_64/mm/*
 .gdb_history
 src/kernel/dev/flanterm/*
+src/kernel/include/limine/limine.h
+src/libs/boot/limine
