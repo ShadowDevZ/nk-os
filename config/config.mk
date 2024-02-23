@@ -12,7 +12,7 @@ export TARGET_GAS=$(PWD)/toolchain/$(HOST)/bin/$(HOST)-as
 export TARGET_LDFLAGS=-nostdlib -static -lgcc -mno-red-zone -mcmodel=kernel -z max-page-size=0x1000 -Wl,-Map,$(SYM_DIR)/$(KERNEL_NAME).map
 
 
-
+export NO_OPTIMIZE=fb.c.o flanterm.c.o
 ###DEFINE HERE
 SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c printf.c crti.asm crtn.asm io.asm gdt.c idt.c \
 isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm irq.c uptime.c keyboard.c \
@@ -27,11 +27,11 @@ export INCDIRS=-Isrc/kernel/include -Isrc/kernel/include/limine -Isrc/kernel/lib
 -Isrc/kernel/include/sys -Isrc/kernel/arch/$(HOST_ARCH)/include -Isrc/kernel/dev/flanterm -Isrc/kernel/dev/smbios
 
 
-#todo fix, kernel wont compile with O > 1
-OPTIMIZATION_LEVEL=1
+
+export OPTIMIZATION_LEVEL=2
 
 
-export TARGET_CFLAGS=-g -O$(OPTIMIZATION_LEVEL) -ffreestanding -Wno-unused-local-typedefs -Wall \
+export TARGET_CFLAGS=-g -ffreestanding -Wno-unused-local-typedefs -Wall \
  -Wextra -std=$(C_VERSION) -Wno-unused-variable -Wno-unused-label -Wno-unused-parameter \
  $(INCDIRS) -fno-stack-protector -fno-stack-check -fno-lto -fno-PIE -fno-PIC -m64 \
  -march=x86-64 -mabi=sysv -mno-80387 -mno-red-zone -mcmodel=kernel \

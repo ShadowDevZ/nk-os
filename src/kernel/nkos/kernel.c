@@ -19,6 +19,16 @@
 
 
 
+void PrintSysRegs() {
+  GDT gdt = {0}; 
+  IDT_DESCRIPTOR64 idt = {0};
+  x64_sreg(X64_SREG_GDT,&gdt);
+  x64_sreg(X64_SREG_IDT, &idt);
+  debugf("\nGDTR\n  Limit: %hu\n  Addr: 0x%X\n", gdt.Limit, gdt.BaseAddress);
+  debugf("\nIDTR\n  Limit: %hu\n  Addr: 0x%X\n", idt.limit, idt.base);
+
+
+}
 
 
 volatile struct limine_smbios_request smbios_request = {
@@ -27,33 +37,37 @@ volatile struct limine_smbios_request smbios_request = {
 };
 #include "smbios.h"
 #include "handlers.h"
-
+#include "memconv.h"
+#define KF_SYM_DUMP 1
 KERNEL_ENTRY kmain() {
     BroadcastPrintf("\n");
     InitFaultHandlers();
-    clrscr();
+   // clrscr();
+    
     
  
-    printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, ADDR_V2P(kmain));
+    printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, PmmPhys2Virt(kmain));
     
     
      
     PmmInit(DEFAULT_PAGE_SIZE);
     
-   // slab_init();
+  
    // PIT_Init(1000);
     #if KF_SYM_DUMP == 1
     SYM_ENUM_STATE st = {0};
      while (KsymEnumSymbol(&st)) {
-        debugf("AD: 0x%llx NM: %s\n", st.list.addr, st.list.name); // Updated format specifiers
+       char* sub = strstr(st.list.name, "X64_I");
+       if (!sub) {
+          debugf("AD: 0x%llx NM: %s\n", st.list.addr, st.list.name); // Updated format specifiers
+       }
+
+        
     }
-    
+    printf("\n");
     #endif
-    debugf("bing bong\n");
-    NkkSetLastSystemError(E_NKK_SUCCESS);
-    printf("%s\n",NkkGetLastErrorAsString()); 
    
-  clrscr();
+ // clrscr();
     
 
    printf("FPU test: %f\n", 3.141592653589793);
@@ -66,7 +80,7 @@ KERNEL_ENTRY kmain() {
 
     bool smret = InitSMBIOS(smbios_request.response, &sm);
     if (smret) {
-        debugf("SMBIOS v%u.%u\n", sm.sm64.verMajor,sm.sm64.verMinor);
+        debugf("====SMBIOS v%u.%u dump start====\n", sm.sm64.verMajor,sm.sm64.verMinor);
 
    // smbios_dump((SMBIOS_HEADER*)sm.sm64.tableAddr);
     
@@ -77,16 +91,28 @@ KERNEL_ENTRY kmain() {
     GetSMBIOSTable(SMBIOS_TBL_CPU, &cputable);
 
     smbios_processor* cpu  = (smbios_processor*)cputable.table;
-    debugf("\nManufacturer: [%s]\n", SmbiosGetStr(&cpu->hd, cpu->cpuManufacturer));
-    debugf("Cpu speed %u Mhz\n", cpu->currentSpeed);
-    debugf("Active cores %u\n", cpu->coreCount2);
+    debugf("::CPU0 Information\n");
+    debugf("  Manufacturer: [%s]\n", SmbiosGetStr(&cpu->hd, cpu->cpuManufacturer));
+    debugf("  Cpu speed [%u] Mhz\n", cpu->currentSpeed);
+    debugf("  Max speed [%u] Mhz\n", cpu->maxSpeed);
+    debugf("  Active cores: %u\n", cpu->coreCount2);
+    debugf("  Active threads: [%u]\n", cpu->threadCount2);
+    debugf("  Characteristics: [%hu]\n", cpu->cpuCharacteristics);
+    debugf("  Family [%u]\n", cpu->cpuFamily2);
+    debugf("  Part name [%s]\n", SmbiosGetStr(&cpu->hd, cpu->partNum));
+    debugf("  Serial number [%s]\n", SmbiosGetStr(&cpu->hd, cpu->serialNumber));
+    debugf("  CPU Version [%s]\n", SmbiosGetStr(&cpu->hd, cpu->cpuVer));
+    debugf("  Asset tag [%s]\n", SmbiosGetStr(&cpu->hd, cpu->assetTag));
+    debugf("  Part name [%s]\n", SmbiosGetStr(&cpu->hd, cpu->cpuVer));
+    debugf("  Cache L1 [%huB]\n", cpu->l1cacheHandle);
+    debugf("  Cache L2 [%huB]\n", cpu->l2cacheHandle);
+    debugf("  Cache L3 [%huB]\n", cpu->l3cacheHandle);
+    debugf("Socket designation [%s]\n", SmbiosGetStr(&cpu->hd, cpu->socketDesignation));
     
-
-   //smbios_dump((SMBIOS_HEADER*)&sm.sm64.tableAddr);
+    debugf("====SMBIOS v%u.%u dump end====\n\n", sm.sm64.verMajor,sm.sm64.verMinor);
     }
-    
    
-    HIWORD(33333);
+    
    IRQ_RegisterHandler(IRQ_KEYBOARD, _keyboardcb_);
  
     KeyboardInit();
@@ -94,31 +120,7 @@ KERNEL_ENTRY kmain() {
   //  DebugPageFault(NULL);
     
   //  kusleep(3000); 
-  //printf("\n");
 
-  /**/
-     uint64_t* a = kmalloc(sizeof(uint64_t));
-    *a = 1337;
-    printf("allocated var at 0x%x with size of %llu bytes\n", a, sizeof(a));
-  
-    printf("dereferenced %llu\n", *a);
-    kfree(a);
-    printf("value freed %llu\n ",*a);
-   void* x = kmalloc(9999);
-    kfree(x);
-    
-   // void* b = kmalloc(9999999);
-   // kfree(b);
-    
-   int* aaa = kmalloc(sizeof(int));
-    *aaa=10;
-   int*  baa = kmalloc(sizeof(int));
-    *baa = 11;
-    SWAP(*aaa,*baa);
-    printf("a:%d b:%d\nsw:\na: %db: %d\n", *aaa,*baa,*aaa,*baa);
-    kfree(aaa);
-    kfree(baa);
-     
   
 
     debugf("CS: 0x%02x DS: 0x%02x TR: 0x%02x DPL: %d\n", x64_readcs(),x64_readds(),x64_readtr(), CS2DPL());
@@ -129,8 +131,9 @@ KERNEL_ENTRY kmain() {
     // printf("working sleep %d\n", GetSystemTicks());
     printf("page size %lluKiB\n", GetKernelPageSize() / 1024);
     printf("RDTSC: %llu\n", x64_rdtsc());
-   // printf("aaaaaaaaaaaaaa: %llu\n", GetSystemTicks());
-   // printf("aaaaaaaaaaaaaa: %llu\n", GetSystemTicks());
+   
+    PrintSysRegs();
+   
    // DumpSymbolTable();
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    

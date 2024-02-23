@@ -114,6 +114,17 @@ size_t strlen(const char *str) {
     return ret;
 }
 
+char* strstr(const char* str1, const char* str2) {
+    size_t len = strlen(str2);
+    while (*str1) {
+        if (!memcmp(str1++,str2,len)) {
+            return (char*)(str1-1);
+        }
+
+    }
+    return 0;
+}
+
 char* strncat(char* destination, const char* source, size_t num)
 {
     // make `ptr` point to the end of the destination string

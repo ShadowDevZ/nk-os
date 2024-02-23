@@ -81,7 +81,7 @@ debug: kernel asmdump ksyms
 
 _run: $(KERNEL_NAME).iso 
 	@echo $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -debugcon stdio
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -debugcon stdio 
 
 vbox: $(KERNEL_NAME).iso 
 	@echo $(COLOR_GREEN)[VBOX]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
@@ -111,9 +111,15 @@ kernel: $(OBJ) $(OBJASM) $(CFG_DIR)/linker.ld
 	@echo $(COLOR_GREEN)[BUILD]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) SUCCESSFUL
 
 $(OBJ): $(OBJ_DIR)%.c.o: %.c
-	
+
+ifneq ($(filter $($(notdir $(basename $@))),$(NO_OPTIMIZE)),)
+		$(TARGET_CFLAGS) += $(OPTIMIZATION_LEVEL)
+endif
 	@$(TARGET_CC) -MD -c $< -o $@ $(TARGET_CFLAGS)
-	@echo CC ' ' $(notdir $@)
+
+
+
+	@echo CC ' ' $(basename $(notdir $@))
 
 
 $(OBJASM): $(OBJ_DIR)%.asm.o: %.asm
@@ -121,7 +127,7 @@ $(OBJASM): $(OBJ_DIR)%.asm.o: %.asm
 #	@echo $(OBJASM)
 	
 	@$(TARGET_AS) $(TARGET_ASFLAGS) -o $@ $<
-	@echo AS ' ' $(notdir $@)
+	@echo AS ' ' $(basename $(notdir $@))
 
 
 iso: $(KERNEL_NAME).iso
@@ -134,8 +140,8 @@ release: kernel _dummyrelease iso
 	@echo Symbols stripped
 
 
-distclean: clean
-	rm -rf src/libs/boot/limine
+distclean: debootstrap
+
 
 
 asmdump: kernel
@@ -156,8 +162,8 @@ ksyms: kernel
 
 
 
-bootstrap: limine all
-	@echo BOOTSTRAPPING ...
+bootstrap: limine
+	@echo Bootstrapped
 	
 
 debootstrap: clean

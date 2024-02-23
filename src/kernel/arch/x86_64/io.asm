@@ -36,16 +36,31 @@ x64_enable_fpu:
     pop rbp
 	ret
 
-global x64_enable_avx
-x64_enable_avx:
-    push rbp
-    mov rbp, rsp
-    mov rax, cr4
-	bts rax, 14		; safer mode extensions
-	mov cr4, rax
-    mov rsp, rbp
-    pop rbp
-	ret 
+;global x64_enable_avx
+;x64_enable_avx:
+;    push rbp
+;
+;    push rax
+;    push rcx
+;    push rdx
+;
+;    mov rbp, rsp
+;    mov rax, cr4
+;
+;	bts rax, 14		; safer mode extensions
+;	
+;
+;    mov cr4, rax
+;
+;    xgetbv
+;    or eax, 7
+;    xsetbv
+;    pop rdx
+;    pop rcx
+;    pop rax
+;    mov rsp, rbp
+;    pop rbp
+;	ret 
 
 global x64_cpu_stop
 x64_cpu_stop:
@@ -269,3 +284,60 @@ x64_readds:
     mov rsp, rbp
     pop rbp
     ret
+
+
+
+
+global x64_sreg
+%define X64_SREG_GDT 0
+%define X64_SREG_IDT 1
+
+x64_sreg:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, rdi
+    cmp al, X64_SREG_GDT
+    je .gdts
+    cmp al, X64_SREG_IDT
+    je .idts
+
+    jmp .none
+
+
+.gdts:
+    sgdt [sloc]
+    jmp .main
+.idts:
+    sidt [sloc]
+    jmp .main
+.none:
+    mov word [rsi], 0
+    mov qword [rsi+2], 0
+    jmp .end
+
+
+.main:
+
+   
+
+    
+    
+    mov rax, 0         
+
+    ; Load limit (lower 2 bytes) into AX
+    mov ax, word [sloc]    
+
+   
+    mov word [rsi], ax           ; Store limit at the beginning of the structure
+    mov rax, qword [sloc + 2]
+    mov qword [rsi + 2], rax     ; Store address after the limit
+    
+.end:
+    mov rsp, rbp
+    pop rbp
+    ret
+
+
+section .bss
+sloc:    resb 10

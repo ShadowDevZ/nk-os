@@ -23,3 +23,5 @@ src/kernel/sys/gensym.c
 src/_internal_stash/*
 # for now
 src/kernel/arch/x86_64/mm/*
+.gdb_history
+src/kernel/dev/flanterm/*

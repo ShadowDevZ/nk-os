@@ -41,7 +41,7 @@ void PIC_SendEOI(uint8_t irq) {
     x64_outb(PORT_PIC_MASTER_CMD,PIC_EOI);
 }
 
-inline void pic_write(port_t port, uint8_t value) {
+static void pic_write(port_t port, uint8_t value) {
     x64_outb(port, value);
     //timeout
     x64_outb(0, 0);

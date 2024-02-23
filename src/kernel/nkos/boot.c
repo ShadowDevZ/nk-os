@@ -23,13 +23,7 @@ volatile struct limine_kernel_address_request address_request = {
     .id = LIMINE_KERNEL_ADDRESS_REQUEST,
     .revision = 0
 };
-// Halt and catch fire function.
-static void hcf(void) {
-    asm ("cli");
-    for (;;) {
-        asm ("hlt");
-    }
-}
+
 #include "sys/version.h"
 #include "dev/fbdev.h"
 #include "include/panic.h"
@@ -52,7 +46,7 @@ void _start(void) {
     
     // Ensure we got a terminal
 if (framebuffer_request.response->framebuffer_count < 1 || framebuffer_request.response->framebuffers[0] == NULL) {
-    hcf();
+    x64_panic();
 } 
    
    
@@ -60,11 +54,10 @@ ft_ctx = flanterm_fb_simple_init(
     framebuffer_request.response->framebuffers[0]->address, framebuffer_request.response->framebuffers[0]->width, framebuffer_request.response->framebuffers[0]->height, \
      framebuffer_request.response->framebuffers[0]->pitch);
 
-const char msg[] = "Hello world\n";
-flanterm_write(ft_ctx, msg, sizeof(msg));
+
 
 InitializeFramebuffers(&framebuffer_request);
-debugf("\n[%llu] Control reached by kernel\n", x64_rdtsc());
+debugf("\n[%llu] Control reached by kernel\n\n", x64_rdtsc());
 
 printf("Kernel booted\n");
 printf("0x%02llx - Physical base\n\
@@ -100,14 +93,12 @@ printf("Version String: %s" \
 "Codename: %s\n" \
 "Arch (%s) - SystemV ABI\n" \
 "CC: %s\n" \
-"Build time %s %s\n" \
-"Version: %s",
-"NK icefox",
+"Build time %s\n" \
+"NK icefox\n\n",
 bi.codename,
 (bi.archType == 64)? "x86_64" : "x86",
 bi.ccVersion,
 bi.buildDate,
-bi.buildTime,
 bi.version->versionStr);
 
 
@@ -118,7 +109,8 @@ InitializeIDT();
 
 
 ISR_Init();
-//asm("sti");
+
+
 
 x64_enable_sse();
 x64_enable_fpu();
@@ -126,7 +118,7 @@ x64_enable_fpu();
 PIT_Init(1000);
 
 
-//x64_enable_avx();
+
 //SystemRaiseHardError("Test", "Debug");
 Fb_SwitchStream(FBDEV_DEFAULT, FB_OUTPUT_BROADCAST);
 
@@ -134,6 +126,6 @@ int ret = kmain();
 SystemRaiseHardError("KMAIN_RETURNED", "Kernel main returned, this should not be happening");
 
 
-    // We're done, just hang...
-    hcf();
+    
+    x64_panic();
 }

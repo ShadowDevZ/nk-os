@@ -26,7 +26,7 @@ bool InitSMBIOS(struct limine_smbios_response* lsr, SMBIOS* smOut) {
             }
             g_Smbios.sm64 = *sm64;
             g_Smbios.major = SMBIOS64_MAJOR;
-            debugf("anchor: ");
+            debugf("Found SM_ANCHOR:");
             for (int i = 0; i < 5; ++i) {
                 debugf(" %X", sm64->anchor[i]);
             }
@@ -86,13 +86,16 @@ int GetSMBIOSTable(SMBIOS_TABLE_TYPES type, SMBIOS_TABLE* table) {
             counter++;
 
         }
+
+        //find string length in the table
+        //the string could be appended by double null terminator
         const char *strtab = (char *)hdr + hdr->len;
 		size_t i;
 		for (i = 1; strtab[i - 1] != '\0' || strtab[i] != '\0'; i++)
 			;
 
-		size_t total = hdr->len + i + 1;
-		hdr = (SMBIOS_HEADER *)((char *)hdr + total);
+		size_t totalStr = hdr->len + i + 1;
+		hdr = (SMBIOS_HEADER *)((char *)hdr + totalStr);
         
          
     }
@@ -105,7 +108,7 @@ int GetSMBIOSTable(SMBIOS_TABLE_TYPES type, SMBIOS_TABLE* table) {
 }
 const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry) {
     if (entry == 0) {
-        return NULL;
+        return "<None>";
 
     }
 

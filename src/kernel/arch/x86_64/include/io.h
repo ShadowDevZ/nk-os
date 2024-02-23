@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "kattributes.h"
 #include "isr.h"
+#include "stdbool.h"
 typedef uint16_t port_t;
 
 
@@ -35,4 +36,7 @@ extern void x64_sti();
 #include "idt.h"
 extern void x64_load_idt(IDT_DESCRIPTOR64* idt);
 
-
+#include "gdt.h"
+#define X64_SREG_GDT    0
+#define X64_SREG_IDT    1
+extern void x64_sreg(uint8_t stat, void* out);
