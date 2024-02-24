@@ -67,10 +67,12 @@ TODOLIST:
 - &#9745; Kernel symbols
 - &#9745; Versioning scheme
 - &#9745; Limine bootloader
+- &#9745; SMBIOS Version 3
+- &#9744; SMBIOS Version 2
 - &#9744; HAL
 - &#9745; IRQ
 - &#9744; Better build system (CMake)
-- &#9744; TSS
+- &#9744; TSS (partially implemented)
 - &#9745; PIT
 - &#9745; PIC
 - &#9745; PS2 keyboard
@@ -79,7 +81,6 @@ TODOLIST:
 - &#9744; VMM
 - &#9744; PMM
 - &#9744; SMP
-- &#9744; TarFS (bsd or ustar)
 - &#9744; Threads
 - &#9744; Custom remote debugger using unix socket via qemu
 - &#9744; Usermode
