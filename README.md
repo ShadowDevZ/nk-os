@@ -60,7 +60,7 @@ your `~/.gdbinit` config.
 
 TODOLIST: 
 - &#9745; Basic printing
-- &#9745; Better framebuffer interface
+- &#9744; Better framebuffer interface
 - &#9745; GDT
 - &#9745; IDT
 - &#9745; ISR
