@@ -50,10 +50,12 @@ if (framebuffer_request.response->framebuffer_count < 1 || framebuffer_request.r
 } 
    
    
-ft_ctx = flanterm_fb_simple_init(
-    framebuffer_request.response->framebuffers[0]->address, framebuffer_request.response->framebuffers[0]->width, framebuffer_request.response->framebuffers[0]->height, \
-     framebuffer_request.response->framebuffers[0]->pitch);
 
+struct limine_framebuffer* lfb = framebuffer_request.response->framebuffers[0];
+
+ft_ctx = flanterm_fb_init(NULL,NULL,lfb->address, lfb->width, lfb->height,
+lfb->pitch, lfb->red_mask_size, lfb->red_mask_shift,lfb->green_mask_size, lfb->green_mask_shift,
+lfb->blue_mask_size, lfb->blue_mask_shift, NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL, 0, 0, 1,0, 0,0);
 
 
 InitializeFramebuffers(&framebuffer_request);
