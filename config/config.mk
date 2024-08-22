@@ -44,7 +44,7 @@ export TARGET_CFLAGS=-g -ffreestanding -Wno-unused-local-typedefs -Wall \
 
 export HOST_CC=gcc
 
-export TARGET_ASFLAGS=-Wall -O$(OPTIMIZATION_LEVEL) -felf64 -g -isrc/kernel/arch/x86_64/include/
+export TARGET_ASFLAGS=-Wall -O$(OPTIMIZATION_LEVEL) -felf64 -g -isrc/kernel/arch/x86_64/include/ -wno-reloc-abs-dword -wno-reloc-abs-qword -wno-reloc-rel-dword
 
 
 

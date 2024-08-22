@@ -31,3 +31,4 @@ src/libs/boot/limine
 tc-work
 tc-install
 toolchain
+src/kernel/dev/flanterm/
