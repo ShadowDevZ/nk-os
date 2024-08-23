@@ -32,7 +32,7 @@ uint64_t GetSystemTicks() {
  return ticks;   
 }
 
-void kusleep(uint64_t ms) {
+void kmsleep(uint64_t ms) {
     asm("cli");
     uint64_t ticks = GetSystemTicks();
     uint64_t saved = ticks;
@@ -43,6 +43,7 @@ void kusleep(uint64_t ms) {
         asm("sti");
         ticks = GetSystemTicks();
         asm("cli");
+        x64_pause();
 
     }
     asm("sti");

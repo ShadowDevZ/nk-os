@@ -3,7 +3,7 @@
 #include "bitsets.h"
 
 
-uint16_t kbCtl = 0;
+volatile uint16_t kbCtl = 0;
 
 void SetKbctlEvent(uint16_t event, bool set) {
     if (!IsValidFlag(event))

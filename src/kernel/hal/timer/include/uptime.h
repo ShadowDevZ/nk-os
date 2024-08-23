@@ -9,5 +9,6 @@ void _timercb_internal_(reg_state_t* rg);
 uint64_t GetSystemTicks();
 void PIT_SetFrequency(int hz);
 uint64_t GetSystemUptime();
-void kusleep(uint64_t sec);
+
+void kmsleep(uint64_t sec);
 void PIT_Init(int hz) ;

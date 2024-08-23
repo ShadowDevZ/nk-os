@@ -20,7 +20,7 @@ export NO_OPTIMIZE=fb.c.o flanterm.c.o
 ###DEFINE HERE
 SOURCES_BUILD := boot.c kver.c kstdio.c fbdev.c printf.c crti.asm crtn.asm io.asm gdt.c idt.c \
 isr.asm isr.c panic.c kernel.c ksyms.c gensym.c nkkerr.c pic.c irq.asm irq.c uptime.c keyboard.c \
-kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c smbios.c handlers.c pic.c
+kbctl.c bitsets.c pmm.c flanterm.c fb.c liballoc.c liballoc_fn.c smbios.c handlers.c pic.c mutex.c
 #
 ###DEFINE HERE
 

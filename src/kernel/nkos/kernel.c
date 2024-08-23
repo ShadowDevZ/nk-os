@@ -15,65 +15,28 @@
 #include "limattr.h"
 #include "../arch/x86_64/include/gdt.h"
 #include "bitsets.h"
-
-
-
+#include "smbios.h"
+void kbcd() {
+  printf("got it \n");
+}
+volatile struct limine_smbios_request smbios_request = {
+    .id = LIMINE_SMBIOS_REQUEST,
+    .revision = 0
+};
 
 void PrintSysRegs() {
   GDT gdt = {0}; 
   IDT_DESCRIPTOR64 idt = {0};
   x64_sreg(X64_SREG_GDT,&gdt);
   x64_sreg(X64_SREG_IDT, &idt);
-  debugf("\nGDTR\n  Limit: %hu\n  Addr: 0x%X\n", gdt.Limit, gdt.BaseAddress);
-  debugf("\nIDTR\n  Limit: %hu\n  Addr: 0x%X\n", idt.limit, idt.base);
+  debugf("\nGDTR\n► Limit: %hu\n► Addr: 0x%X\n", gdt.Limit, gdt.BaseAddress);
+  debugf("\nIDTR\n► Limit: %hu\n► Addr: 0x%X\n", idt.limit, idt.base);
 
 
 }
 
+void smbios_print() {
 
-volatile struct limine_smbios_request smbios_request = {
-    .id = LIMINE_SMBIOS_REQUEST,
-    .revision = 0
-};
-#include "smbios.h"
-#include "handlers.h"
-#include "memconv.h"
-#define KF_SYM_DUMP 1
-KERNEL_ENTRY kmain() {
-    BroadcastPrintf("\n");
-    InitFaultHandlers();
-   // clrscr();
-    
-    
- 
-    printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, PmmPhys2Virt(kmain));
-    
-    
-     
-    PmmInit(DEFAULT_PAGE_SIZE);
-    
-  
-   // PIT_Init(1000);
-    #if KF_SYM_DUMP == 1
-    SYM_ENUM_STATE st = {0};
-     while (KsymEnumSymbol(&st)) {
-       char* sub = strstr(st.list.name, "X64_I");
-       if (!sub) {
-          debugf("AD: 0x%llx NM: %s\n", st.list.addr, st.list.name); // Updated format specifiers
-       }
-
-        
-    }
-    printf("\n");
-    #endif
-   
- // clrscr();
-    
-
-   printf("FPU test: %f\n", 3.141592653589793);
- // asm("int $0xD");
-    
-   
    SMBIOS sm = {0};
     
 
@@ -81,11 +44,14 @@ KERNEL_ENTRY kmain() {
     bool smret = InitSMBIOS(smbios_request.response, &sm);
     if (smret) {
         debugf("====SMBIOS v%u.%u dump start====\n", sm.sm64.verMajor,sm.sm64.verMinor);
-
+    }
+    else {
+        printf("smbios not found\n");
+        return;
+    }
    // smbios_dump((SMBIOS_HEADER*)sm.sm64.tableAddr);
     
 
-    
 
     SMBIOS_TABLE cputable = {0};
     GetSMBIOSTable(SMBIOS_TBL_CPU, &cputable);
@@ -110,7 +76,49 @@ KERNEL_ENTRY kmain() {
     debugf("Socket designation [%s]\n", SmbiosGetStr(&cpu->hd, cpu->socketDesignation));
     
     debugf("====SMBIOS v%u.%u dump end====\n\n", sm.sm64.verMajor,sm.sm64.verMinor);
+  }
+
+
+
+
+#include "handlers.h"
+#include "memconv.h"
+#define KF_SYM_DUMP 1
+KERNEL_ENTRY kmain() {
+    BroadcastPrintf("\n");
+    InitFaultHandlers();
+   // clrscr();
+    
+    
+ 
+    printf("Kernel main reached at 0x%x\nPhysical address: 0x%x\n", kmain, PmmPhys2Virt(kmain));
+    
+    
+     
+    PmmInit(DEFAULT_PAGE_SIZE);
+    
+  
+   // PIT_Init(1000);
+    #if KF_SYM_DUMP == 0
+    SYM_ENUM_STATE st = {0};
+     while (KsymEnumSymbol(&st)) {
+       char* sub = strstr(st.list.name, "X64_I");
+       if (!sub) {
+          debugf("AD: 0x%llx NM: %s\n", st.list.addr, st.list.name); // Updated format specifiers
+       }
+
+        
     }
+    printf("\n");
+    #endif
+   
+ // clrscr();
+    
+
+   printf("FPU test: %f\n", 3.141592653589793);
+ // asm("int $0xD");
+    
+   
    
     
    IRQ_RegisterHandler(IRQ_KEYBOARD, _keyboardcb_);
@@ -133,7 +141,22 @@ KERNEL_ENTRY kmain() {
     printf("RDTSC: %llu\n", x64_rdtsc());
    
     PrintSysRegs();
-   
+
+    
+
+    
+   // char c = KeyboardGetChar(true);
+    
+   // char b = KeyboardGetChar(true);
+   // char a = KeyboardGetChar(true);
+   // printf("%c%c%c", c,b,a);
+//KbListenKeyPress(PS2_ARROW_DOWN, kbcd);
+smbios_print();
+
+//    char c = GetKeyPress(true);
+ //   printf("\nGot char=%c\n", c);
+   // char b = GetKeyPress(true);
+    //char a = GetKeyPress(true);
    // DumpSymbolTable();
   //  BroadcastPrintf("%d\n", Fb_GetStreamType(FBDEV_DEFAULT));
    

@@ -234,6 +234,11 @@ x64_cli:
     cli
     ret
 
+global x64_pause
+x64_pause:
+    pause
+    ret
+
 global x64_sti
 x64_sti:
     sti

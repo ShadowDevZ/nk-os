@@ -30,7 +30,7 @@ extern void x64_enable_sse();
 extern void x64_tss_flush(uint16_t segmentOffset);
 extern void x64_cli();
 extern void x64_sti();
-
+extern void x64_pause();
 #define x64_iowait() x64_outb(0x80, 0);
 
 #include "idt.h"

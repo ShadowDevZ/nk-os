@@ -49,7 +49,9 @@
         "pmm.h": "c",
         "smbios.h": "c",
         "memconv.h": "c",
-        "gdt.h": "c"
+        "gdt.h": "c",
+        "stdatomic.h": "c",
+        "handlers.h": "c"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
     "C_Cpp.errorSquiggles": "enabled",

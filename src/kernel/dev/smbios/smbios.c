@@ -7,15 +7,19 @@ const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry);
 
 
 bool InitSMBIOS(struct limine_smbios_response* lsr, SMBIOS* smOut) {
+
+    
     if (smOut == NULL) {
         return false;
     }
+    
     if (lsr->entry_32 != NULL) {
 
         //todo ...
         return false;
     }
     else if (lsr->entry_64 != NULL) {
+        
         
         if (!memcmp(lsr->entry_64, SMBIOS64_ANCHOR, 5)) {
             SMBIOS64* sm64 = (SMBIOS64*)lsr->entry_64;
