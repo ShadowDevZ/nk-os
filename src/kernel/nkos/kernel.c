@@ -43,15 +43,24 @@ void smbios_print() {
 
     bool smret = InitSMBIOS(smbios_request.response, &sm);
     if (smret) {
-        debugf("====SMBIOS v%u.%u dump start====\n", sm.sm64.verMajor,sm.sm64.verMinor);
+        if (sm.major >= SMBIOS64_MAJOR) {
+          debugf("====SMBIOS v%u.%u dump start====\n", sm.sm64.verMajor,sm.sm64.verMinor);
+        } 
+        else if (sm.major >= SMBIOS32_MAJOR) {
+          debugf("====SMBIOS v%u.%u dump start====\n", sm.sm32.verMajor,sm.sm32.verMinor);
+        }
+        else {
+          debugf("====Unknown SMBIOS version====\n");
+        }
     }
     else {
         printf("smbios not found\n");
         return;
     }
    // smbios_dump((SMBIOS_HEADER*)sm.sm64.tableAddr);
+   // debugf("%u", sm.sm32.bcdRevision);
     
-
+    /*
 
     SMBIOS_TABLE cputable = {0};
     GetSMBIOSTable(SMBIOS_TBL_CPU, &cputable);
@@ -76,6 +85,7 @@ void smbios_print() {
     debugf("Socket designation [%s]\n", SmbiosGetStr(&cpu->hd, cpu->socketDesignation));
     
     debugf("====SMBIOS v%u.%u dump end====\n\n", sm.sm64.verMajor,sm.sm64.verMinor);
+  */
   }
 
 

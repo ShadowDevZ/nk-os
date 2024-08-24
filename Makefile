@@ -21,6 +21,7 @@ dirs := $(dir $(C_SOURCES))
 dirs += $(dir $(AS_SOURCES))
 VPATH := $(dirs)
 
+LIMINE_BRANCH := v8.x-binary
 
 
 
@@ -39,11 +40,9 @@ debug: kernel asmdump ksyms
 	@echo $(COLOR_GREEN)[DBG]$(COLOR_RESET) Debug files were generated
 
 
-
-
-_run: $(KERNEL_NAME).iso 
+_run : $(KERNEL_NAME).iso
 	@echo $(COLOR_GREEN)[QEMU]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
-	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -debugcon stdio 
+	@qemu-system-$(HOST_ARCH) -M q35 -m $(EMULATOR_MEM) -cdrom $(BUILD_DIR)/$(KERNEL_NAME).iso -boot d -debugcon stdio -smp $(EMULATOR_SMP)
 
 vbox: $(KERNEL_NAME).iso 
 	@echo $(COLOR_GREEN)[VBOX]$(COLOR_RESET) $(BUILD_DIR)/$(KERNEL_FILE) RUNNING $(KERNEL_NAME).iso
@@ -147,7 +146,7 @@ debootstrap: clean
 	@rm -rf $(abspath src/kernel/dev/flanterm)
 
 limine:	
-	git clone https://github.com/limine-bootloader/limine.git --branch=v5.x-branch-binary --depth=1 $(LIMINE_BOOT_DIR)
+	git clone https://github.com/limine-bootloader/limine.git --branch=$(LIMINE_BRANCH) --depth=1 $(LIMINE_BOOT_DIR)
 #	$(MAKE) -C limine CC=gcc CFLAGS="-Wall -Wextra"
 	$(MAKE) -C $(LIMINE_BOOT_DIR) CC="${HOST_CC}"
 	@cp $(LIMINE_BOOT_DIR)/limine.h $(LIMINE_INC_DIR)
@@ -163,12 +162,12 @@ $(KERNEL_NAME).iso: kernel
 	@mkdir -p $(BUILD_DIR)/iso
 	
 	
-	@cp $(BUILD_DIR)/$(KERNEL_FILE) $(CFG_DIR)/limine.cfg $(LIMINE_BOOT_DIR)/limine-bios-cd.bin \
-	$(LIMINE_BOOT_DIR)/limine-bios.sys $(BUILD_DIR)/iso/
+	@cp $(BUILD_DIR)/$(KERNEL_FILE) $(CFG_DIR)/limine.conf $(LIMINE_BOOT_DIR)/limine-bios-cd.bin \
+	$(LIMINE_BOOT_DIR)/limine-bios.sys  $(LIMINE_BOOT_DIR)/limine-uefi-cd.bin $(BUILD_DIR)/iso/
 
-	
 	@xorriso -as mkisofs -b limine-bios-cd.bin -no-emul-boot -boot-load-size 4 -boot-info-table \
-	--protective-msdos-label $(BUILD_DIR)/iso -o $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
+	--protective-msdos-label --efi-boot limine-uefi-cd.bin --efi-boot-part --efi-boot-image \
+	 $(BUILD_DIR)/iso -o $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 
 	@$(LIMINE_BOOT_DIR)/limine bios-install $(BUILD_DIR)/iso/$(KERNEL_NAME).iso > /dev/null 2>&1
 	@cp $(BUILD_DIR)/iso/$(KERNEL_NAME).iso $(BUILD_DIR)

@@ -73,4 +73,5 @@ export KERNEL_FILE=$(KERNEL_NAME).elf
 
 export DEFAULT_FONT=zap-light16.psf
 
-export EMULATOR_MEM=2G
+export EMULATOR_MEM=1G
+export EMULATOR_SMP=2

@@ -61,7 +61,7 @@ typedef struct {
 
 typedef struct {
     union {
-     //   SMBIOS32 sm32;
+        SMBIOS32 sm32;
         SMBIOS64 sm64;
         
     };
@@ -113,7 +113,9 @@ typedef struct {
 bool InitSMBIOS(struct limine_smbios_response* lsr, SMBIOS* smOut);
 int GetSMBIOSTable(SMBIOS_TABLE_TYPES type, SMBIOS_TABLE* table);
 
-const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry) ;
+char* SmbiosParseStr(uint64_t* start, uint8_t len);
 SMBIOS GetSMBIOS();
+
+size_t SmbiosStrlen(void* loc);
 
 bool SMBIOSAvailable();

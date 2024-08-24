@@ -5,6 +5,22 @@ bool SmbiosChecksum(void* addr, uint64_t len);
 static SMBIOS g_Smbios = {0};
 const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry);
 
+void Sm32NextTable(SMBIOS_HEADER* hdr) {
+    hdr = (SMBIOS_HEADER*)(uint64_t)hdr+hdr->len;
+    hdr = (SMBIOS_HEADER*)(uint64_t)hdr+SmbiosStrlen(&hdr);
+
+}
+
+#define SMBIOS_TABLE_VERSION(maj, min) ( ((maj * 10)) + (min) )
+
+bool SmbiosTableParser(SMBIOS_HEADER* hdr, uint16_t tblVersion) {
+   // if (hdr->handle == UINT16_MAX) {
+     //   return false;
+    //}
+  //  debugf("%p",hdr->handle);
+    return true;
+
+}
 
 bool InitSMBIOS(struct limine_smbios_response* lsr, SMBIOS* smOut) {
 
@@ -16,6 +32,29 @@ bool InitSMBIOS(struct limine_smbios_response* lsr, SMBIOS* smOut) {
     if (lsr->entry_32 != NULL) {
 
         //todo ...
+        if (!memcmp(lsr->entry_32, "_SM_", 4)) {
+            SMBIOS32* sm32 = (SMBIOS32*)lsr->entry_32;
+            if(!SmbiosChecksum(sm32, sm32->length)) {
+                debugf("sm32 checksum fail\n");
+                return false;
+            }
+            else {
+                g_Smbios.sm32 = *sm32;
+                g_Smbios.major = SMBIOS32_MAJOR;
+                debugf("Found SM_ANCHOR:");
+                for (int i = 0; i < 5; ++i) {
+                    debugf(" %X", sm32->anchor[i]);
+                }
+                debugf("\n");
+                *smOut = g_Smbios;
+                
+               // SMBIOS_HEADER *hdr = (SMBIOS_HEADER*)g_Smbios.sm32.tblAddr;
+
+              
+                return true;
+            }
+            
+        }
         return false;
     }
     else if (lsr->entry_64 != NULL) {
@@ -110,6 +149,16 @@ int GetSMBIOSTable(SMBIOS_TABLE_TYPES type, SMBIOS_TABLE* table) {
 
     return 1;
 }
+
+char* SmbiosParseStr(uint64_t* start, uint8_t len) {
+    char* addr = (char*)start;
+    for (int i = 0; i < (len-1); ++i) {
+        addr += strlen(addr) + 1;
+    }
+    return addr;
+}
+
+/*
 const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry) {
     if (entry == 0) {
         return "<None>";
@@ -121,4 +170,14 @@ const char* SmbiosGetStr(SMBIOS_HEADER* hdr, uint64_t entry) {
         while (*str++ != '\0');
     }
     return str;
+}
+*/
+
+size_t SmbiosStrlen(void* loc) {
+    char* addr = (char*)loc;
+    while (*addr != '\0' || *(addr+1) != '\0') {
+        addr++;
+    }
+    size_t locEnd = (size_t)(addr+2) - (size_t)loc;
+    return locEnd;
 }
